@@ -160,13 +160,12 @@ De tal forma que se pueda utilizar las propiedades del template de la siguiente 
 </#list>
 }}}
 
-===TemplateArgsDiscover===
-El objetivo de implementar esta interfaz es investigar las propiedades que requiere un template para posteriormente poder hacer por ejemplo una interfaz de usuario para dicho template.
-
+===TemplateDataModelDiscover=== 
+El objetivo de implementar esta interfaz es investigar las propiedades que requiere un template desde antes de hacer match con él.
 {{{
-  * org.tequila.template.TemplateArgsDiscover
-  * org.tequila.template.FreeMarkerTemplateArgsDiscover
-  * org.tequila.template.VelocityTemplateArgsDiscover
+  * org.tequila.template.datamodel.TemplateDataModelDiscover
+  * org.tequila.template.datamodel.FreeMarkerTemplateDataModelDiscover
+  * org.tequila.template.datamodel.VelocityTemplateDataModelDiscover
 }}}
 
 ===TemplateEngine===
@@ -222,7 +221,6 @@ Las rutas utilizadas en el template deberán ser relativas al proyecto cargado.
 
 
 =Juntando todo==
-El objetivo de juntar todo es ver si se puede reducir el archivo de configuración
 
 {{{
 <bean id="nbproject" class="org.tequila.jproject.NetbeansJProject">
