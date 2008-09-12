@@ -27,7 +27,7 @@ se pretende que el spring-bean del proyecto sea algo similar al siguiente:
 </bean>
 }}}
 
-===PojoWrapper===
+===PojoWrapper=== (TODO: tal vez se podría eliminar y en el matcher solo indicar la clase)
 El objetivo de esta clase es encapsular todas las propiedades del POJO(fields, nombre, etc).
 Se pretende que la estructura del bean-spring sea como la siguiente:
 {{{
@@ -43,7 +43,7 @@ Se pretende que la estructura del bean-spring sea como la siguiente:
 <bean id="customer" class="org.tequila.template.datamodel.DynaAnnotatedPojoWrapper">
     <property name="className" value="org.test.Customer" />
     
-    <property name="dynamicAnnotations">
+    <property name="annotations">
         <map>
             <entry>
                 <key><value>databaseTable</value></key>
@@ -52,7 +52,7 @@ Se pretende que la estructura del bean-spring sea como la siguiente:
         </map>
     </property>
    
-    <!-- equivaldría a decir:
+    <!-- equivale a:
 
         @(databaseTable="CUSTOMER")
         public class Customer {
@@ -70,5 +70,31 @@ ${pojo.fields}: Obtendrá una lista con los fields definidos en la clase
 ${pojo.databaseTable}: CUSTOMER
 }}}
 
-===PojoFieldTemplateWrapper===
-Sirve para envolver un field de una clase con el objetivo de introducirle propiedades dinámicas(se podría decir anotarlo en tiempo de ejecución)
+===DynaAnnotatedFieldWrapper===
+El objetivo de esta clase es encapsular todas las propiedades del field (nombre y tipo), así como un conjunto de anotaciones inyectadas en tiempo de ejecución (definidas en el archivo de configuración) para poder ser utilizadas dentro de los templates.
+Se pretende que la estructura del bean-spring sea como la siguiente:
+
+{{{
+<bean id="idCustomer" class="org.tequila.template.datamodel.DynaAnnotatedFieldWrapper">
+    <property name="className" value="org.test.Customer" />
+    <property name="fieldName" value="idCustomer" />
+
+    <property name="annotations">
+        <map>
+            <entry>
+                <key><value>primaryKey</value></key>
+                <value>yes</value>
+            </entry> 
+        </map>
+    </property>
+   
+    <!-- equivale a:
+
+        public class Customer {
+            @(primaryKey="yes")
+            private int idCustomer;
+            // ...
+        }
+    -->
+</bean>
+}}}
