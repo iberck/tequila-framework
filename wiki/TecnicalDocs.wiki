@@ -1,13 +1,21 @@
-#summary One-sentence summary of this page.
+#summary Documentos técnicos del framework
 
-= Introduction =
+= Introducción =
 
-Add your content here.
+En esta página se detallan las clases utilizadas por el framework y el objetivo de cada una como fase de análisis.
 
+= Clases =
 
-= Details =
+===JProject===
+Un JProject servirá para saber de donde tomar los pojos compilados (.class), además de conocer la estructura del proyecto y saber donde ubicar los archivos generados.
+Se pretende manejar las estructuras de los proyectos más comerciales en los siguientes paquetes:
+  {{{
+  * org.tequila.jproject.AbstractJProject (Clase abstracta de la que deberán extender todos los proyectos)
+  * org.tequila.jproject.NetbeansJProject
+  * org.tequila.jproject.NetbeansWebJProject
+  * org.tequila.jproject.NetbeansMobileJProject
+  * org.tequila.jproject.EclipseJProject
+  * org.tequila.jproject.IntelliJProject
+  * org.tequila.jproject.MavenProject
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+}}}
