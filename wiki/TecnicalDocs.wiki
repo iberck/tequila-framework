@@ -161,7 +161,8 @@ De tal forma que se pueda utilizar las propiedades del template de la siguiente 
 }}}
 
 ===TemplateDataModelDiscover=== 
-El objetivo de implementar esta interfaz es investigar las propiedades que requiere un template desde antes de hacer match con él.
+El objetivo de implementar esta interfaz es investigar las propiedades que requiere un template desde antes de hacer match contra él con el objetivo de por ejemplo construir interfaces de usuario dinamicas de acuerdo a los datos que necesite el template.
+
 {{{
   * org.tequila.template.datamodel.TemplateDataModelDiscover
   * org.tequila.template.datamodel.FreeMarkerTemplateDataModelDiscover
