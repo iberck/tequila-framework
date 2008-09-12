@@ -27,7 +27,8 @@ Estructura del bean-spring:
 </bean>
 }}}
 
-===PojoWrapper=== (TODO: tal vez se podría eliminar y en el matcher solo indicar la clase)
+===PojoWrapper=== 
+TODO: tal vez se podría eliminar y en el matcher solo indicar la clase
 El objetivo de esta clase es encapsular todas las propiedades del POJO(fields, nombre, etc).
 Se pretende que la estructura del bean-spring sea como la siguiente:
 {{{
@@ -70,7 +71,8 @@ ${pojo.fields}: Obtendrá una lista con los fields definidos en la clase
 ${pojo.databaseTable}: CUSTOMER
 }}}
 
-===DynaAnnotatedFieldWrapper=== (TODO: Como inyectar este field a su clase)
+===DynaAnnotatedFieldWrapper=== 
+TODO: Como inyectar este field a su clase
 El objetivo de esta clase es encapsular todas las propiedades del field (nombre y tipo), así como un conjunto de anotaciones inyectadas en tiempo de ejecución (definidas en el archivo de configuración) para poder ser utilizadas dentro de los templates.
 
 Estructura del bean-spring:
@@ -218,3 +220,84 @@ ${project.author}: author
 }}}
 Las rutas utilizadas en el template deberán ser relativas al proyecto cargado.
 
+
+=Juntando todo==
+El objetivo de juntar todo es ver si se puede reducir el archivo de configuración
+
+{{{
+<bean id="nbproject" class="org.tequila.jproject.NetbeansJProject">
+    <property name="path" value="c:/projectTest"/>
+</bean>
+
+<bean id="customer" class="org.tequila.template.datamodel.DynaAnnotatedPojoWrapper">
+    <property name="className" value="org.test.Customer" />
+    
+    <property name="annotations">
+        <map>
+            <entry>
+                <key><value>databaseTable</value></key>
+                <value>CUSTOMER</value>
+            </entry> 
+        </map>
+    </property>
+</bean>
+
+<bean id="templateProperties" class="org.tequila.template.datamodel.TemplatePropertiesWrapper">
+    <property name="propertiesMap">
+        <map>
+            <entry>
+                <key><value>databases</value></key>
+                <value>
+                    <list>
+                        <value>
+                            <map>
+                                <entry>
+                                    <key><value>id</value></key>
+                                    <value>20</value>
+                                </entry>  
+                                <entry>
+                                    <key><value>name</value></key>
+                                    <value>Mysql</value>
+                                </entry> 
+                            </map>
+                        </value>
+                        <value>
+                            <map>
+                                <entry>
+                                    <key><value>id</value></key>
+                                    <value>60</value>
+                                </entry>  
+                                <entry>
+                                    <key><value>name</value></key>
+                                    <value>Oracle</value>
+                                </entry> 
+                            </map>
+                        </value>
+                    </list>  
+                </value>
+            </entry> 
+        </map>
+    </property>
+</bean>
+
+<bean id="freemarkerEngine" class="org.tequila.template.engine.FreeMarkerTemplateEngine">
+    <property name="templatesRootPath" value="d:/ftls"/>
+</bean>
+
+<bean id="toStringTemplateMatcher" class="org.tequila.template.FreeMarkerTemplateMatcher">
+    <property name="templateEngine" ref="freemarkerEngine"/>
+  
+    <!-- template -->
+    <property name="templatePath" value="/uno.ftl" />
+  
+    <!-- datamodel -->
+    <property name="pojos">
+        <list>
+            <value ref="customer" />
+        </list>
+    </property>
+
+    <property name="templateProperties" ref="templateProperties"/>
+    <property name="project" ref="nbproject" />
+</bean>
+}}}
