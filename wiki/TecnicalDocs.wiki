@@ -100,9 +100,15 @@ Se pretende hacer uso de las siguientes clases:
   * org.tequila.template.datamodel.DynaAnnotatedFieldWrapper
 }}}
 
+===SimpleFieldWrapper=== 
+El objetivo de esta clase es encapsular un field que no este ni anotado ni se quiera inyectar anotaciones en tiempo de ejecución (este será el comunmente usado).
+No es necesario definir cada field con este wrapper, se envolverán todos los fields del pojo por default con esta clase.
+
+===AnnotatedFieldWrapper=== 
+El objetivo de esta clase es encapsular un field anotado para poder hacer uso de sus anotaciones dentro del template.
+El framework deberá saber si el field tiene anotaciones y ocupar por default esta clase, no se deberá utilizar dentro del contexto de spring.
 
 ===DynaAnnotatedFieldWrapper=== 
-TODO: Como inyectar este field a su clase
 El objetivo de esta clase es encapsular todas las propiedades del field (nombre y tipo), así como un conjunto de anotaciones inyectadas en tiempo de ejecución (definidas en el archivo de configuración) para poder ser utilizadas dentro de los templates.
 
 Estructura del bean-spring:
@@ -123,6 +129,7 @@ Estructura del bean-spring:
     <!-- equivale a:
 
         public class Customer {
+
             @(primaryKey="yes")
             private int idCustomer;
             // ...
@@ -249,4 +256,3 @@ ${project.web-inf}: ruta del directorio web-inf
 ${project.author}: author
 }}}
 Las rutas utilizadas en el template deberán ser relativas al proyecto cargado.
-
