@@ -27,12 +27,31 @@ Estructura del bean-spring:
 </bean>
 }}}
 
-===PojoWrapper=== 
-TODO: tal vez se podría eliminar y en el matcher solo indicar la clase
+==PojoWrapper==
+Un PojoWrapper es una clase que se encargará de encapsular los datos de un pojo para poder ser utilizados dentro del template de una forma simple (todavía se esta definiendo cómo)
+
+Hasta el momento se tienen el mente los siguientes pojo wrappers.
+{{{
+  * org.tequila.template.datamodel.PojoWrapper
+  * org.tequila.template.datamodel.SimplePojoWrapper
+  * org.tequila.template.datamodel.AnnotatedPojoWrapper
+  * org.tequila.template.datamodel.DynaAnnotatedPojoWrapper
+}}}
+
+===SimplePojoWrapper=== 
 El objetivo de esta clase es encapsular todas las propiedades del POJO(fields, nombre, etc).
 Se pretende que la estructura del bean-spring sea como la siguiente:
 {{{
-<bean id="customer" class="org.tequila.template.datamodel.PojoWrapper">
+<bean id="customer" class="org.tequila.template.datamodel.SimplePojoWrapper">
+    <property name="className" value="org.test.Customer" />
+</bean>
+}}}
+
+===AnnotatedPojoWrapper=== 
+El objetivo de esta clase es encapsular las clases @notadas en modelos de datos simples para los templates.
+Se pretende que la estructura del bean-spring sea como la siguiente:
+{{{
+<bean id="customer" class="org.tequila.template.datamodel.AnnotatedPojoWrapper">
     <property name="className" value="org.test.Customer" />
 </bean>
 }}}
@@ -70,6 +89,17 @@ De tal forma que se puedan utilizar los objetos del pojo de la siguiente manera 
 ${pojo.fields}: Obtendrá una lista con los fields definidos en la clase
 ${pojo.databaseTable}: CUSTOMER
 }}}
+
+==FieldWrapper==
+El objetivo de esta clase es encapsular los fields de un pojo para poder ser utilizados de forma simple dentro del template.
+Se pretende hacer uso de las siguientes clases:
+{{{
+  * org.tequila.template.datamodel.FieldWrapper
+  * org.tequila.template.datamodel.SimpleFieldWrapper
+  * org.tequila.template.datamodel.AnnotatedFieldWrapper
+  * org.tequila.template.datamodel.DynaAnnotatedFieldWrapper
+}}}
+
 
 ===DynaAnnotatedFieldWrapper=== 
 TODO: Como inyectar este field a su clase
@@ -220,83 +250,3 @@ ${project.author}: author
 }}}
 Las rutas utilizadas en el template deberán ser relativas al proyecto cargado.
 
-
-=Juntando todo==
-
-{{{
-<bean id="nbproject" class="org.tequila.jproject.NetbeansJProject">
-    <property name="path" value="c:/projectTest"/>
-</bean>
-
-<bean id="customer" class="org.tequila.template.datamodel.DynaAnnotatedPojoWrapper">
-    <property name="className" value="org.test.Customer" />
-    
-    <property name="annotations">
-        <map>
-            <entry>
-                <key><value>databaseTable</value></key>
-                <value>CUSTOMER</value>
-            </entry> 
-        </map>
-    </property>
-</bean>
-
-<bean id="templateProperties" class="org.tequila.template.datamodel.TemplatePropertiesWrapper">
-    <property name="propertiesMap">
-        <map>
-            <entry>
-                <key><value>databases</value></key>
-                <value>
-                    <list>
-                        <value>
-                            <map>
-                                <entry>
-                                    <key><value>id</value></key>
-                                    <value>20</value>
-                                </entry>  
-                                <entry>
-                                    <key><value>name</value></key>
-                                    <value>Mysql</value>
-                                </entry> 
-                            </map>
-                        </value>
-                        <value>
-                            <map>
-                                <entry>
-                                    <key><value>id</value></key>
-                                    <value>60</value>
-                                </entry>  
-                                <entry>
-                                    <key><value>name</value></key>
-                                    <value>Oracle</value>
-                                </entry> 
-                            </map>
-                        </value>
-                    </list>  
-                </value>
-            </entry> 
-        </map>
-    </property>
-</bean>
-
-<bean id="freemarkerEngine" class="org.tequila.template.engine.FreeMarkerTemplateEngine">
-    <property name="templatesRootPath" value="d:/ftls"/>
-</bean>
-
-<bean id="toStringTemplateMatcher" class="org.tequila.template.FreeMarkerTemplateMatcher">
-    <property name="templateEngine" ref="freemarkerEngine"/>
-  
-    <!-- template -->
-    <property name="templatePath" value="/uno.ftl" />
-  
-    <!-- datamodel -->
-    <property name="pojos">
-        <list>
-            <value ref="customer" />
-        </list>
-    </property>
-
-    <property name="templateProperties" ref="templateProperties"/>
-    <property name="project" ref="nbproject" />
-</bean>
-}}}
