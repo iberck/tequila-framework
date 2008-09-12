@@ -19,3 +19,56 @@ Se pretende manejar las estructuras de los proyectos más comerciales en los sig
   * org.tequila.jproject.MavenProject
 
 }}}
+
+se pretende que el spring-bean del proyecto sea algo similar al siguiente:
+{{{
+<bean id="nbproject" class="org.tequila.jproject.NetbeansJProject">
+    <property name="path" value="c:/projectTest"/>
+</bean>
+}}}
+
+===PojoWrapper===
+El objetivo de esta clase es encapsular todas las propiedades del POJO(fields, nombre, etc).
+Se pretende que la estructura del bean-spring sea como la siguiente:
+{{{
+<bean id="customer" class="org.tequila.template.datamodel.PojoWrapper">
+    <property name="className" value="org.test.Customer" />
+</bean>
+}}}
+
+===DynaAnnotatedPojoWrapper===
+El objetivo de esta clase es encapsular todas las propiedades del POJO (fields, nombre, etc), así como un conjunto de anotaciones inyectadas en tiempo de ejecución (definidas en el archivo de configuración) para poder ser utilizadas dentro de los templates.
+Se pretende que la estructura del bean-spring sea como la siguiente:
+{{{
+<bean id="customer" class="org.tequila.template.datamodel.DynaAnnotatedPojoWrapper">
+    <property name="className" value="org.test.Customer" />
+    
+    <property name="dynamicAnnotations">
+        <map>
+            <entry>
+                <key><value>databaseTable</value></key>
+                <value>CUSTOMER</value>
+            </entry> 
+        </map>
+    </property>
+   
+    <!-- equivaldría a decir:
+
+        @(databaseTable="CUSTOMER")
+        public class Customer {
+           // ...
+        }
+    -->
+</bean>
+}}}
+
+
+De tal forma que se puedan utilizar los objetos del pojo de la siguiente manera en la plantilla:
+
+{{{
+${pojo.fields}: Obtendrá una lista con los fields definidos en la clase
+${pojo.databaseTable}: CUSTOMER
+}}}
+
+===PojoFieldTemplateWrapper===
+Sirve para envolver un field de una clase con el objetivo de introducirle propiedades dinámicas(se podría decir anotarlo en tiempo de ejecución)
