@@ -27,6 +27,10 @@ Estructura del bean-spring:
 </bean>
 }}}
 
+=Wrapper=
+El objetivo de esta interfaz es encapsular un elemento para posteriormente poder utilizar sus propiedades dentro del template.
+
+
 ==PojoWrapper==
 Un PojoWrapper es una clase que se encargará de encapsular los datos de un pojo para poder ser utilizados dentro del template de una forma simple (todavía se esta definiendo cómo)
 
