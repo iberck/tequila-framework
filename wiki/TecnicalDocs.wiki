@@ -4,7 +4,14 @@
 
 En esta página se detallan las clases utilizadas por el framework y el objetivo de cada una como fase de análisis.
 
-= Clases =
+==Estructura general del proyecto==
+El siguiente diagrama muestra de manera general la estructura de tequila-framework.
+[http://tequila-framework.googlecode.com/svn/wiki/images/estructura-general.jpg]
+
+Uno de los aspectos más importantes del diagrama es que no se modifica nada del proyecto original para poder generar código fuente dentro del mismo. Además, se puede observar que a partir de los pojos del proyecto se generan modelos de datos y junto con una plantilla el moto hace un match para generar un conjunto de Archivos dentro del proyecto original.
+
+
+==Clases==
 
 ===JProject===
 Un JProject servirá para saber de donde tomar los pojos compilados (.class), además de conocer la estructura del proyecto y saber donde ubicar los archivos generados.
@@ -201,13 +208,13 @@ De tal forma que se pueda utilizar las propiedades del template de la siguiente 
 </#list>
 }}}
 
-===TemplateDataModelDiscover=== 
+===TemplateDataModelDiscovery=== 
 El objetivo de implementar esta interfaz es investigar las propiedades que requiere un template desde antes de hacer match contra él con el objetivo de por ejemplo construir interfaces de usuario dinamicas de acuerdo a los datos que necesite el template.
 
 {{{
-  * org.tequila.template.datamodel.TemplateDataModelDiscover
-  * org.tequila.template.datamodel.FreeMarkerTemplateDataModelDiscover
-  * org.tequila.template.datamodel.VelocityTemplateDataModelDiscover
+  * org.tequila.template.datamodel.TemplateDataModelDiscovery
+  * org.tequila.template.datamodel.FreeMarkerTemplateDataModelDiscovery
+  * org.tequila.template.datamodel.VelocityTemplateDataModelDiscovery
 }}}
 
 ===TemplateEngine===
