@@ -19,5 +19,4 @@ para utilizar los fields de un pojo:
 </#list>
 }}}
 
-Por lo tanto los pojos podrán hacer uso de toda la librería reflection pero además contarán con un conjunto de alias para las tareas más comunes.
-
+_Por lo tanto los pojos podrán hacer uso de todas sus propiedades de reflexión, pero además contarán con un conjunto de alias para las tareas más comunes._
