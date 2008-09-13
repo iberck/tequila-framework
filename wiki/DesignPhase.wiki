@@ -1,0 +1,270 @@
+#summary Documentos técnicos del framework
+#labels Featured
+
+= Introducción =
+
+En esta página se detallan las clases utilizadas por el framework y el objetivo de cada una como fase de análisis.
+
+==Estructura general del proyecto==
+El siguiente diagrama muestra de manera general la estructura de tequila-framework.
+[http://tequila-framework.googlecode.com/svn/wiki/images/estructura-general.jpg]
+
+Uno de los aspectos más importantes del diagrama es que no se modifica nada del proyecto original para poder generar código fuente dentro del mismo. Además, se puede observar que a partir de los pojos del proyecto se generan modelos de datos y junto con una plantilla el moto hace un match para generar un conjunto de Archivos dentro del proyecto original.
+
+
+==Clases==
+
+===JProject===
+Un JProject servirá para saber de donde tomar los pojos compilados (.class), además de conocer la estructura del proyecto y saber donde ubicar los archivos generados.
+Se pretende manejar las estructuras de los proyectos más comerciales en los siguientes paquetes:
+  {{{
+  * org.tequila.jproject.AbstractJProject (Clase abstracta de la que deberán extender todos los proyectos)
+  * org.tequila.jproject.NetbeansJProject
+  * org.tequila.jproject.NetbeansWebJProject
+  * org.tequila.jproject.NetbeansMobileJProject
+  * org.tequila.jproject.EclipseJProject
+  * org.tequila.jproject.IntelliJProject
+  * org.tequila.jproject.MavenProject
+
+}}}
+
+Estructura del bean-spring:
+{{{
+<bean id="nbproject" class="org.tequila.jproject.NetbeansJProject">
+    <property name="path" value="c:/projectTest"/>
+</bean>
+}}}
+
+=Wrapper=
+El objetivo de esta interfaz es encapsular un elemento para posteriormente poder utilizar sus propiedades dentro del template.
+
+
+==PojoWrapper==
+Un PojoWrapper es una clase que se encargará de encapsular los datos de un pojo para poder ser utilizados dentro del template de una forma simple (todavía se esta definiendo cómo)
+
+Hasta el momento se tienen el mente los siguientes pojo wrappers.
+{{{
+  * org.tequila.template.datamodel.PojoWrapper
+  * org.tequila.template.datamodel.SimplePojoWrapper
+  * org.tequila.template.datamodel.AnnotatedPojoWrapper
+  * org.tequila.template.datamodel.DynaAnnotatedPojoWrapper
+}}}
+
+===SimplePojoWrapper=== 
+El objetivo de esta clase es encapsular todas las propiedades del POJO(fields, nombre, etc).
+Se pretende que la estructura del bean-spring sea como la siguiente:
+{{{
+<bean id="customer" class="org.tequila.template.datamodel.SimplePojoWrapper">
+    <property name="className" value="org.test.Customer" />
+</bean>
+}}}
+
+===AnnotatedPojoWrapper=== 
+El objetivo de esta clase es encapsular las clases @notadas en modelos de datos simples para los templates.
+Se pretende que la estructura del bean-spring sea como la siguiente:
+{{{
+<bean id="customer" class="org.tequila.template.datamodel.AnnotatedPojoWrapper">
+    <property name="className" value="org.test.Customer" />
+</bean>
+}}}
+
+===DynaAnnotatedPojoWrapper===
+El objetivo de esta clase es encapsular todas las propiedades del POJO (fields, nombre, etc), así como un conjunto de anotaciones inyectadas en tiempo de ejecución (definidas en el archivo de configuración) para poder ser utilizadas dentro de los templates.
+
+Estructura del bean-spring:
+{{{
+<bean id="customer" class="org.tequila.template.datamodel.DynaAnnotatedPojoWrapper">
+    <property name="className" value="org.test.Customer" />
+    
+    <property name="annotations">
+        <map>
+            <entry>
+                <key><value>databaseTable</value></key>
+                <value>CUSTOMER</value>
+            </entry> 
+        </map>
+    </property>
+   
+    <!-- equivale a:
+
+        @(databaseTable="CUSTOMER")
+        public class Customer {
+           // ...
+        }
+    -->
+</bean>
+}}}
+
+De tal forma que se puedan utilizar los objetos del pojo de la siguiente manera en la plantilla:
+
+{{{
+${pojo.fields}: Obtendrá una lista con los fields definidos en la clase
+${pojo.databaseTable}: CUSTOMER
+}}}
+
+==FieldWrapper==
+El objetivo de esta clase es encapsular los fields de un pojo para poder ser utilizados de forma simple dentro del template.
+Se pretende hacer uso de las siguientes clases:
+{{{
+  * org.tequila.template.datamodel.FieldWrapper
+  * org.tequila.template.datamodel.SimpleFieldWrapper
+  * org.tequila.template.datamodel.AnnotatedFieldWrapper
+  * org.tequila.template.datamodel.DynaAnnotatedFieldWrapper
+}}}
+
+===SimpleFieldWrapper=== 
+El objetivo de esta clase es encapsular un field que no este ni anotado ni se quiera inyectar anotaciones en tiempo de ejecución (este será el comunmente usado).
+No es necesario definir cada field con este wrapper, se envolverán todos los fields del pojo por default con esta clase.
+
+===AnnotatedFieldWrapper=== 
+El objetivo de esta clase es encapsular un field anotado para poder hacer uso de sus anotaciones dentro del template.
+El framework deberá saber si el field tiene anotaciones y ocupar por default esta clase, no se deberá utilizar dentro del contexto de spring.
+
+===DynaAnnotatedFieldWrapper=== 
+El objetivo de esta clase es encapsular todas las propiedades del field (nombre y tipo), así como un conjunto de anotaciones inyectadas en tiempo de ejecución (definidas en el archivo de configuración) para poder ser utilizadas dentro de los templates.
+
+Estructura del bean-spring:
+{{{
+<bean id="idCustomer" class="org.tequila.template.datamodel.DynaAnnotatedFieldWrapper">
+    <property name="className" value="org.test.Customer" />
+    <property name="fieldName" value="idCustomer" />
+
+    <property name="annotations">
+        <map>
+            <entry>
+                <key><value>primaryKey</value></key>
+                <value>yes</value>
+            </entry> 
+        </map>
+    </property>
+   
+    <!-- equivale a:
+
+        public class Customer {
+
+            @(primaryKey="yes")
+            private int idCustomer;
+            // ...
+        }
+    -->
+</bean>
+}}}
+
+De tal forma que se pueda utilizar el field la siguiente manera en la plantilla:
+{{{
+${field.primaryKey}: yes
+${field.name}: idCustomer
+${field.type}: int
+}}}
+
+===TemplatePropertiesWrapper===
+El objetivo de esta clase es agrupar un conjunto de propiedades para poder ser utilizadas dentro de un template.
+
+Estructura del bean-spring:
+{{{
+<bean id="templateProperties" class="org.tequila.template.datamodel.TemplatePropertiesWrapper">
+    <property name="propertiesMap">
+        <map>
+            <entry>
+                <key><value>databases</value></key>
+                <value>
+                    <list>
+                        <value>
+                            <map>
+                                <entry>
+                                    <key><value>id</value></key>
+                                    <value>20</value>
+                                </entry>  
+                                <entry>
+                                    <key><value>name</value></key>
+                                    <value>Mysql</value>
+                                </entry> 
+                            </map>
+                        </value>
+                        <value>
+                            <map>
+                                <entry>
+                                    <key><value>id</value></key>
+                                    <value>60</value>
+                                </entry>  
+                                <entry>
+                                    <key><value>name</value></key>
+                                    <value>Oracle</value>
+                                </entry> 
+                            </map>
+                        </value>
+                    </list>  
+                </value>
+            </entry> 
+        </map>
+    </property>
+</bean>
+}}}
+
+De tal forma que se pueda utilizar las propiedades del template de la siguiente manera en la plantilla:
+{{{
+<#list templateProperties.databases as db>
+    ${db.id}: 20(1), 50(2)
+    ${db.name}: MySql(1), Oracle(2)
+</#list>
+}}}
+
+===TemplateDataModelDiscovery=== 
+El objetivo de implementar esta interfaz es investigar las propiedades que requiere un template desde antes de hacer match contra él con el objetivo de por ejemplo construir interfaces de usuario dinamicas de acuerdo a los datos que necesite el template.
+
+{{{
+  * org.tequila.template.datamodel.TemplateDataModelDiscovery
+  * org.tequila.template.datamodel.FreeMarkerTemplateDataModelDiscovery
+  * org.tequila.template.datamodel.VelocityTemplateDataModelDiscovery
+}}}
+
+===TemplateEngine===
+Interfaz que representa el motor de plantillas, se pretende primero dar soporte a freemarker y posteriormente a velocity, jamon, etc.
+
+Paquetes a realizar:
+{{{
+  * org.tequila.template.engine.TemplateEngine
+  * org.tequila.template.engine.FreeMarkerTemplateEngine
+  * org.tequila.template.engine.VelocityTemplateEngine
+}}}
+
+Estructura del bean-spring:
+{{{
+<bean id="freemarkerEngine" class="org.tequila.template.engine.FreeMarkerTemplateEngine">
+    <property name="templatesRootPath" value="d:/ftls"/>
+</bean>
+}}}
+
+
+===TemplateMatcher===
+Interfaz que deben implementar cada motor de plantillas para hacer match entre los templates y los modelos de datos para generar un archivo de resultado
+
+Estructura del bean-spring:
+{{{
+<bean id="toStringTemplateMatcher" class="org.tequila.template.FreeMarkerTemplateMatcher">
+    <property name="templateEngine" ref="freemarkerEngine"/>
+  
+    <!-- template -->
+    <property name="templatePath" value="/uno.ftl" />
+  
+    <!-- datamodel -->
+    <property name="pojos">
+        <list>
+            <value ref="customer" />
+        </list>
+    </property>
+
+    <property name="templateProperties" ref="templateProperties"/>
+    <property name="project" ref="nbproject" />
+</bean>
+}}}
+
+===ProjectWrapper===
+Sirve para encapsular un proyecto y poderlo utilizar como objeto dentro de los templates
+{{{
+${project.classes}: ruta del directorio classes
+${project.sources}: ruta del directorio sources
+${project.web-inf}: ruta del directorio web-inf
+${project.author}: author
+}}}
+Las rutas utilizadas en el template deberán ser relativas al proyecto cargado.
