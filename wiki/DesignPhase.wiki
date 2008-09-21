@@ -273,3 +273,43 @@ El classloader para este proyecto es muy importante ya que es donde buscará las
 Esta característica será fundamental por que abrirá la posibilidad de crear proyectos de 2 formas:
   # Tomar los pojos del proyecto e inyectarles propiedades dinámicamente (lo cual será especificado en el applicationContext.xml)
   # Crear dentro del proyecto externo pojos estáticos, los cuales no necesitarán que se les inyecte las propiedades dinámicamente por que serán especificadas en la definición de los mismos.
+
+=Template objects=
+
+Como idea inicial se pensaba utilizar todas las propiedades de reflection para el pojo pero eso implica que para utilizar los objetos en el template se requiere que la instrucción _sea más larga_, por ejemplo para utilizar los fields de un pojo se debería hacer algo como lo siguiente
+
+<#list pojo.class.declaredFields as field>
+</#list>
+
+Para evitar eso se propone hacer alias de las sentencias más útiles del pojo, por ejemplo para utilizar los fields de un pojo:
+
+<#list pojo.fiels as field>
+</#list>
+
+*(por definir todas las propiedades del objeto, groovy se ve muy bien)*
+
+
+==objeto ${classes}==
+El objeto classes será una lista que tendrá todas las clases definidas dentro del proyecto , las cuales podrán ser utilizadas dentro del template. Ejemplo:
+
+<#list classes as class>
+   ${class.name}
+   ${class.simpleName}
+   ...
+</#list>
+
+==objeto ${properties}==
+El objeto properties contendrá una lista de propiedades definidas en el archivo de configuración, las cuales podrán ser utilizadas dentro del template. Ejemplo:
+
+<#list properties as property>
+   ${property.connectionUrl}
+   ...
+</#list>
+
+
+==objeto ${project}==
+Este objeto contrendrá el modelo de datos del proyecto que se haya cargado, por ejemplo:
+
+  * ${project.name}: Nombre del proyecto
+  * ${project.dir.src}: Ruta donde se encuentran los fuentes del proyecto
+  ...
