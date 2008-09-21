@@ -11,7 +11,6 @@ El siguiente diagrama muestra de manera general la estructura de tequila-framewo
 
 Uno de los aspectos más importantes del diagrama es que no se modifica nada del proyecto original para poder generar código fuente dentro del mismo. Además, se puede observar que a partir de los pojos del proyecto se generan modelos de datos y junto con una plantilla el moto hace un match para generar un conjunto de Archivos dentro del proyecto original.
 
-
 ==Clases==
 
 ===JProject===
@@ -268,3 +267,11 @@ ${project.web-inf}: ruta del directorio web-inf
 ${project.author}: author
 }}}
 Las rutas utilizadas en el template deberán ser relativas al proyecto cargado.
+
+
+=ClassLoader=
+El classloader para este proyecto es muy importante ya que es donde buscará las definiciones de las clases. Las clases de tipo PojoWrapper las buscará primero en el classloader local y después en el classloader del proyecto existente.
+
+Esta característica será fundamental por que abrirá la posibilidad de crear proyectos de 2 formas:
+  # Tomar los pojos del proyecto e inyectarles propiedades dinámicamente (lo cual será especificado en el applicationContext.xml)
+  # Crear dentro del proyecto externo pojos estáticos, los cuales no necesitarán que se les inyecte las propiedades dinámicamente por que serán especificadas en la definición de los mismos.
