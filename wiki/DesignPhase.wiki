@@ -36,41 +36,41 @@ Estructura del bean-spring:
 El objetivo de esta interfaz es encapsular un elemento para posteriormente poder utilizar sus propiedades dentro del template.
 Para más detalles de como podrá ser utilizado un pojo y sus propiedades dentro del template consulte: [TemplateObjects]
 
-==PojoWrapper==
-Un PojoWrapper es una clase que se encargará de encapsular los datos de un pojo para poder ser utilizados dentro del template de una forma simple dentro del template.
+==ClassWrapper (antes: PojoWrapper)==
+Un ClassWrapper es una clase que se encargará de encapsular los datos de una clase para poder ser utilizados dentro del template de una forma simple dentro del template.
 
 Hasta el momento se tienen el mente los siguientes pojo wrappers.
 {{{
-  * org.tequila.template.datamodel.PojoWrapper
-  * org.tequila.template.datamodel.SimplePojoWrapper
-  * org.tequila.template.datamodel.AnnotatedPojoWrapper
-  * org.tequila.template.datamodel.DynaAnnotatedPojoWrapper
+  * org.tequila.template.datamodel.ClassWrapper
+  * org.tequila.template.datamodel.SimpleClassWrapper
+  * org.tequila.template.datamodel.AnnotatedClassWrapper
+  * org.tequila.template.datamodel.DynaAnnotatedClassWrapper
 }}}
 
-===SimplePojoWrapper=== 
-El objetivo de esta clase es encapsular todas las propiedades del POJO(fields, nombre, etc).
+===SimpleClassWrapper=== 
+El objetivo de esta clase es encapsular todas las propiedades de una clase(fields, nombre, etc).
 Se pretende que la estructura del bean-spring sea como la siguiente:
 {{{
-<bean id="customer" class="org.tequila.template.datamodel.SimplePojoWrapper">
+<bean id="customer" class="org.tequila.template.datamodel.SimpleClassWrapper">
     <property name="className" value="org.test.Customer" />
 </bean>
 }}}
 
-===AnnotatedPojoWrapper=== 
+===AnnotatedClassWrapper=== 
 El objetivo de esta clase es encapsular las clases @notadas en modelos de datos simples para los templates.
 Se pretende que la estructura del bean-spring sea como la siguiente:
 {{{
-<bean id="customer" class="org.tequila.template.datamodel.AnnotatedPojoWrapper">
+<bean id="customer" class="org.tequila.template.datamodel.AnnotatedClassWrapper">
     <property name="className" value="org.test.Customer" />
 </bean>
 }}}
 
-===DynaAnnotatedPojoWrapper===
-El objetivo de esta clase es encapsular todas las propiedades del POJO (fields, nombre, etc), así como un conjunto de anotaciones inyectadas en tiempo de ejecución (definidas en el archivo de configuración) para poder ser utilizadas dentro de los templates.
+===DynaAnnotatedClassWrapper===
+El objetivo de esta clase es encapsular todas las propiedades de la clase (fields, nombre, etc), así como un conjunto de anotaciones inyectadas en tiempo de ejecución (definidas en el archivo de configuración) para poder ser utilizadas dentro de los templates.
 
 Estructura del bean-spring:
 {{{
-<bean id="customer" class="org.tequila.template.datamodel.DynaAnnotatedPojoWrapper">
+<bean id="customer" class="org.tequila.template.datamodel.DynaAnnotatedClassWrapper">
     <property name="className" value="org.test.Customer" />
     
     <property name="annotations">
