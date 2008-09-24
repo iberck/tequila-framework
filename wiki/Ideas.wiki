@@ -7,3 +7,6 @@
 
   * Para los proyectos no soportados, se debe crear un nuevo tipo de proyecto (un proyecto generico) donde se especifique donde estan los sources, las classes, etc. y si se trata de un proyecto web tambien especificar en que carpeta se encuentra WEB-INF
 
+  * El framework puede considerarse como un desarrollador más al cual se le dan las instrucciónes a seguir para que pueda realizar su trabajo.
+
+  
