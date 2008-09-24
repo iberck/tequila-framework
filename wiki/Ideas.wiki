@@ -13,3 +13,6 @@
   * Crear un tipo de plantilla como si fuera una gsp pero en lugar de generar html genere texto (código fuente) con el propósito de hacer muy simple el desarrollo de templates ya que es uno de los puntos flacos del framework por que velocity y freemarker no tienen una sintaxis tan clara a la hora de hacer plantillas (o tal vez no se esta acostumbrado a trabajar con esta sintaxis)
 
   * Generar archivos de forma atomica (o todos los que se indico o nada)
+
+  * La estructura del proyecto será realizada en maven para que cuando el usuario cree un nuevo proyecto ya no le ponga las librerías y además venga un simple ejemplo de como utilizarlo.
+
