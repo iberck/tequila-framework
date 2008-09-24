@@ -9,6 +9,6 @@
 
   * El framework puede considerarse como un desarrollador más al cual se le dan las instrucciónes a seguir para que pueda realizar su trabajo, el mismo tiempo que tarda en decirle a un programador como hacer las cosas lo pierde en decirle al framework cómo hacer su trabajo.
 
-
+  * Se deben crear grupos de plantillas
 
   
