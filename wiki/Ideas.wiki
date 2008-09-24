@@ -2,8 +2,7 @@
 
 = Puntos clave =
 
-  * El framework puede ser considerado como framework project-driven lo cual significa que 
-    se genera código fuente a partir de la información de un proyecto.
+  * El framework puede ser considerado como framework project-driven lo cual significa que se genera código fuente a partir de la información de un proyecto.
 
   * Para los proyectos no soportados, se debe crear un nuevo tipo de proyecto (un proyecto generico) donde se especifique donde estan los sources, las classes, etc. y si se trata de un proyecto web tambien especificar en que carpeta se encuentra WEB-INF
 
