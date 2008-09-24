@@ -16,3 +16,4 @@
 
   * La estructura del proyecto será realizada en maven para que cuando el usuario cree un nuevo proyecto ya no le ponga las librerías y además venga un simple ejemplo de como utilizarlo.
 
+  * Hacer un ClassWrapper para freemarker lo cual consistira en crear un mapa con las propiedades del pojo pero las propiedades deberán ser muy entendibles (similar a lo que hace groovy para la introspección)
