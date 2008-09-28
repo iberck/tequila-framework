@@ -44,7 +44,7 @@ Hasta el momento se tienen el mente los siguientes pojo wrappers.
   * org.tequila.template.datamodel.ClassWrapper
   * org.tequila.template.datamodel.SimpleClassWrapper
   * org.tequila.template.datamodel.AnnotatedClassWrapper
-  * org.tequila.template.datamodel.DynaAnnotatedClassWrapper
+  * org.tequila.template.datamodel.InjectedClassWrapper
 }}}
 
 ===SimpleClassWrapper=== 
@@ -65,15 +65,15 @@ Se pretende que la estructura del bean-spring sea como la siguiente:
 </bean>
 }}}
 
-===DynaAnnotatedClassWrapper===
-El objetivo de esta clase es encapsular todas las propiedades de la clase (fields, nombre, etc), así como un conjunto de anotaciones inyectadas en tiempo de ejecución (definidas en el archivo de configuración) para poder ser utilizadas dentro de los templates.
+===InjectedClassWrapper===
+El objetivo de esta clase es encapsular todas las propiedades de la clase (fields, nombre, etc), así como un conjunto de propiedades inyectadas en tiempo de ejecución (definidas en el archivo de configuración) para poder ser utilizadas dentro de los templates.
 
 Estructura del bean-spring:
 {{{
-<bean id="customer" class="org.tequila.template.datamodel.DynaAnnotatedClassWrapper">
+<bean id="customer" class="org.tequila.template.datamodel.InjectedClassWrapper">
     <property name="className" value="org.test.Customer" />
     
-    <property name="annotations">
+    <property name="injectedClassProperties">
         <map>
             <entry>
                 <key><value>databaseTable</value></key>
@@ -89,6 +89,14 @@ Estructura del bean-spring:
            // ...
         }
     -->
+    <property name="injectedFieldsProperties">
+        <list>
+             <!-- definir cada una de las propiedades inyectadas para las propiedades
+                  de esta clase -->
+        </list>
+    </property>
+
+    
 </bean>
 }}}
 
@@ -117,16 +125,18 @@ No es necesario definir cada field con este wrapper, se envolverán todos los fi
 El objetivo de esta clase es encapsular un field anotado para poder hacer uso de sus anotaciones dentro del template.
 El framework deberá saber si el field tiene anotaciones y ocupar por default esta clase, no se deberá utilizar dentro del contexto de spring.
 
-===DynaAnnotatedFieldWrapper=== 
-El objetivo de esta clase es encapsular todas las propiedades del field (nombre y tipo), así como un conjunto de anotaciones inyectadas en tiempo de ejecución (definidas en el archivo de configuración) para poder ser utilizadas dentro de los templates.
+===InjectedFieldWrapper=== 
+El objetivo de esta clase es encapsular todas las propiedades del field (nombre y tipo), así como un conjunto de propiedades inyectadas en tiempo de ejecución (definidas en el archivo de configuración) para poder ser utilizadas dentro de los templates.
 
 Estructura del bean-spring:
+
+Inyectando propiedades el field idCustomer de la clase org.test.Customer
 {{{
-<bean id="idCustomer" class="org.tequila.template.datamodel.DynaAnnotatedFieldWrapper">
+<bean id="idCustomer" class="org.tequila.template.wrapper.InjectedFieldWrapper">
     <property name="className" value="org.test.Customer" />
     <property name="fieldName" value="idCustomer" />
 
-    <property name="annotations">
+    <property name="injectedFieldProperties">
         <map>
             <entry>
                 <key><value>primaryKey</value></key>
