@@ -266,6 +266,10 @@ ${project.author}: author
 }}}
 Las rutas utilizadas en el template deberán ser relativas al proyecto cargado.
 
+==Template==
+Esta clase modela un template, su ruta, su capa, su descripcion
+==GroupTemplate==
+Esta clase modela un grupo de templates para ejecutarlos como una unidad
 
 =ClassLoader=
 El classloader para este proyecto es muy importante ya que es donde buscará las definiciones de las clases. Las clases de tipo PojoWrapper las buscará primero en el classloader local y después en el classloader del proyecto existente.
