@@ -20,6 +20,10 @@ package org.tequila.project;
  * Esta clase modela proyectos que no tienen una estructura estandar, si se cuenta
  * con un proyecto de este tipo, se debería crear una instancia de esta clase
  * para definir donde se encuentra cada carpeta.
+ * 
+ * Muchos desarrolladores siguen sus propias convenciones de carpetas, 
+ * esta clase sirve para crear proyectos que no sigan una estructura específica.
+ * 
  * @author iberck
  */
 public class FreeJProject extends JProject {
