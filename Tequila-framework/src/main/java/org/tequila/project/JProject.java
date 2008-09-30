@@ -29,7 +29,7 @@ import org.tequila.template.wrapper.JProjectWrapper;
 public abstract class JProject implements ExternalProject {
 
     protected static final Log log = LogFactory.getLog(JProject.class);
-    private String path;
+    private final String path;
 
     protected JProject(String path) {
         this.path = path;

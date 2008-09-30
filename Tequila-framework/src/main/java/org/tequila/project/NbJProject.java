@@ -22,9 +22,9 @@ import java.io.File;
  * Esta clase modela un proyecto java básico en netbeans
  * @author iberck
  */
-public class NbProject extends JProject {
+public class NbJProject extends JProject {
 
-    public NbProject(String path) {
+    public NbJProject(String path) {
         super(path);
     }
 

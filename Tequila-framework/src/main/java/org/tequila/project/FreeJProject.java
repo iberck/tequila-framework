@@ -28,23 +28,26 @@ package org.tequila.project;
  */
 public class FreeJProject extends JProject {
 
-    private String classesPath;
-    private String sourcesPath;
-    private String testPath;
+    private final String classesPath;
+    private final String sourcesPath;
+    private final String testPath;
 
-    public FreeJProject(String path) {
+    /**
+     * Crea un proyecto de estructura libre de acuerdo a los siguientes parámetros.
+     * 
+     * si su proyecto tiene los sources en la carpeta 'src' deberá mandar como segundo parámetro
+     * "src" y así sucesivamente.
+     * 
+     * @param path Path del proyecto
+     * @param sourcesPath Carpeta relativa sources
+     * @param classesPath Carpeta relativa a donde se encuentran los archivos .class
+     * @param testPath Carpeta relativa al proyecto donde se encuentran los test
+     */
+    public FreeJProject(String path, String sourcesPath, String classesPath, String testPath) {
         super(path);
-    }
 
-    public void setClassesPath(String classesPath) {
-        this.classesPath = classesPath;
-    }
-
-    public void setSourcesPath(String sourcesPath) {
         this.sourcesPath = sourcesPath;
-    }
-
-    public void setTestPath(String testPath) {
+        this.classesPath = classesPath;
         this.testPath = testPath;
     }
 
