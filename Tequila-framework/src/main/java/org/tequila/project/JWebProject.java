@@ -16,8 +16,6 @@
  */
 package org.tequila.project;
 
-import java.io.File;
-
 /**
  *
  * Esta clase modela los proyectos externos de tipo java web

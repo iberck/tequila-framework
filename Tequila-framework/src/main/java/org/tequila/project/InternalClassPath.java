@@ -43,6 +43,8 @@ public class InternalClassPath {
      * @throws ProjectException No se puede agregar el recurso al classpath interno
      */
     private static void addURL(URL url) {
+        log.debug("Agregando el recurso '" + url + "' al classpath interno");
+
         try {
             URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
             Class<?> clazz = URLClassLoader.class;
