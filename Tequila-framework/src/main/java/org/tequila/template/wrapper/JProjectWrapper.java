@@ -14,44 +14,25 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.project;
+package org.tequila.template.wrapper;
 
-import java.io.File;
+import java.util.Map;
+import org.tequila.project.JProject;
 
 /**
- *
+ * Esta clase modela el wrapper del proyecto, lo cual no es otra cosa que un objeto 
+ * entendible por el template, el objetivo del wrapper es dar al usuario la posibilidad 
+ * de utilizar todas las propiedades del proyecto dentro de los templates.
+ * Por ejemplo usted obtendrá el nombre de proyecto dentro de un template de 
+ * la siguiente manera:
+ * ${project.sources.path}
+ * 
  * @author iberck
  */
-public class NbProject extends JProject {
+public class JProjectWrapper implements TemplateObjectWrapper<JProject> {
 
-    public NbProject(String path) {
-        super(path);
-    }
-
-    /**
-     * @see ExternalProject
-     * @return
-     */
     @Override
-    public String getClassesPath() {
-        return "build" + File.separator + "classes";
-    }
-
-    /**
-     * @see ExternalProject
-     * @return
-     */
-    @Override
-    public String getSourcesPath() {
-        return "src";
-    }
-
-    /**
-     * @see ExternalProject
-     * @return
-     */
-    @Override
-    public String getTestPath() {
-        return "test";
+    public Map wrap(JProject object) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
