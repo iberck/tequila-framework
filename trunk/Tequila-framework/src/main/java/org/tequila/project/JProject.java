@@ -18,6 +18,8 @@ package org.tequila.project;
 
 import java.io.File;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Esta clase modela los proyectos externos de tipo java básico
@@ -25,6 +27,7 @@ import org.apache.commons.io.FilenameUtils;
  */
 public abstract class JProject implements ExternalProject {
 
+    protected static final Log log = LogFactory.getLog(JProject.class);
     private String path;
 
     protected JProject(String path) {
@@ -100,8 +103,9 @@ public abstract class JProject implements ExternalProject {
      */
     @Override
     public void validateProject() throws ProjectException {
+        log.debug("Validando el proyecto");
+        
         // validar que exista la ruta del proyecto
-
         if (!exists(getPath())) {
             throw new ProjectException("No existe el proyecto '" + getPath() + "'");
         }
