@@ -18,8 +18,11 @@ package org.tequila.project;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -39,15 +42,20 @@ public class InternalClassPath {
      * Agrega una url al classloader interno
      * @see InternalClassPath
      * @param url
-     * @throws java.lang.Exception
+     * @throws ProjectException No se puede agregar el recurso al classpath interno
      */
-    private static void addURL(URL url) throws Exception {
-        URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        Class<?> clazz = URLClassLoader.class;
+    private static void addURL(URL url) {
+        try {
+            URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+            Class<?> clazz = URLClassLoader.class;
 
-        Method method = clazz.getDeclaredMethod("addURL", parameters);
-        method.setAccessible(true);
-        method.invoke(classLoader, new Object[]{url});
+            Method method = clazz.getDeclaredMethod("addURL", parameters);
+            method.setAccessible(true);
+            method.invoke(classLoader, new Object[]{url});
+        } catch (Exception ex) {
+            throw new ProjectException("No se puede agregar recurso " +
+                    "'" + url + "' al classpath interno", ex);
+        }
     }
 
     /**
@@ -66,15 +74,28 @@ public class InternalClassPath {
      * InternalClassPath.addFile(new File("c:/Proyect1/conf/app-context.xml"));
      * y a partir de ese momento lo tendrá a disposición.
      *
-     * @throws java.lang.Exception: En caso que no exista el recurso o
+     * @throws ProjectException: En caso que no exista el recurso o
      * no se puede agregar al classpath interno.
      */
-    static void addResource(File resource) throws Exception {
+    static void addResource(File resource) {
         if (!resource.exists()) {
-            throw new IllegalArgumentException("No se puede agregar el recurso " +
-                    "al classpath interno ya que no existe el archivo");
+            throw new ProjectException("No se pudo agregar el recurso " + "al " +
+                    "classpath interno ya que no existe");
         }
 
-        addURL(resource.toURI().toURL());
+        try {
+            addURL(resource.toURI().toURL());
+        } catch (MalformedURLException ex) {
+            throw new ProjectException("No se pudo agregar el recurso al classpath interno", ex);
+        }
+    }
+
+    /**
+     * @see addResource(File resource)
+     * @param resource
+     * @throws ProjectException
+     */
+    static void addResource(String resource) {
+        addResource(new File(resource));
     }
 }

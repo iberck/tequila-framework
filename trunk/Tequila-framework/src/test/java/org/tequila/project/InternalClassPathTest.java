@@ -62,7 +62,7 @@ public class InternalClassPathTest extends TestCase {
         }
 
         // verificar que SI se puede crear un objeto de la clase
-        File classes = new File("C:/projects/Tequila-framework/src/test/resources/classes/");
+        File classes = new File("./src/test/resources/classes/");
         InternalClassPath.addResource(classes);
 
         Class<?> classForName = null;
