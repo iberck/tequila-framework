@@ -16,12 +16,11 @@
  */
 package org.tequila.project;
 
-import org.tequila.template.wrapper.JProjectWrapper;
 import org.tequila.template.wrapper.JWebProjectWrapper;
 
 /**
  *
- * Esta clase modela los proyectos externos de tipo java web
+ * Esta clase abstracta modela los proyectos externos de tipo java web
  * @author iberck
  */
 public abstract class JWebProject extends JProject {

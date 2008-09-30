@@ -20,12 +20,14 @@ import java.util.Map;
 import org.tequila.project.JProject;
 
 /**
- * Esta clase modela el wrapper del proyecto, lo cual no es otra cosa que un objeto 
+ * Esta clase modela el wrapper del proyecto web, lo cual no es otra cosa que un objeto 
  * entendible por el template, el objetivo del wrapper es dar al usuario la posibilidad 
  * de utilizar todas las propiedades del proyecto dentro de los templates.
- * Por ejemplo usted obtendrá el nombre de proyecto dentro de un template de 
+ * Por ejemplo usted obtendrá la ruta web-inf dentro de un template de 
  * la siguiente manera:
  * ${project.webinf.path}
+ * 
+ * Ademas podrá utilizar todas las propiedades del wrapper JProjectWrapper
  * 
  * @author iberck
  */

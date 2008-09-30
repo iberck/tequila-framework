@@ -19,8 +19,8 @@ package org.tequila.project;
 import org.tequila.template.wrapper.TemplateObjectWrapper;
 
 /**
- * Esta clase modela los proyectos externos en donde se depositarán los archivos
- * generados por el framework.
+ * Esta clase modela los proyectos externos de los cuales se podrá obtener recursos y 
+ * se depositarán los archivos generados por el framework.
  * @author iberck
  */
 public interface ExternalProject {

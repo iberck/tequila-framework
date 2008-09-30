@@ -19,7 +19,7 @@ package org.tequila.project;
 import java.io.File;
 
 /**
- *
+ * Esta clase modela un proyecto java básico en netbeans
  * @author iberck
  */
 public class NbProject extends JProject {
