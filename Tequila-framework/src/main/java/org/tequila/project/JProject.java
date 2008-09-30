@@ -52,7 +52,7 @@ public abstract class JProject implements ExternalProject {
             throw new ProjectException("El nombre del proyecto no es válido");
         }
 
-        return FilenameUtils.getName(path);
+        return projectName;
     }
 
     /**
@@ -104,6 +104,11 @@ public abstract class JProject implements ExternalProject {
 
         if (!exists(getPath())) {
             throw new ProjectException("No existe el proyecto '" + getPath() + "'");
+        }
+
+        File f = new File(getPath());
+        if (!f.canWrite()) {
+            throw new ProjectException("El proyecto '" + getPath() + "' es de solo lectura");
         }
 
         // valida que se encuentre la carpeta sources
