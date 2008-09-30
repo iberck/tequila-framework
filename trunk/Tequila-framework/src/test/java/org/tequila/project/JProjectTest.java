@@ -38,9 +38,12 @@ public class JProjectTest extends TestCase {
         super.tearDown();
     }
 
-    public void testNbProject() {
+    /**
+     * Testea los proyectos java básicos de netbeans
+     */
+    public void testNbJProject() {
 
-        JProject nbProject = new NbProject(".\\src\\test\\resources\\NbApplication");
+        JProject nbProject = new NbJProject(".\\src\\test\\resources\\NbApplication");
 
         // validar nombre del proyecto
         assertEquals(nbProject.getProjectName(), "NbApplication");
@@ -67,5 +70,73 @@ public class JProjectTest extends TestCase {
             throw new AssertionError(ex.getCause());
         }
 
+    }
+
+    /**
+     * Testea los proyectos java web de netbeans
+     */
+    public void testNbJWebProject() {
+
+        JProject nbProject = new NbJWebProject(".\\src\\test\\resources\\NbWebApplicationTest");
+
+        // validar nombre del proyecto
+        assertEquals(nbProject.getProjectName(), "NbWebApplicationTest");
+
+        // validar estructura del proyecto
+        try {
+            nbProject.validateProject();
+        } catch (Exception ex) {
+            throw new AssertionError(ex.getCause());
+        }
+
+        // validar que agregue el proyecto al classpath
+        try {
+            nbProject.addToInternalClassPath();
+        } catch (Exception ex) {
+            throw new AssertionError(ex.getCause());
+        }
+
+        // validar que pueda que las clases del proyecto externo esten en el classpath    
+        try {
+            Object instance = Class.forName("org.iberck.test.Foo").newInstance();
+            assertNotNull(instance);
+        } catch (Exception ex) {
+            throw new AssertionError(ex.getCause());
+        }
+
+    }
+
+    /**
+     * Testea los proyectos con estructura libre
+     */
+    public void testFreeJProject() {
+
+        JProject nbProject = new FreeJProject(".\\src\\test\\resources\\FreeJProject", "src", "bin", "test");
+
+
+        // validar nombre del proyecto
+        assertEquals(nbProject.getProjectName(), "FreeJProject");
+
+        // validar estructura del proyecto
+        try {
+            nbProject.validateProject();
+        } catch (Exception ex) {
+            throw new AssertionError(ex.getCause());
+        }
+
+        // validar que agregue el proyecto al classpath
+        try {
+            nbProject.addToInternalClassPath();
+        } catch (Exception ex) {
+            throw new AssertionError(ex.getCause());
+        }
+
+        // validar que pueda que las clases del proyecto externo esten en el classpath    
+        try {
+            Object instance = Class.forName("org.test.Clase").newInstance();
+            assertNotNull(instance);
+        } catch (Exception ex) {
+            throw new AssertionError(ex.getCause());
+        }
     }
 }
