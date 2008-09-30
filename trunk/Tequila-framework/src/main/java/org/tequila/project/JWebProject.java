@@ -16,6 +16,9 @@
  */
 package org.tequila.project;
 
+import org.tequila.template.wrapper.JProjectWrapper;
+import org.tequila.template.wrapper.JWebProjectWrapper;
+
 /**
  *
  * Esta clase modela los proyectos externos de tipo java web
@@ -49,5 +52,10 @@ public abstract class JWebProject extends JProject {
             throw new ProjectException("No existe la carpeta WEB-INF '" + webInf + "' dentro del " +
                     "proyecto");
         }
+    }
+
+    @Override
+    public JWebProjectWrapper getProjectWrapper() {
+        return new JWebProjectWrapper();
     }
 }

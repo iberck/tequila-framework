@@ -16,7 +16,7 @@
  */
 package org.tequila.project;
 
-import org.tequila.template.wrapper.ProjectWrapper;
+import org.tequila.template.wrapper.TemplateObjectWrapper;
 
 /**
  * Esta clase modela los proyectos externos en donde se depositarán los archivos
@@ -47,7 +47,7 @@ public interface ExternalProject {
      * 
      * @return Un wrapper de template para el proyecto
      */
-    public ProjectWrapper getProjectWrapper();
+    public TemplateObjectWrapper getProjectWrapper();
 
     /**
      * Valida que el proyecto tenga una estructura básica de acuerdo a su tipo

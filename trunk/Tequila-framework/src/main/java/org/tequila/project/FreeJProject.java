@@ -16,42 +16,46 @@
  */
 package org.tequila.project;
 
-import java.io.File;
-
 /**
- *
+ * Esta clase modela proyectos que no tienen una estructura estandar, si se cuenta
+ * con un proyecto de este tipo, se debería crear una instancia de esta clase
+ * para definir donde se encuentra cada carpeta.
  * @author iberck
  */
-public class NbProject extends JProject {
+public class FreeJProject extends JProject {
 
-    public NbProject(String path) {
+    private String classesPath;
+    private String sourcesPath;
+    private String testPath;
+
+    public FreeJProject(String path) {
         super(path);
     }
 
-    /**
-     * @see ExternalProject
-     * @return
-     */
+    public void setClassesPath(String classesPath) {
+        this.classesPath = classesPath;
+    }
+
+    public void setSourcesPath(String sourcesPath) {
+        this.sourcesPath = sourcesPath;
+    }
+
+    public void setTestPath(String testPath) {
+        this.testPath = testPath;
+    }
+
     @Override
     public String getClassesPath() {
-        return "build" + File.separator + "classes";
+        return classesPath;
     }
 
-    /**
-     * @see ExternalProject
-     * @return
-     */
     @Override
     public String getSourcesPath() {
-        return "src";
+        return sourcesPath;
     }
 
-    /**
-     * @see ExternalProject
-     * @return
-     */
     @Override
     public String getTestPath() {
-        return "test";
+        return testPath;
     }
 }

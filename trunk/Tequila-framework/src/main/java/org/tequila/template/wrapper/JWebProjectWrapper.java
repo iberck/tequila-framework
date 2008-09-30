@@ -17,7 +17,7 @@
 package org.tequila.template.wrapper;
 
 import java.util.Map;
-import org.tequila.project.ExternalProject;
+import org.tequila.project.JProject;
 
 /**
  * Esta clase modela el wrapper del proyecto, lo cual no es otra cosa que un objeto 
@@ -25,20 +25,18 @@ import org.tequila.project.ExternalProject;
  * de utilizar todas las propiedades del proyecto dentro de los templates.
  * Por ejemplo usted obtendrá el nombre de proyecto dentro de un template de 
  * la siguiente manera:
- * ${project.name}
+ * ${project.webinf.path}
  * 
  * @author iberck
  */
-public class ProjectWrapper implements TemplateObjectWrapper<ExternalProject> {
+public class JWebProjectWrapper extends JProjectWrapper {
 
-    /**
-     * Crea un wrapper para el proyecto
-     * @see ExternalProject
-     * @param object
-     * @return
-     */
     @Override
-    public Map wrap(ExternalProject object) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Map wrap(JProject object) {
+        Map m = super.wrap(object);
+
+        // TODO: implementar el wrapper para el proyecto web
+
+        return m;
     }
 }
