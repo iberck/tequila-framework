@@ -14,41 +14,33 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.framework;
-
-import junit.framework.TestCase;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+package org.tequila.project;
 
 /**
- *
+ * Modela las excepciones en tiempo de ejecución de los proyectos
  * @author iberck
  */
-public class Log4jTest extends TestCase {
+public class ProjectException extends RuntimeException {
 
-    private static final Log log = LogFactory.getLog(Log4jTest.class);
-
-    public Log4jTest(String testName) {
-        super(testName);
+    /**
+     * Crea una excepcion vacía
+     */
+    public ProjectException() {
     }
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    /**
+     * Crea una excepción con un mensaje
+     * @param msg
+     */
+    public ProjectException(String msg) {
+        super(msg);
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
-
-    public void testLogj4() {
-        try {
-            log.debug("log4j test");
-        } catch (Throwable ex) {
-            throw new AssertionError(ex);
-        }
-
-        assertTrue(true);
+    /**
+     * Crea una excepción con un mensaje y un objeto con la excepcion
+     * @param msg
+     */
+    public ProjectException(String msg, Throwable t) {
+        super(msg, t);
     }
 }

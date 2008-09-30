@@ -14,21 +14,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.framework;
+package org.tequila.project;
 
 import junit.framework.TestCase;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  *
  * @author iberck
  */
-public class Log4jTest extends TestCase {
+public class JProjectTest extends TestCase {
 
-    private static final Log log = LogFactory.getLog(Log4jTest.class);
-
-    public Log4jTest(String testName) {
+    public JProjectTest(String testName) {
         super(testName);
     }
 
@@ -42,13 +38,34 @@ public class Log4jTest extends TestCase {
         super.tearDown();
     }
 
-    public void testLogj4() {
+    public void testNbProject() {
+
+        JProject nbProject = new NbProject(".\\src\\test\\resources\\NbApplication");
+
+        // validar nombre del proyecto
+        assertEquals(nbProject.getProjectName(), "NbApplication");
+
+        // validar estructura del proyecto
         try {
-            log.debug("log4j test");
-        } catch (Throwable ex) {
-            throw new AssertionError(ex);
+            nbProject.validateProject();
+        } catch (Exception ex) {
+            throw new AssertionError(ex.getCause());
         }
 
-        assertTrue(true);
+        // validar que agregue el proyecto al classpath
+        try {
+            nbProject.addToInternalClassPath();
+        } catch (Exception ex) {
+            throw new AssertionError(ex.getCause());
+        }
+
+        // validar que pueda que las clases del proyecto externo esten en el classpath    
+        try {
+            Object instance = Class.forName("nbapplication.Main").newInstance();
+            assertNotNull(instance);
+        } catch (Exception ex) {
+            throw new AssertionError(ex.getCause());
+        }
+
     }
 }
