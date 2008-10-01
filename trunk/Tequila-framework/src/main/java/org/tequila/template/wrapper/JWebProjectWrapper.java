@@ -49,7 +49,7 @@ public class JWebProjectWrapper extends JProjectWrapper {
         JWebProject webProject = (JWebProject) project;
         Map m = super.wrap(webProject);
 
-        Map properties = (Map) m.get(PROJECT_ROOT);
+        Map properties = (Map) m.get(PROJECT_PROPERTIES);
         properties.put("webInfPath", webProject.getWebInfPath());
         properties.put("webInfAbsPath", webProject.getAbsolutePath(webProject.getWebInfPath()));
 
