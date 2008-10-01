@@ -18,6 +18,7 @@ package org.tequila.template.wrapper;
 
 import java.util.Map;
 import org.tequila.project.JProject;
+import org.tequila.project.JWebProject;
 
 /**
  * Esta clase modela el wrapper del proyecto web, lo cual no es otra cosa que un objeto 
@@ -33,11 +34,24 @@ import org.tequila.project.JProject;
  */
 public class JWebProjectWrapper extends JProjectWrapper {
 
+    /**
+     * Realiza el wrapper de un proyecto java básico, hasta el momento se cuenta con
+     * las siguientes propiedades:
+     * @see JProjectWrapper
+     * 
+     * ${project.webInfPath} -> Ruta relativa a la carpeta WEB-INF del proyecto
+     * ${project.webInfAbsPath} -> Ruta absoluta a la carpeta WEB-INF del proyecto
+     * @param project
+     * @return
+     */
     @Override
-    public Map wrap(JProject object) {
-        Map m = super.wrap(object);
+    public Map wrap(JProject project) {
+        JWebProject webProject = (JWebProject) project;
+        Map m = super.wrap(webProject);
 
-        // TODO: implementar el wrapper para el proyecto web
+        Map properties = (Map) m.get(PROJECT_ROOT);
+        properties.put("webInfPath", webProject.getWebInfPath());
+        properties.put("webInfAbsPath", webProject.getAbsolutePath(webProject.getWebInfPath()));
 
         return m;
     }
