@@ -16,7 +16,7 @@
  */
 package org.tequila.project;
 
-import org.tequila.template.wrapper.TemplateObjectWrapper;
+import java.util.Map;
 
 /**
  * Esta clase modela los proyectos externos de los cuales se podrá obtener recursos y 
@@ -47,7 +47,7 @@ public interface ExternalProject {
      * 
      * @return Un wrapper de template para el proyecto
      */
-    public TemplateObjectWrapper getProjectWrapper();
+    public Map wrap();
 
     /**
      * Valida que el proyecto tenga una estructura básica de acuerdo a su tipo

@@ -17,6 +17,7 @@
 package org.tequila.project;
 
 import java.io.File;
+import java.util.Map;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,9 +31,13 @@ public abstract class JProject implements ExternalProject {
 
     protected static final Log log = LogFactory.getLog(JProject.class);
     private final String path;
-
+    protected JProjectWrapper projectWrapper;
+    
     protected JProject(String path) {
         this.path = path;
+        
+        // wrapper del proyecto.
+        projectWrapper = new JProjectWrapper();
     }
 
     /**
@@ -60,8 +65,8 @@ public abstract class JProject implements ExternalProject {
     }
 
     @Override
-    public JProjectWrapper getProjectWrapper() {
-        return new JProjectWrapper();
+    public Map wrap() {
+        return projectWrapper.wrap(this);
     }
 
     /**
@@ -168,7 +173,7 @@ public abstract class JProject implements ExternalProject {
      * @param dir
      * @return
      */
-    protected String getAbsolutePath(String dir) {
+    public String getAbsolutePath(String dir) {
         return getPath() + File.separator + dir;
     }
 }

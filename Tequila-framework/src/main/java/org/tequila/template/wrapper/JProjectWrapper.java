@@ -16,6 +16,7 @@
  */
 package org.tequila.template.wrapper;
 
+import java.util.HashMap;
 import java.util.Map;
 import org.tequila.project.JProject;
 
@@ -25,14 +26,45 @@ import org.tequila.project.JProject;
  * de utilizar todas las propiedades del proyecto dentro de los templates.
  * Por ejemplo usted obtendrá el el path de los sources dentro de un template de 
  * la siguiente manera:
- * ${project.sources.path}
+ * ${project.srcPath}
  * 
  * @author iberck
  */
 public class JProjectWrapper implements TemplateObjectWrapper<JProject> {
 
+    protected final static String PROJECT_ROOT = "project";
+
+    /**
+     * Realiza el wrapper de un proyecto java básico, hasta el momento se cuenta con
+     * las siguientes propiedades:
+     * 
+     * ${project.path} -> Path absoluto del proyecto
+     * ${project.name} -> Nombre del proyecto
+     * ${project.srcPath} -> Carpeta relativa a los sources del proyecto
+     * ${project.srcAbsPath} -> Carpeta absoluta a los sources del proyecto
+     * ${project.classesPath} -> Carpeta relativa a los .class del proyecto
+     * ${project.classesAbsPath} -> Carpeta absoluta a los .class del proyecto
+     * ${project.testPath} -> Carpeta relativa a los test del proyecto
+     * ${project.testAbsPath} -> Carpeta absoluta a los test del proyecto
+     * 
+     * @param project
+     * @return
+     */
     @Override
-    public Map wrap(JProject object) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Map wrap(JProject project) {
+        Map root = new HashMap();
+        Map properties = new HashMap();
+
+        root.put(PROJECT_ROOT, properties);
+        properties.put("path", project.getPath());
+        properties.put("name", project.getProjectName());
+        properties.put("srcPath", project.getSourcesPath());
+        properties.put("srcAbsPath", project.getAbsolutePath(project.getSourcesPath()));
+        properties.put("classesPath", project.getClassesPath());
+        properties.put("classesAbsPath", project.getAbsolutePath(project.getClassesPath()));
+        properties.put("testPath", project.getTestPath());
+        properties.put("testAbsPath", project.getAbsolutePath(project.getTestPath()));
+
+        return root;
     }
 }

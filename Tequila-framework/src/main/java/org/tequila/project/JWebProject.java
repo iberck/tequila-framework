@@ -16,6 +16,7 @@
  */
 package org.tequila.project;
 
+import java.util.Map;
 import org.tequila.template.wrapper.JWebProjectWrapper;
 
 /**
@@ -25,8 +26,13 @@ import org.tequila.template.wrapper.JWebProjectWrapper;
  */
 public abstract class JWebProject extends JProject {
 
+    protected JWebProjectWrapper jWebProjectWrapper;
+
     protected JWebProject(String path) {
         super(path);
+
+        // wrapper del proyecto web.
+        jWebProjectWrapper = new JWebProjectWrapper();
     }
 
     /**
@@ -54,7 +60,7 @@ public abstract class JWebProject extends JProject {
     }
 
     @Override
-    public JWebProjectWrapper getProjectWrapper() {
-        return new JWebProjectWrapper();
+    public Map wrap() {
+        return jWebProjectWrapper.wrap(this);
     }
 }
