@@ -48,7 +48,7 @@ public class InternalClassPathTest extends TestCase {
     }
 
     /**
-     * Test of addFile method, of class InternalClassPath.
+     * Test of addFile method, of class RuntimeClassPath.
      */
     public void testAddClassesDir() throws Exception {
         log.debug("addFile");
@@ -63,7 +63,7 @@ public class InternalClassPathTest extends TestCase {
 
         // verificar que SI se puede crear un objeto de la clase
         File classes = new File("./src/test/resources/classes/");
-        InternalClassPath.addResource(classes);
+        JProject.RuntimeClassPath.addResource(classes);
 
         Class<?> classForName = null;
         try {
@@ -94,7 +94,7 @@ public class InternalClassPathTest extends TestCase {
         }
 
         File resources = new File("./src/test/resources/up-to-classpath.xml");
-        InternalClassPath.addResource(resources);
+        JProject.RuntimeClassPath.addResource(resources);
 
         BeanFactory factory = new XmlBeanFactory(
                 new ClassPathResource("up-to-classpath.xml"));
