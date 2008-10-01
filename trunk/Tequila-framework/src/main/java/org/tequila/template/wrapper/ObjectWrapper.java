@@ -16,14 +16,14 @@
  */
 package org.tequila.template.wrapper;
 
-import java.util.Map;
-
 /**
- * Representa una clase que crea wrappers en forma de mapas, freemarker y velocity
- * cuentan con dicha filosofía.
+ * Esta interfaz representa cualquier objeto que pueda ser envuelto para 
+ * posteriormente ser utilizado dentro de los templates.
+ * Con el objetivo de poder mapear objetos a distintos motores de plantillas.
+ * 
  * @author iberck
  */
-public interface MapObjectWrapper<T> {
+public interface ObjectWrapper<T> {
 
-    public Map wrap(T object);
+    public Object wrap(T object);
 }

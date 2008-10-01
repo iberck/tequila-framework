@@ -32,7 +32,7 @@ public class AbstractFreemarkerTestCaseTest extends AbstractFreemarkerTestCase {
         // un proyecto cualquiera
         JProject nbProject = new NbJProject("./src/test/resources/NbApplication");
         nbProject.setup();
-        Map projectWrap = nbProject.wrap();
+        Map projectWrap = nbProject.getProjectWrapper().wrap(nbProject);
 
         String templateDef = "${project.name}, ${project.path}, ${project.srcPath}," +
                 "${project.classesPath}, ${project.testPath}";

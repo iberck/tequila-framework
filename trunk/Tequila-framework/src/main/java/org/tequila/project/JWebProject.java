@@ -16,8 +16,8 @@
  */
 package org.tequila.project;
 
-import java.util.Map;
 import org.tequila.template.wrapper.JWebProjectWrapper;
+import org.tequila.template.wrapper.ProjectWrapper;
 
 /**
  *
@@ -59,8 +59,12 @@ public abstract class JWebProject extends JProject {
         }
     }
 
+    /**
+     * Obtiene el wrapper para proyectos web
+     * @return
+     */
     @Override
-    public Map wrap() {
-        return jWebProjectWrapper.wrap(this);
+    public ProjectWrapper getProjectWrapper() {
+        return jWebProjectWrapper;
     }
 }
