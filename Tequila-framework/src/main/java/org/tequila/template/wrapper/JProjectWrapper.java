@@ -30,7 +30,7 @@ import org.tequila.project.JProject;
  * 
  * @author iberck
  */
-public class JProjectWrapper implements MapObjectWrapper<JProject> {
+public class JProjectWrapper implements ProjectWrapper<JProject> {
 
     protected final static String PROJECT_PROPERTIES = "project";
     protected final static String PROJECT_PATH = "path";

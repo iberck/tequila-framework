@@ -45,7 +45,7 @@ public class ProjectWrapTest extends AbstractFreemarkerTestCase {
     public void testNbProjectWrapp() throws Exception {
         JProject nbProject = new NbJProject("./src/test/resources/NbApplication");
         nbProject.setup();
-        Map projectWrap = nbProject.wrap();
+        Map projectWrap = nbProject.getProjectWrapper().wrap(nbProject);
 
         Map projectProps = (Map) projectWrap.get(JProjectWrapper.PROJECT_PROPERTIES);
         assertEquals(projectProps.get(JProjectWrapper.PROJECT_NAME), "NbApplication");
@@ -60,5 +60,6 @@ public class ProjectWrapTest extends AbstractFreemarkerTestCase {
         assertEqualsFreemarkerTemplate(projectWrap, "${project.srcPath}", "src");
         assertEqualsFreemarkerTemplate(projectWrap, "${project.classesPath}", "build" + File.separator + "classes");
         assertEqualsFreemarkerTemplate(projectWrap, "${project.testPath}", "test");
+
     }
 }

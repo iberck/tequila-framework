@@ -16,14 +16,17 @@
  */
 package org.tequila.template.wrapper;
 
+import java.util.Map;
+import org.tequila.project.ExternalProject;
+
 /**
- * Esta interfaz representa cualquier objeto que pueda ser envuelto para 
- * posteriormente ser utilizado dentro de los templates.
- * Con el objetivo de poder mapear objetos a distintos motores de plantillas.
+ * Interfaz que modela los wrappers de proyectos externos.
  * 
+ * @see ObjectWrapper
  * @author iberck
  */
-public interface TemplateObjectWrapper<T, R> {
+public interface ProjectWrapper<T extends ExternalProject> extends ObjectWrapper<T> {
 
-    public R wrap(T object);
+    @Override
+    public Map wrap(T project);
 }

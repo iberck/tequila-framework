@@ -21,11 +21,11 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Map;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tequila.template.wrapper.JProjectWrapper;
+import org.tequila.template.wrapper.ProjectWrapper;
 
 /**
  * Esta clase modela los proyectos externos de tipo java básico
@@ -33,9 +33,9 @@ import org.tequila.template.wrapper.JProjectWrapper;
  */
 public abstract class JProject implements ExternalProject {
 
+    protected ProjectWrapper projectWrapper;
     protected static final Log log = LogFactory.getLog(JProject.class);
     private final String path;
-    protected JProjectWrapper projectWrapper;
 
     /**
      * Crea un nuevo JProject a partir de una ruta
@@ -44,7 +44,6 @@ public abstract class JProject implements ExternalProject {
     protected JProject(String path) throws ProjectException {
         this.path = path;
 
-        // wrapper del proyecto.
         projectWrapper = new JProjectWrapper();
     }
 
@@ -70,11 +69,6 @@ public abstract class JProject implements ExternalProject {
         }
 
         return projectName;
-    }
-
-    @Override
-    public Map wrap() {
-        return projectWrapper.wrap(this);
     }
 
     /**
@@ -107,6 +101,15 @@ public abstract class JProject implements ExternalProject {
      * @return
      */
     public abstract String getTestPath();
+
+    /**
+     * Obtiene el autor del proyecto
+     * @return
+     */
+    @Override
+    public String getAuthor() {
+        return System.getProperty("user.name");
+    }
 
     /**
      * Valida que se encuentre al menos la estructurá básica del proyecto.
@@ -182,6 +185,15 @@ public abstract class JProject implements ExternalProject {
 
         // introducir el proyecto al classpath
         addToInternalClassPath();
+    }
+
+    /**
+     * Obtiene el wrapper para projectos java básicos
+     * @return
+     */
+    @Override
+    public ProjectWrapper getProjectWrapper() {
+        return projectWrapper;
     }
 
     /**
