@@ -18,15 +18,15 @@ package org.tequila.template.wrapper;
 
 import java.io.File;
 import java.util.Map;
-import junit.framework.TestCase;
 import org.tequila.project.JProject;
 import org.tequila.project.NbJProject;
+import org.tequila.template.freemarker.AbstractFreemarkerTestCase;
 
 /**
  *
  * @author iberck
  */
-public class ProjectWrapTest extends TestCase {
+public class ProjectWrapTest extends AbstractFreemarkerTestCase {
 
     public ProjectWrapTest(String testName) {
         super(testName);
@@ -42,9 +42,9 @@ public class ProjectWrapTest extends TestCase {
         super.tearDown();
     }
 
-    public void testProjectWrapp() {
+    public void testNbProjectWrapp() throws Exception {
         JProject nbProject = new NbJProject("./src/test/resources/NbApplication");
-
+        nbProject.setup();
         Map projectWrap = nbProject.wrap();
 
         Map projectProps = (Map) projectWrap.get(JProjectWrapper.PROJECT_PROPERTIES);
@@ -53,5 +53,12 @@ public class ProjectWrapTest extends TestCase {
         assertEquals(projectProps.get(JProjectWrapper.PROJECT_SRC_PATH), "src");
         assertEquals(projectProps.get(JProjectWrapper.PROJECT_CLASSES_PATH), "build" + File.separator + "classes");
         assertEquals(projectProps.get(JProjectWrapper.PROJECT_TEST_PATH), "test");
+
+        // freemarker test
+        assertEqualsFreemarkerTemplate(projectWrap, "${project.name}", "NbApplication");
+        assertEqualsFreemarkerTemplate(projectWrap, "${project.path}", "./src/test/resources/NbApplication");
+        assertEqualsFreemarkerTemplate(projectWrap, "${project.srcPath}", "src");
+        assertEqualsFreemarkerTemplate(projectWrap, "${project.classesPath}", "build" + File.separator + "classes");
+        assertEqualsFreemarkerTemplate(projectWrap, "${project.testPath}", "test");
     }
 }
