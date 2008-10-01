@@ -40,22 +40,12 @@ public abstract class JProject implements ExternalProject {
     /**
      * Crea un nuevo JProject a partir de una ruta
      * @param path Ruta del proyecto
-     * @throws org.tequila.project.ProjectException Se puede lanzar bajo las 
-     * siguientes circunstancias: 
-     *  1. El proyecto no es valido
-     *  2. El proyecto no se puede meter al RuntimeClasspath del framework.
      */
     protected JProject(String path) throws ProjectException {
         this.path = path;
 
         // wrapper del proyecto.
         projectWrapper = new JProjectWrapper();
-
-        // validar el proyecto
-        validateProject();
-
-        // introducir el proyecto al classpath
-        RuntimeClassPath.addResource(getPath() + File.separator + getClassesPath());
     }
 
     /**
@@ -132,10 +122,11 @@ public abstract class JProject implements ExternalProject {
      */
     @Override
     public void validateProject() throws ProjectException {
-        log.debug("Validando el proyecto");
+        log.debug("Validando el proyecto '" + getPath() + "'");
 
         // validar que exista la ruta del proyecto
-        if (!exists(getPath())) {
+        File fprj = new File(getPath());
+        if (!fprj.exists()) {
             throw new ProjectException("No existe el proyecto '" + getPath() + "'");
         }
 
@@ -145,23 +136,23 @@ public abstract class JProject implements ExternalProject {
         }
 
         // valida que se encuentre la carpeta sources
-        String src = getAbsolutePath(getSourcesPath());
-        if (!exists(src)) {
+        String src = getSourcesPath();
+        if (!existsInProject(src)) {
             throw new ProjectException("No existe la carpeta sources '" + src + "' dentro del " +
                     "proyecto");
         }
 
         // valida que se encuentre la carpeta classes
-        String classes = getAbsolutePath(getClassesPath());
-        if (!exists(classes)) {
+        String classes = getClassesPath();
+        if (!existsInProject(classes)) {
             throw new ProjectException("No existe la carpeta classes '" + classes + "' dentro del " +
                     "proyecto");
         }
 
         // valida que se encuentre la carpeta test siempre y cuando el proyecto java la soporte
         if (getTestPath() != null) {
-            String test = getAbsolutePath(getTestPath());
-            if (!exists(test)) {
+            String test = getTestPath();
+            if (!existsInProject(test)) {
                 throw new ProjectException("No existe la carpeta test '" + test + "' dentro del " +
                         "proyecto");
             }
@@ -169,30 +160,28 @@ public abstract class JProject implements ExternalProject {
     }
 
     /**
-     * Valida si existe el directorio
+     * Valida si existe el directorio dentro del proyecto
      * @param path
      * @return true si existe, false si no existe
      */
-    protected boolean exists(String directory) {
-        File f = new File(directory);
+    public boolean existsInProject(String directory) {
+        File f = new File(getPath() + File.separator + directory);
         return f.exists() && f.isDirectory();
     }
 
-    /**
-     * Obtiene la ruta absoluta del un directorio dentro de acuerdo al proyecto 
-     * externo, por ejemplo si desea obtener la ruta absoluta del directorio classes, 
-     * deberia utilizar este metodo como sigue:
-     * getAbsolutePath(getClassesPath());
-     * 
-     * Si su proyecto netbeans externo fuere c:/NbApp1 y quisiera la ruta classes,
-     * este método retornaría 
-     * c:/NbApp1/build/classes
-     * 
-     * @param dir
-     * @return
+    /*
+     * Inicializa el proyecto
+     * @throws org.tequila.project.ProjectException Se puede lanzar bajo las 
+     * siguientes circunstancias: 
+     *  1. El proyecto no es valido
+     *  2. El proyecto no se puede meter al RuntimeClasspath del framework.
      */
-    public String getAbsolutePath(String dir) {
-        return getPath() + File.separator + dir;
+    public void setup() throws ProjectException {
+        // validar el proyecto
+        validateProject();
+
+        // introducir el proyecto al classpath
+        addToInternalClassPath();
     }
 
     /**

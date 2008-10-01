@@ -34,6 +34,8 @@ import org.tequila.project.JWebProject;
  */
 public class JWebProjectWrapper extends JProjectWrapper {
 
+    protected final static String PROJECT_WEB_INF_PATH = "webInfPath";
+
     /**
      * Realiza el wrapper de un proyecto java básico, hasta el momento se cuenta con
      * las siguientes propiedades:
@@ -46,12 +48,12 @@ public class JWebProjectWrapper extends JProjectWrapper {
      */
     @Override
     public Map wrap(JProject project) {
+        // hace el wrapper de las propiedades padre
         JWebProject webProject = (JWebProject) project;
         Map m = super.wrap(webProject);
 
         Map properties = (Map) m.get(PROJECT_PROPERTIES);
-        properties.put("webInfPath", webProject.getWebInfPath());
-        properties.put("webInfAbsPath", webProject.getAbsolutePath(webProject.getWebInfPath()));
+        properties.put(PROJECT_WEB_INF_PATH, webProject.getWebInfPath());
 
         return m;
     }
