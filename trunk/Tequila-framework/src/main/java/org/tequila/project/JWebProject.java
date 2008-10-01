@@ -52,8 +52,8 @@ public abstract class JWebProject extends JProject {
         super.validateProject();
 
         // valida que se encuentre la carpeta classes
-        String webInf = getAbsolutePath(getWebInfPath());
-        if (!exists(webInf)) {
+        String webInf = getWebInfPath();
+        if (!existsInProject(webInf)) {
             throw new ProjectException("No existe la carpeta WEB-INF '" + webInf + "' dentro del " +
                     "proyecto");
         }
