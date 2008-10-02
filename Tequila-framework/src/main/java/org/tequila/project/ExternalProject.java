@@ -17,6 +17,7 @@
 package org.tequila.project;
 
 import org.tequila.template.wrapper.ProjectWrapper;
+import org.tequila.template.wrapper.ProjectWrapperFactory;
 
 /**
  * Esta clase modela los proyectos externos de los cuales se podrá obtener recursos y 
@@ -38,12 +39,6 @@ public interface ExternalProject {
     public String getProjectName();
 
     /**
-     * Obtiene el autor del proyecto
-     * @return
-     */
-    public String getAuthor();
-
-    /**
      * Valida que el proyecto tenga una estructura básica de acuerdo a su tipo
      * @throws org.tequila.project.ProjectException Se lanza cuando la estructura
      * del proyecto no sea valida.
@@ -51,8 +46,25 @@ public interface ExternalProject {
     public void validateProject() throws ProjectException;
 
     /**
-     * Obtiene el wrapper del proyecto
+     * Obtiene el wrapper del proyecto, el wrapper del proyecto servirá para saber
+     * con que tipo de clase debe crear el framework el objeto para la plantilla.
+     * Por ejemplo, cada proyecto debe decir si va a utilizar un wrapper para un proyecto
+     * java simple o un wrapper para un proyecto web, precisamente este método es para que
+     * cada proyecto diga que wrapper envolverá al proyecto.
      * @return
      */
     public ProjectWrapper getProjectWrapper();
+
+    /**
+     * Asigna la fabrica para envolver proyectos. La fabrica de envoltura de proyectos
+     * sirve para saber para que template engine será creado el objeto.
+     * @param pwf
+     */
+    public void setProjectWrapperFactory(ProjectWrapperFactory pwf);
+
+    /**
+     * Obtiene la fabrica de wrappers
+     * @return
+     */
+    public ProjectWrapperFactory getProjectWrapperFactory();
 }

@@ -24,6 +24,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
+import org.tequila.framework.FrameworkClassPath;
 
 /**
  *
@@ -63,7 +64,7 @@ public class InternalClassPathTest extends TestCase {
 
         // verificar que SI se puede crear un objeto de la clase
         File classes = new File("./src/test/resources/classes/");
-        JProject.RuntimeClassPath.addResource(classes);
+        FrameworkClassPath.addResource(classes);
 
         Class<?> classForName = null;
         try {
@@ -94,7 +95,7 @@ public class InternalClassPathTest extends TestCase {
         }
 
         File resources = new File("./src/test/resources/up-to-classpath.xml");
-        JProject.RuntimeClassPath.addResource(resources);
+        FrameworkClassPath.addResource(resources);
 
         BeanFactory factory = new XmlBeanFactory(
                 new ClassPathResource("up-to-classpath.xml"));

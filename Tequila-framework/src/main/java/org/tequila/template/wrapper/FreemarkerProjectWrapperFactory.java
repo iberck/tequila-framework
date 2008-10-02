@@ -16,16 +16,19 @@
  */
 package org.tequila.template.wrapper;
 
-import org.tequila.project.ExternalProject;
-
 /**
- * Interfaz que modela los wrappers de proyectos externos.
- * 
- * @see ObjectWrapper
+ *
  * @author iberck
  */
-public interface ProjectWrapper<T extends ExternalProject> extends ObjectWrapper<T> {
+public class FreemarkerProjectWrapperFactory implements ProjectWrapperFactory {
 
     @Override
-    public Object wrap(T project);
+    public ProjectWrapper getJProjectWrapper() {
+        return new FreemarkerJProjectWrapper();
+    }
+
+    @Override
+    public ProjectWrapper getJWebProjectWrapper() {
+        return new FreemarkerJWebProjectWrapper();
+    }
 }
