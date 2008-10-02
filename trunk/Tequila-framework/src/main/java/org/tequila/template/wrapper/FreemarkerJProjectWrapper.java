@@ -21,16 +21,10 @@ import java.util.Map;
 import org.tequila.project.JProject;
 
 /**
- * Esta clase modela el wrapper del proyecto, lo cual no es otra cosa que un objeto 
- * entendible por el template, el objetivo del wrapper es dar al usuario la posibilidad 
- * de utilizar todas las propiedades del proyecto dentro de los templates.
- * Por ejemplo usted obtendrá el el path de los sources dentro de un template de 
- * la siguiente manera:
- * ${project.srcPath}
- * 
+ *
  * @author iberck
  */
-public class JProjectWrapper implements ProjectWrapper<JProject> {
+public class FreemarkerJProjectWrapper implements ProjectWrapper<JProject> {
 
     protected final static String PROJECT_PROPERTIES = "project";
     protected final static String PROJECT_PATH = "path";

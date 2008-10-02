@@ -24,8 +24,9 @@ import java.net.URLClassLoader;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.tequila.template.wrapper.JProjectWrapper;
+import org.tequila.framework.FrameworkClassPath;
 import org.tequila.template.wrapper.ProjectWrapper;
+import org.tequila.template.wrapper.ProjectWrapperFactory;
 
 /**
  * Esta clase modela los proyectos externos de tipo java básico
@@ -33,8 +34,8 @@ import org.tequila.template.wrapper.ProjectWrapper;
  */
 public abstract class JProject implements ExternalProject {
 
-    protected ProjectWrapper projectWrapper;
     protected static final Log log = LogFactory.getLog(JProject.class);
+    protected ProjectWrapperFactory projectWrapperFactory;
     private final String path;
 
     /**
@@ -43,8 +44,6 @@ public abstract class JProject implements ExternalProject {
      */
     protected JProject(String path) throws ProjectException {
         this.path = path;
-
-        projectWrapper = new JProjectWrapper();
     }
 
     /**
@@ -77,7 +76,17 @@ public abstract class JProject implements ExternalProject {
      * @see RuntimeClassPath
      */
     protected void addToInternalClassPath() {
-        RuntimeClassPath.addResource(getPath() + File.separator + getClassesPath());
+        FrameworkClassPath.addResource(getPath() + File.separator + getClassesPath());
+    }
+
+    @Override
+    public ProjectWrapperFactory getProjectWrapperFactory() {
+        return projectWrapperFactory;
+    }
+
+    @Override
+    public void setProjectWrapperFactory(ProjectWrapperFactory projectWrapperFactory) {
+        this.projectWrapperFactory = projectWrapperFactory;
     }
 
     /**
@@ -106,7 +115,6 @@ public abstract class JProject implements ExternalProject {
      * Obtiene el autor del proyecto
      * @return
      */
-    @Override
     public String getAuthor() {
         return System.getProperty("user.name");
     }
@@ -193,81 +201,6 @@ public abstract class JProject implements ExternalProject {
      */
     @Override
     public ProjectWrapper getProjectWrapper() {
-        return projectWrapper;
-    }
-
-    /**
-     * Esta clase modela el classpath interno del framework y sirve para introducir
-     * recursos de un proyecto externo al classpath interno con el propósito de
-     * obtener hacer uso de ellos en tiempo de ejecución.
-     * 
-     * @author iberck
-     */
-    protected static class RuntimeClassPath {
-
-        private static final Class<?>[] parameters = new Class[]{URL.class};
-
-        /**
-         * Agrega una url al classloader interno
-         * @see RuntimeClassPath
-         * @param url
-         * @throws ProjectException No se puede agregar el recurso al classpath interno
-         */
-        private static void addURL(URL url) throws ProjectException {
-            log.debug("Agregando el recurso '" + url + "' al classpath interno");
-
-            try {
-                URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-                Class<?> clazz = URLClassLoader.class;
-
-                Method method = clazz.getDeclaredMethod("addURL", parameters);
-                method.setAccessible(true);
-                method.invoke(classLoader, new Object[]{url});
-            } catch (Exception ex) {
-                throw new ProjectException("No se puede agregar recurso " +
-                        "'" + url + "' al classpath interno", ex);
-            }
-        }
-
-        /**
-         * Agrega un recurso de un proyecto externo al classpath interno
-         * @param resource Archivo donde donde se encuentra el recurso o los recursos.
-         *
-         * Por ejemplo, para agregar las clases del proyecto c:/Proyect1 al classpath interno,
-         * debería agregar la carpeta classes de la siguiente forma:
-         * RuntimeClassPath.addFile(new File("c:/Proyect1/classes"));
-         * lo cual permitiría crear objetos del proyecto externo en tiempo de ejecución.
-         * Nota: No se pueden agregar archivos .class de forma individual, debe ser
-         * toda la carpeta classes del proyecto externo.
-         *
-         * Otro ejemplo, para agregar el archivo c:/Proyect1/conf/app-context.xml al
-         * classpath interno, deberá hacer algo como esto:
-         * RuntimeClassPath.addFile(new File("c:/Proyect1/conf/app-context.xml"));
-         * y a partir de ese momento lo tendrá a disposición.
-         *
-         * @throws ProjectException: En caso que no exista el recurso o
-         * no se puede agregar al classpath interno.
-         */
-        static void addResource(File resource) throws ProjectException {
-            if (!resource.exists()) {
-                throw new ProjectException("No se pudo agregar el recurso " + "al " +
-                        "classpath interno ya que no existe");
-            }
-
-            try {
-                addURL(resource.toURI().toURL());
-            } catch (MalformedURLException ex) {
-                throw new ProjectException("No se pudo agregar el recurso al classpath interno", ex);
-            }
-        }
-
-        /**
-         * @see addResource(File resource)
-         * @param resource
-         * @throws ProjectException
-         */
-        static void addResource(String resource) throws ProjectException {
-            addResource(new File(resource));
-        }
+        return projectWrapperFactory.getJProjectWrapper();
     }
 }

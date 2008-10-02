@@ -42,17 +42,21 @@ public class ProjectWrapTest extends AbstractFreemarkerTestCase {
         super.tearDown();
     }
 
-    public void testNbProjectWrapp() throws Exception {
-        JProject nbProject = new NbJProject("./src/test/resources/NbApplication");
-        nbProject.setup();
-        Map projectWrap = nbProject.getProjectWrapper().wrap(nbProject);
+    public void testFreemarkerNbProjectWrapp() throws Exception {
 
-        Map projectProps = (Map) projectWrap.get(JProjectWrapper.PROJECT_PROPERTIES);
-        assertEquals(projectProps.get(JProjectWrapper.PROJECT_NAME), "NbApplication");
-        assertEquals(projectProps.get(JProjectWrapper.PROJECT_PATH), "./src/test/resources/NbApplication");
-        assertEquals(projectProps.get(JProjectWrapper.PROJECT_SRC_PATH), "src");
-        assertEquals(projectProps.get(JProjectWrapper.PROJECT_CLASSES_PATH), "build" + File.separator + "classes");
-        assertEquals(projectProps.get(JProjectWrapper.PROJECT_TEST_PATH), "test");
+
+        JProject nbProject = new NbJProject("./src/test/resources/NbApplication");
+        ProjectWrapperFactory prjWrapperFactory = new FreemarkerProjectWrapperFactory();
+        nbProject.setProjectWrapperFactory(prjWrapperFactory);
+        nbProject.setup();
+        
+        Map projectWrap = (Map) nbProject.getProjectWrapper().wrap(nbProject);
+        Map projectProps = (Map) projectWrap.get(FreemarkerJProjectWrapper.PROJECT_PROPERTIES);
+        assertEquals(projectProps.get(FreemarkerJProjectWrapper.PROJECT_NAME), "NbApplication");
+        assertEquals(projectProps.get(FreemarkerJProjectWrapper.PROJECT_PATH), "./src/test/resources/NbApplication");
+        assertEquals(projectProps.get(FreemarkerJProjectWrapper.PROJECT_SRC_PATH), "src");
+        assertEquals(projectProps.get(FreemarkerJProjectWrapper.PROJECT_CLASSES_PATH), "build" + File.separator + "classes");
+        assertEquals(projectProps.get(FreemarkerJProjectWrapper.PROJECT_TEST_PATH), "test");
 
         // freemarker test
         assertEqualsFreemarkerTemplate(projectWrap, "${project.name}", "NbApplication");

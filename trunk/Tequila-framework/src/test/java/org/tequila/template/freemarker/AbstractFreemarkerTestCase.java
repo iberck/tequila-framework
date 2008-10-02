@@ -21,7 +21,6 @@ import freemarker.template.Configuration;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.StringWriter;
-import java.util.Map;
 import junit.framework.TestCase;
 import org.apache.commons.io.FilenameUtils;
 
@@ -52,7 +51,7 @@ public abstract class AbstractFreemarkerTestCase extends TestCase {
         super.tearDown();
     }
 
-    protected void assertEqualsFreemarkerTemplate(Map dataModel, String templateStr, String expectedTemplate) throws Exception {
+    protected void assertEqualsFreemarkerTemplate(Object rootMap, String templateStr, String expectedTemplate) throws Exception {
         File fTemplate = File.createTempFile("fmt_", ".ftl");
         FileWriter fw = new FileWriter(fTemplate);
         fw.write(templateStr);
@@ -63,7 +62,7 @@ public abstract class AbstractFreemarkerTestCase extends TestCase {
         freemarker.template.Template freeMarkerTemplate = cfg.getTemplate(relativeTemplate);
 
         StringWriter sw = new StringWriter();
-        Environment env = freeMarkerTemplate.createProcessingEnvironment(dataModel, sw);
+        Environment env = freeMarkerTemplate.createProcessingEnvironment(rootMap, sw);
         env.process(); // process the template
 
         assertEquals(sw.toString(), expectedTemplate);
@@ -72,7 +71,7 @@ public abstract class AbstractFreemarkerTestCase extends TestCase {
         fTemplate.deleteOnExit();
     }
 
-    protected void assertEqualsFreemarkerTemplate(Map dataModel, File template, String expectedTemplate) throws Exception {
+    protected void assertEqualsFreemarkerTemplate(Object rootMap, File template, String expectedTemplate) throws Exception {
         String fullPath = FilenameUtils.getFullPath(template.getAbsolutePath());
         cfg.setDirectoryForTemplateLoading(new File(fullPath));
 
@@ -80,7 +79,7 @@ public abstract class AbstractFreemarkerTestCase extends TestCase {
         freemarker.template.Template freeMarkerTemplate = cfg.getTemplate(relativeTemplate);
 
         StringWriter sw = new StringWriter();
-        Environment env = freeMarkerTemplate.createProcessingEnvironment(dataModel, sw);
+        Environment env = freeMarkerTemplate.createProcessingEnvironment(rootMap, sw);
         env.process(); // process the template
 
         assertEquals(sw.toString(), expectedTemplate);
