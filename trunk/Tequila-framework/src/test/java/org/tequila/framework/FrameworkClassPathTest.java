@@ -24,7 +24,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
-import org.tequila.framework.FrameworkClassPath;
 
 /**
  *

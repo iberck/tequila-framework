@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.Map;
 import org.tequila.project.JProject;
 import org.tequila.project.NbJProject;
+import org.tequila.project.NbJWebProject;
 import org.tequila.template.freemarker.AbstractFreemarkerTestCase;
 
 /**
@@ -43,7 +44,7 @@ public class ProjectWrapTest extends AbstractFreemarkerTestCase {
         super.tearDown();
     }
 
-    public void testFreemarkerNbProjectWrapp() throws Exception {
+    public void testFreemarkerNbJProjectWrapp() throws Exception {
         JProject nbProject = new NbJProject("./src/test/resources/NbApplication");
         ProjectWrapperFactory prjWrapperFactory = new FreemarkerProjectWrapperFactory();
         nbProject.setProjectWrapperFactory(prjWrapperFactory);
@@ -63,6 +64,31 @@ public class ProjectWrapTest extends AbstractFreemarkerTestCase {
         assertEqualsFreemarkerTemplate(projectWrap, "${project.srcPath}", "src");
         assertEqualsFreemarkerTemplate(projectWrap, "${project.classesPath}", "build" + File.separator + "classes");
         assertEqualsFreemarkerTemplate(projectWrap, "${project.testPath}", "test");
+    }
 
+    public void testFreemarkerNbJWebProjectWrapp() throws Exception {
+        JProject nbProject = new NbJWebProject("./src/test/resources/NbWebApplicationTest");
+        ProjectWrapperFactory prjWrapperFactory = new FreemarkerProjectWrapperFactory();
+        nbProject.setProjectWrapperFactory(prjWrapperFactory);
+        nbProject.setup();
+
+        Map projectWrap = (Map) nbProject.getProjectWrapper().wrap(nbProject);
+        Map projectProps = (Map) projectWrap.get(FreemarkerJWebProjectWrapper.PROJECT_PROPERTIES);
+        assertEquals(projectProps.get(FreemarkerJWebProjectWrapper.PROJECT_NAME), "NbWebApplicationTest");
+        assertEquals(projectProps.get(FreemarkerJWebProjectWrapper.PROJECT_PATH), "./src/test/resources/NbWebApplicationTest");
+        assertEquals(projectProps.get(FreemarkerJWebProjectWrapper.PROJECT_SRC_PATH), "src");
+        assertEquals(projectProps.get(FreemarkerJWebProjectWrapper.PROJECT_CLASSES_PATH), "build" + File.separator + "web" +
+                File.separator + "WEB-INF" + File.separator + "classes");
+        assertEquals(projectProps.get(FreemarkerJWebProjectWrapper.PROJECT_TEST_PATH), "test");
+        assertEquals(projectProps.get(FreemarkerJWebProjectWrapper.PROJECT_WEB_INF_PATH), "web" + File.separator + "WEB-INF");
+
+        // freemarker test
+        assertEqualsFreemarkerTemplate(projectWrap, "${project.name}", "NbWebApplicationTest");
+        assertEqualsFreemarkerTemplate(projectWrap, "${project.path}", "./src/test/resources/NbWebApplicationTest");
+        assertEqualsFreemarkerTemplate(projectWrap, "${project.srcPath}", "src");
+        assertEqualsFreemarkerTemplate(projectWrap, "${project.classesPath}", "build" + File.separator + "web" +
+                File.separator + "WEB-INF" + File.separator + "classes");
+        assertEqualsFreemarkerTemplate(projectWrap, "${project.testPath}", "test");
+        assertEqualsFreemarkerTemplate(projectWrap, "${project.webInfPath}", "web" + File.separator + "WEB-INF");
     }
 }
