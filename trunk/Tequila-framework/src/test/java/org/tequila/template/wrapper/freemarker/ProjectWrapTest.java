@@ -14,8 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.template.wrapper;
+package org.tequila.template.wrapper.freemarker;
 
+import org.tequila.template.wrapper.*;
 import java.io.File;
 import java.util.Map;
 import org.tequila.project.JProject;
@@ -43,13 +44,11 @@ public class ProjectWrapTest extends AbstractFreemarkerTestCase {
     }
 
     public void testFreemarkerNbProjectWrapp() throws Exception {
-
-
         JProject nbProject = new NbJProject("./src/test/resources/NbApplication");
         ProjectWrapperFactory prjWrapperFactory = new FreemarkerProjectWrapperFactory();
         nbProject.setProjectWrapperFactory(prjWrapperFactory);
         nbProject.setup();
-        
+
         Map projectWrap = (Map) nbProject.getProjectWrapper().wrap(nbProject);
         Map projectProps = (Map) projectWrap.get(FreemarkerJProjectWrapper.PROJECT_PROPERTIES);
         assertEquals(projectProps.get(FreemarkerJProjectWrapper.PROJECT_NAME), "NbApplication");

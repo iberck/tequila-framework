@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.project;
+package org.tequila.framework;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -30,11 +30,11 @@ import org.tequila.framework.FrameworkClassPath;
  *
  * @author iberck
  */
-public class InternalClassPathTest extends TestCase {
+public class FrameworkClassPathTest extends TestCase {
 
     private static final Log log = LogFactory.getLog(TestCase.class);
 
-    public InternalClassPathTest(String testName) {
+    public FrameworkClassPathTest(String testName) {
         super(testName);
     }
 
