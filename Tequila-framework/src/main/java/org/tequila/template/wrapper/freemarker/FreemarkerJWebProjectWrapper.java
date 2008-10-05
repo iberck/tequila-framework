@@ -17,8 +17,8 @@
 package org.tequila.template.wrapper.freemarker;
 
 import java.util.Map;
-import org.tequila.project.JProject;
-import org.tequila.project.JWebProject;
+import org.tequila.model.project.JProject;
+import org.tequila.model.project.JWebProject;
 
 /**
  *
