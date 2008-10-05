@@ -16,29 +16,34 @@
  */
 package org.tequila.template.wrapper.freemarker;
 
-import org.tequila.template.wrapper.EngineWrappersFactory;
-import org.tequila.template.wrapper.MetaPojosWrapperFactory;
-import org.tequila.template.wrapper.MetaPropertyWrapperFactory;
-import org.tequila.template.wrapper.ProjectWrapperFactory;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.tequila.model.JMetaPojo;
+import org.tequila.model.MetaPojo;
+import org.tequila.template.wrapper.MetaPojosWrapper;
 
 /**
  *
  * @author iberck
  */
-public class FreemarkerWrappersFactory implements EngineWrappersFactory {
+public class FreemarkerMetaJPojosWrapper implements MetaPojosWrapper<JMetaPojo> {
 
-    @Override
-    public ProjectWrapperFactory getProjectWrapperFactory() {
-        return new FreemarkerProjectWrapperFactory();
+    FreemarkerMetaJPojosWrapper() {
     }
 
     @Override
-    public MetaPropertyWrapperFactory getMetaPropertyWrapperFactory() {
-        return new FreemarkerMetaPropertyWrapperFactory();
-    }
+    public Map wrap(List<JMetaPojo> metaPojos) {
+        List metaPojosInjected = new ArrayList();
 
-    @Override
-    public MetaPojosWrapperFactory getMetaPojosWrapperFactory() {
-        return new FreemarkerMetaPojosWrapperFactory();
+        for (MetaPojo metaPojo : metaPojos) {
+            metaPojosInjected.add(metaPojo.createInjectedObject());
+        }
+
+        Map m = new HashMap();
+        m.put(MetaPojosWrapper.POJOS_KEY, metaPojosInjected);
+
+        return m;
     }
 }

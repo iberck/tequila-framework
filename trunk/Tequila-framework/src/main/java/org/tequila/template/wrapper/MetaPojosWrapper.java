@@ -23,10 +23,10 @@ import org.tequila.model.MetaPojo;
  *
  * @author iberck
  */
-public interface MetaPojosWrapper extends ObjectWrapper<List<MetaPojo>> {
+public interface MetaPojosWrapper<T extends MetaPojo> extends ObjectWrapper<List<T>> {
 
     public final static String POJOS_KEY = "metaPojos";
 
     @Override
-    public Object wrap(List<MetaPojo> metaPojos);
+    public Object wrap(List<T> metaPojos);
 }

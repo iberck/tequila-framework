@@ -25,6 +25,7 @@ import org.tequila.template.engine.FreemarkerEngine;
 import org.tequila.template.engine.TemplateEngine;
 import org.tequila.template.freemarker.AbstractFreemarkerTestCase;
 import org.tequila.template.wrapper.MetaPojosWrapper;
+import org.tequila.template.wrapper.MetaPojosWrapperFactory;
 
 /**
  *
@@ -53,6 +54,12 @@ public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
         MetaPojo bean2 = new JMetaPojo("org.tequila.template.wrapper.freemarker.Bean2");
         MetaPojo bean3 = new JMetaPojo("org.tequila.template.wrapper.freemarker.Bean3");
 
+        TemplateEngine engine = new FreemarkerEngine();
+        MetaPojosWrapperFactory factory = engine.getEngineWrappersFactory().getMetaPojosWrapperFactory();
+        bean1.setMetaPojosWrapperFactory(factory);
+        // se toma de cualquiera
+        MetaPojosWrapper metaPojosWrapper = bean1.getMetaPojosWrapper();
+
         // injectar propiedad
         bean1.injectPojoProperty("injectedProperty1", "value");
 
@@ -60,8 +67,7 @@ public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
         jMetaPojos.add(bean2);
         jMetaPojos.add(bean3);
 
-        TemplateEngine engine = new FreemarkerEngine();
-        MetaPojosWrapper metaPojosWrapper = engine.getEngineWrappersFactory().getMetaPojosWrapper();
+
         Map metaPojosWrapped = (Map) metaPojosWrapper.wrap(jMetaPojos);
 
         // template1 test (simpleName)
@@ -95,7 +101,10 @@ public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
         jMetaPojos.add(bean1);
 
         TemplateEngine engine = new FreemarkerEngine();
-        MetaPojosWrapper metaPojosWrapper = engine.getEngineWrappersFactory().getMetaPojosWrapper();
+        MetaPojosWrapperFactory factory = engine.getEngineWrappersFactory().getMetaPojosWrapperFactory();
+        bean1.setMetaPojosWrapperFactory(factory);
+        MetaPojosWrapper metaPojosWrapper = bean1.getMetaPojosWrapper();
+
         Map metaPojosWrapped = (Map) metaPojosWrapper.wrap(jMetaPojos);
 
         // solo debe tener la propiedad prop2
@@ -142,12 +151,14 @@ public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
 
         // injectar field
         bean1.injectPojoProperty("nuevaPropiedad", new Integer(5));
-        bean1.injectFieldProperty("nuevaPropiedad", "validate", "view");//inyectar propiedad nueva
+        bean1.injectFieldProperty("nuevaPropiedad", "validate", "InView");//inyectar propiedad nueva
         bean1.injectFieldProperty("prop2", "primaryKey", "value");//inyectar propiedad existente
         jMetaPojos.add(bean1);
 
         TemplateEngine engine = new FreemarkerEngine();
-        MetaPojosWrapper metaPojosWrapper = engine.getEngineWrappersFactory().getMetaPojosWrapper();
+        MetaPojosWrapperFactory factory = engine.getEngineWrappersFactory().getMetaPojosWrapperFactory();
+        bean1.setMetaPojosWrapperFactory(factory);
+        MetaPojosWrapper metaPojosWrapper = bean1.getMetaPojosWrapper();
         Map metaPojosWrapped = (Map) metaPojosWrapper.wrap(jMetaPojos);
 
         // propiedades
@@ -179,6 +190,6 @@ public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
         t4.append("</#if>");
         t4.append("</#list>");
         t4.append("</#list>");
-        assertEqualsFreemarkerTemplate(metaPojosWrapped, "metafield inyectado nuevaPropiedad view", t4.toString());
+        assertEqualsFreemarkerTemplate(metaPojosWrapped, "metafield inyectado nuevaPropiedad InView", t4.toString());
     }
 }
