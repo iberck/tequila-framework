@@ -16,7 +16,9 @@
  */
 package org.tequila.model;
 
+import java.util.Collection;
 import junit.framework.TestCase;
+import org.apache.commons.beanutils.DynaProperty;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -52,7 +54,7 @@ public class JMetaPojoTest extends TestCase {
 
 //        JMetaPojo metaClass = new JMetaPojo("org.tequila.model.MyBean");
         JMetaPojo metaClass = new JMetaPojo(b);
-        metaClass.injectProperty("edad", 5);
+        metaClass.injectPojoProperty("edad", 5);
 
         // obtener un objeto inyectado
         Object injectedObject = metaClass.createInjectedObject();
@@ -62,7 +64,7 @@ public class JMetaPojoTest extends TestCase {
         assertEquals("MyBean", clazz);
 
         Object[] declFields = (Object[]) PropertyUtils.getNestedProperty(injectedObject, "class.declaredFields");
-        assertEquals("DynaProperty[]", declFields.getClass().getSimpleName());
+        assertEquals("Object[]", declFields.getClass().getSimpleName());
 
         // test de las propiedades originales del objeto
         assertEquals("iberck", PropertyUtils.getNestedProperty(injectedObject, "nombre"));
@@ -71,7 +73,7 @@ public class JMetaPojoTest extends TestCase {
 
         // test con el nombre de la clase
         JMetaPojo metaClassName = new JMetaPojo("org.tequila.model.MyBean");
-        metaClassName.injectProperty("estatura", 23.4f);
+        metaClassName.injectPojoProperty("estatura", 23.4f);
 
         Object injObj = metaClassName.createInjectedObject();
 
@@ -86,7 +88,7 @@ public class JMetaPojoTest extends TestCase {
         assertEquals(23.4f, PropertyUtils.getNestedProperty(injObj, "estatura"));
 
         // reinjectar y probar
-        metaClassName.injectProperty("otraPropiedad", "val");
+        metaClassName.injectPojoProperty("otraPropiedad", "val");
         injObj = metaClassName.createInjectedObject();
 
         // valores viejos
@@ -101,5 +103,28 @@ public class JMetaPojoTest extends TestCase {
         assertEquals("java.lang.String", PropertyUtils.getNestedProperty(injObj, "otraPropiedad").getClass().getName());
         assertEquals("val", PropertyUtils.getNestedProperty(injObj, "otraPropiedad"));
 
+    }
+
+    public void testJMetaPojoInjectedField() throws Exception {
+        MyBean b = new MyBean();
+        b.setNombre("iberck");
+
+        JMetaPojo metaClass = new JMetaPojo(b);
+        metaClass.injectFieldProperty("nombre", "pref", "nom");
+        Object injObj = metaClass.createInjectedObject();
+
+        Object nombreNP = PropertyUtils.getNestedProperty(injObj, "nombre");
+        // metapojo por que es un metafield
+        assertEquals("JMetaPojo", nombreNP.getClass().getSimpleName());
+        Object prefNp = PropertyUtils.getNestedProperty(nombreNP, "pref");
+        assertEquals("nom", prefNp);
+
+        Object nombrePreNP = PropertyUtils.getNestedProperty(injObj, "nombre.pref");
+        assertEquals("java.lang.String", nombrePreNP.getClass().getName());
+        assertEquals("nom", nombrePreNP);
+
+
+        Object[] decFields = (Object[]) PropertyUtils.getNestedProperty(injObj, "class.declaredFields");
+        assertNotNull(decFields);
     }
 }

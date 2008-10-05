@@ -59,7 +59,7 @@ public class PropertyWrapTest extends AbstractFreemarkerTestCase {
 
         Map rootMap = (Map) metaPropertyMap.getMetaPropertyWrapper().wrap(metaPropertyMap);
 
-        assertEqualsFreemarkerTemplate(rootMap, "${metaProperty.llave}", "_valor_");
+        assertEqualsFreemarkerTemplate(rootMap, "_valor_", "${metaProperty.llave}");
     }
 
     public void testFreemarkerPropertyObjectTest() throws Exception {
@@ -74,7 +74,7 @@ public class PropertyWrapTest extends AbstractFreemarkerTestCase {
 
         Map rootMap = (Map) metaPropertyObject.getMetaPropertyWrapper().wrap(metaPropertyObject);
 
-        assertEqualsFreemarkerTemplate(rootMap, "${metaProperty.valor}", "hola mundo");
-        assertEqualsFreemarkerTemplate(rootMap, "${metaProperty.class.simpleName}", "Cadena");
+        assertEqualsFreemarkerTemplate(rootMap, "hola mundo", "${metaProperty.valor}");
+        assertEqualsFreemarkerTemplate(rootMap, "Cadena", "${metaProperty.class.simpleName}");
     }
 }

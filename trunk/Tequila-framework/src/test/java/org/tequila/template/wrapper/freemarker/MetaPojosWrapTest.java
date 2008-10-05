@@ -54,7 +54,7 @@ public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
         MetaPojo bean3 = new JMetaPojo("org.tequila.template.wrapper.freemarker.Bean3");
 
         // injectar propiedad
-        bean1.injectProperty("injectedProperty1", "value");
+        bean1.injectPojoProperty("injectedProperty1", "value");
 
         jMetaPojos.add(bean1);
         jMetaPojos.add(bean2);
@@ -64,15 +64,12 @@ public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
         MetaPojosWrapper metaPojosWrapper = engine.getEngineWrappersFactory().getMetaPojosWrapper();
         Map metaPojosWrapped = (Map) metaPojosWrapper.wrap(jMetaPojos);
 
-        // template0 test
-        assertEqualsFreemarkerTemplate(metaPojosWrapped, "${metaPojos.class.name}", "java.util.ArrayList");
-
         // template1 test (simpleName)
         StringBuilder t1 = new StringBuilder();
         t1.append("<#list metaPojos as pojo>");
         t1.append("${pojo.class.simpleName},");
         t1.append("</#list>");
-        assertEqualsFreemarkerTemplate(metaPojosWrapped, t1.toString(), "Bean1,Bean2,Bean3,");
+        assertEqualsFreemarkerTemplate(metaPojosWrapped, "Bean1,Bean2,Bean3,", t1.toString());
 
         // test de los fields y propiedad inyectada a la clase
         StringBuilder t2 = new StringBuilder();
@@ -81,6 +78,107 @@ public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
         t2.append("${field.name},");
         t2.append("</#list>");
         t2.append("</#list>");
-        assertEqualsFreemarkerTemplate(metaPojosWrapped, t2.toString(), "prop1,prop1_1,injectedProperty1,prop2,prop3,");
+        assertEqualsFreemarkerTemplate(metaPojosWrapped, "injectedProperty1,prop1,prop1_1,prop2,prop3,", t2.toString());
+
+    // test de inyeccion de fields a las clases
+
+    }
+
+    public void testMetaPojosInjectedFieldsFreemarker() throws Exception {
+
+        // crear lista de metapojos
+        List<MetaPojo> jMetaPojos = new ArrayList();
+        JMetaPojo bean1 = new JMetaPojo("org.tequila.template.wrapper.freemarker.Bean2");
+
+        // injectar field
+        bean1.injectFieldProperty("prop2", "primaryKey", "value");
+        jMetaPojos.add(bean1);
+
+        TemplateEngine engine = new FreemarkerEngine();
+        MetaPojosWrapper metaPojosWrapper = engine.getEngineWrappersFactory().getMetaPojosWrapper();
+        Map metaPojosWrapped = (Map) metaPojosWrapper.wrap(jMetaPojos);
+
+        // solo debe tener la propiedad prop2
+        StringBuilder t2 = new StringBuilder();
+        t2.append("<#list metaPojos as pojo>");
+        t2.append("<#list pojo.class.declaredFields as field>");
+        t2.append("${field.name},");
+        t2.append("</#list>");
+        t2.append("</#list>");
+        assertEqualsFreemarkerTemplate(metaPojosWrapped, "prop2,", t2.toString());
+
+        // Field inyectado a nivel clase
+        StringBuilder t3 = new StringBuilder();
+        t3.append("<#list metaPojos as pojo>");
+        t3.append("<#if pojo.prop2.primaryKey??>si existe<#else>no existe</#if>");
+        t3.append("</#list>");
+        assertEqualsFreemarkerTemplate(metaPojosWrapped, "si existe", t3.toString());
+
+        // test ??
+        StringBuilder t4 = new StringBuilder();
+        t4.append("<#list metaPojos as pojo>");
+        t4.append("<#if pojo.prop2.anyProperty??>si existe<#else>no existe</#if>");
+        t4.append("</#list>");
+        assertEqualsFreemarkerTemplate(metaPojosWrapped, "no existe", t4.toString());
+
+        // field inyectado a nivel declaredFields
+        StringBuilder t6 = new StringBuilder();
+        t6.append("<#list metaPojos as pojo>");
+        t6.append("<#list pojo.class.declaredFields as field>");
+        t6.append("<#if field.primaryKey??>");
+        t6.append("declaredField inyectado satisfactoriamente");
+        t6.append("<#else>");
+        t6.append("error");
+        t6.append("</#if>");
+        t6.append("</#list>");
+        t6.append("</#list>");
+        assertEqualsFreemarkerTemplate(metaPojosWrapped, "declaredField inyectado satisfactoriamente", t6.toString());
+    }
+
+    public void testGeneralInjection() throws Exception {
+        // crear lista de metapojos
+        List<MetaPojo> jMetaPojos = new ArrayList();
+        JMetaPojo bean1 = new JMetaPojo("org.tequila.template.wrapper.freemarker.Bean2");
+
+        // injectar field
+        bean1.injectPojoProperty("nuevaPropiedad", new Integer(5));
+        bean1.injectFieldProperty("nuevaPropiedad", "validate", "view");//inyectar propiedad nueva
+        bean1.injectFieldProperty("prop2", "primaryKey", "value");//inyectar propiedad existente
+        jMetaPojos.add(bean1);
+
+        TemplateEngine engine = new FreemarkerEngine();
+        MetaPojosWrapper metaPojosWrapper = engine.getEngineWrappersFactory().getMetaPojosWrapper();
+        Map metaPojosWrapped = (Map) metaPojosWrapper.wrap(jMetaPojos);
+
+        // propiedades
+        StringBuilder t2 = new StringBuilder();
+        t2.append("<#list metaPojos as pojo>");
+        t2.append("<#list pojo.class.declaredFields as field>");
+        t2.append("${field.name},");
+        t2.append("</#list>");
+        t2.append("</#list>");
+        assertEqualsFreemarkerTemplate(metaPojosWrapped, "prop2,nuevaPropiedad,", t2.toString());
+
+        // fields existente inyectado
+        StringBuilder t3 = new StringBuilder();
+        t3.append("<#list metaPojos as pojo>");
+        t3.append("<#list pojo.class.declaredFields as field>");
+        t3.append("<#if field.name=='prop2' && field.primaryKey??>");
+        t3.append("field existente inyectado ${field.name} ${field.primaryKey}");
+        t3.append("</#if>");
+        t3.append("</#list>");
+        t3.append("</#list>");
+        assertEqualsFreemarkerTemplate(metaPojosWrapped, "field existente inyectado prop2 value", t3.toString());
+
+        // fields nuevo inyectado
+        StringBuilder t4 = new StringBuilder();
+        t4.append("<#list metaPojos as pojo>");
+        t4.append("<#list pojo.class.declaredFields as field>");
+        t4.append("<#if field.name=='nuevaPropiedad' && field.validate??>");
+        t4.append("metafield inyectado ${field.name} ${field.validate}");
+        t4.append("</#if>");
+        t4.append("</#list>");
+        t4.append("</#list>");
+        assertEqualsFreemarkerTemplate(metaPojosWrapped, "metafield inyectado nuevaPropiedad view", t4.toString());
     }
 }

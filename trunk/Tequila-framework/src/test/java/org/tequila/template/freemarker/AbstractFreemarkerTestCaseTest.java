@@ -45,10 +45,10 @@ public final class AbstractFreemarkerTestCaseTest extends AbstractFreemarkerTest
                 "build" + File.separator + "classes, test";
 
         // test case de las cadenas.
-        assertEqualsFreemarkerTemplate(projectWrap, templateDef, expected);
+        assertEqualsFreemarkerTemplate(projectWrap, expected, templateDef);
 
         // test case de los archivos.
         File temFile = new File("./src/test/resources/templates/test1.ftl");
-        assertEqualsFreemarkerTemplate(projectWrap, temFile, "src");
+        assertEqualsFreemarkerTemplate(projectWrap, "src", temFile);
     }
 }

@@ -16,7 +16,9 @@
  */
 package org.tequila.model;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.beanutils.DynaProperty;
 import org.apache.commons.beanutils.LazyDynaBean;
 import org.apache.commons.beanutils.LazyDynaClass;
@@ -32,6 +34,7 @@ public class JMetaPojo extends LazyDynaBean implements MetaPojo {
 
     private static final Log log = LogFactory.getLog(JMetaPojo.class);
     private Object sourceObject;
+    private Map<String, JMetaPojo> declaredFields = new HashMap<String, JMetaPojo>();
 
     /**
      * Crea una JMetaPojo a partir del nombre de una clase
@@ -51,14 +54,14 @@ public class JMetaPojo extends LazyDynaBean implements MetaPojo {
         this.sourceObject = instance;
 
         try {
+            // copia todas las propiedades y las pone al servicio con get('propertyName')
             PropertyUtils.copyProperties(this, instance);
-        } catch (IllegalAccessException ex) {
-            throw new MetaPojoException("IllegalAccessException", ex);
-        } catch (InvocationTargetException ex) {
-            throw new MetaPojoException("InvocationTargetException", ex);
-        } catch (NoSuchMethodException ex) {
-            throw new MetaPojoException("NoSuchMethodException", ex);
+        } catch (Exception ex) {
+            throw new MetaPojoException("Error al crear el metapojo", ex);
         }
+    }
+
+    private JMetaPojo() {
     }
 
     public Object getSourceObject() {
@@ -68,59 +71,82 @@ public class JMetaPojo extends LazyDynaBean implements MetaPojo {
     private static Object instantiateClass(String className) throws MetaPojoException {
         try {
             return Class.forName(className).newInstance();
-        } catch (InstantiationException ex) {
-            throw new MetaPojoException("InstantiationException", ex);
-        } catch (IllegalAccessException ex) {
-            throw new MetaPojoException("IllegalAccessException", ex);
-        } catch (ClassNotFoundException ex) {
-            throw new MetaPojoException("ClassNotFoundException", ex);
+        } catch (Exception ex) {
+            throw new MetaPojoException("Error al instanciar la clase '" + className + "'", ex);
         }
     }
 
     @Override
-    public void injectProperty(String name, Object value) throws MetaPojoException {
+    public void injectPojoProperty(String propName, Object propValue) throws MetaPojoException {
         try {
-            PropertyUtils.setNestedProperty(this, name, value);
-        } catch (IllegalAccessException ex) {
-            throw new MetaPojoException("IllegalAccessException", ex);
-        } catch (InvocationTargetException ex) {
-            throw new MetaPojoException("InvocationTargetException", ex);
-        } catch (NoSuchMethodException ex) {
-            throw new MetaPojoException("NoSuchMethodException", ex);
+            // Pone la propiedad al servicio con get('propName')
+            PropertyUtils.setNestedProperty(this, propName, propValue);
+            PropertyUtils.setNestedProperty(this, "name", propName);
+            PropertyUtils.setNestedProperty(this, "type", propValue.getClass());
+
+            declaredFields.put(propName, this);
+        } catch (Exception ex) {
+            throw new MetaPojoException("Error al inyectar la propiedad '[" + propName + ", " + propValue + "']", ex);
+        }
+    }
+
+    @Override
+    public void injectFieldProperty(String fieldName, String propertyName, Object propertyValue) {
+        Object fieldObj = null;
+        try {
+            // 1.validar que exista el field y obtenerlo
+            fieldObj = PropertyUtils.getNestedProperty(this, fieldName);
+
+            // 2. Metapojo a partir del objeto field
+            JMetaPojo metaField = new JMetaPojo(fieldObj);
+
+            // 3. inyectar propiedad al field(la hace accesible por medio de get() y la pone en sus dynaProperties)
+            PropertyUtils.setNestedProperty(metaField, propertyName, propertyValue);
+            //metaField.createInjectedObject();
+
+            // 4. borrar el field viejo del pojo, TODO: Obtener sus annotations
+            this.removeProperty(fieldName);
+
+            // 5. inyectar nuevo field al pojo (la hace accesible por medio de get() y la pone en sus dynaProperties)
+            //this.injectPojoProperty(fieldName, metaField);
+            PropertyUtils.setNestedProperty(this, fieldName, metaField);
+
+            // TODO: crear un nuevo declared Field para no aplastar posibles name y type originales
+            PropertyUtils.setNestedProperty(metaField, "name", fieldName);
+            PropertyUtils.setNestedProperty(metaField, "type", fieldObj.getClass());
+            declaredFields.put(fieldName, metaField);
+
+        } catch (Exception ex) {
+            throw new MetaPojoException("No existe la propiedad '" + fieldName + "'", ex);
         }
     }
 
     @Override
     public Object createInjectedObject() throws MetaPojoException {
         try {
+            // se crea a partir del objeto original para preservar el nombre de clase y otros atributos,
+            // lo único que cambiara son sus declaredFields
             JMetaPojo clazz = new JMetaPojo(sourceObject.getClass());
 
-            // propiedades actuales (originales + injectadas)
-            DynaProperty[] injectedProps = getDynaClass().getDynaProperties();
+            // crear los declaredFields
+            Field[] oldDeclaredFields = sourceObject.getClass().getDeclaredFields();
 
-            // quitar objeto class de las propiedades
-            DynaProperty[] injectedWithoutClass = new DynaProperty[injectedProps.length - 1];
-            int i = 0;
-            for (DynaProperty dp : injectedProps) {
-                if (!dp.getName().equals("class")) {
-                    injectedWithoutClass[i++] = dp;
+            for (Field f : oldDeclaredFields) {
+                if (!declaredFields.containsKey(f.getName())) {
+                    declaredFields.put(f.getName(), new JMetaPojo(f));
                 }
             }
 
             // Modificar los declaredFields del objeto original
             clazz.removeProperty("declaredFields");
-            PropertyUtils.setNestedProperty(clazz, "declaredFields", injectedWithoutClass);
+            PropertyUtils.setNestedProperty(clazz, "declaredFields", declaredFields.values().toArray());
 
             // reemplazar el objeto class del MetaPojo
             this.removeProperty("class");
             PropertyUtils.setNestedProperty(this, "class", clazz);
 
-        } catch (IllegalAccessException ex) {
-            throw new MetaPojoException("IllegalAccessException", ex);
-        } catch (InvocationTargetException ex) {
-            throw new MetaPojoException("InvocationTargetException", ex);
-        } catch (NoSuchMethodException ex) {
-            throw new MetaPojoException("NoSuchMethodException", ex);
+        } catch (Exception ex) {
+            throw new MetaPojoException("Error al crear el objeto inyectado", ex);
         }
 
         return this;
@@ -132,5 +158,24 @@ public class JMetaPojo extends LazyDynaBean implements MetaPojo {
      */
     protected void removeProperty(String propertyName) {
         ((LazyDynaClass) getDynaClass()).remove(propertyName);
+    }
+
+    /**
+     * Obtiene todas las propiedades menos la propiedad class
+     * @return
+     */
+    protected Object[] getDynaProperties() {
+        // quitar objeto class de las propiedades
+        DynaProperty[] dynaProps = getDynaClass().getDynaProperties();
+        Object[] dynaPropsWithoutClass = new Object[dynaProps.length - 1];
+
+        int i = 0;
+        for (DynaProperty dp : dynaProps) {
+            if (!dp.getName().equals("class")) {
+                dynaPropsWithoutClass[i++] = dp;
+            }
+        }
+
+        return dynaPropsWithoutClass;
     }
 }

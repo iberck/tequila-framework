@@ -61,7 +61,7 @@ public abstract class AbstractFreemarkerTestCase extends TestCase {
         super.tearDown();
     }
 
-    protected void assertEqualsFreemarkerTemplate(Object rootMap, String template, String expectedResult) throws Exception {
+    protected void assertEqualsFreemarkerTemplate(Object rootMap, String expectedResult, String template) throws Exception {
         File fTemplate = File.createTempFile("fmt_", ".ftl");
         FileWriter fw = new FileWriter(fTemplate);
         fw.write(template);
@@ -74,13 +74,13 @@ public abstract class AbstractFreemarkerTestCase extends TestCase {
         Environment env = freeMarkerTemplate.createProcessingEnvironment(rootMap, sw);
         env.process(); // process the template
 
-        assertEquals(sw.toString(), expectedResult);
+        assertEquals(expectedResult, sw.toString());
         sw.close();
         fw.close();
         fTemplate.deleteOnExit();
     }
 
-    protected void assertEqualsFreemarkerTemplate(Object rootMap, File template, String expectedResult) throws Exception {
+    protected void assertEqualsFreemarkerTemplate(Object rootMap, String expectedResult, File template) throws Exception {
         String fullPath = FilenameUtils.getFullPath(template.getAbsolutePath());
         cfg.setDirectoryForTemplateLoading(new File(fullPath));
 
@@ -91,7 +91,7 @@ public abstract class AbstractFreemarkerTestCase extends TestCase {
         Environment env = freeMarkerTemplate.createProcessingEnvironment(rootMap, sw);
         env.process(); // process the template
 
-        assertEquals(sw.toString(), expectedResult);
+        assertEquals(expectedResult, sw.toString());
         sw.close();
     }
 }
