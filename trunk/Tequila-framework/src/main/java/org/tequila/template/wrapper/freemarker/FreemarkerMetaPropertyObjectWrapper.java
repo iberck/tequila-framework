@@ -16,24 +16,24 @@
  */
 package org.tequila.template.wrapper.freemarker;
 
-import org.tequila.template.wrapper.*;
+import java.util.HashMap;
+import java.util.Map;
+import org.tequila.model.MetaPropertyObject;
+import org.tequila.template.wrapper.MetaPropertyWrapper;
 
 /**
  *
  * @author iberck
  */
-public class FreemarkerProjectWrapperFactory implements ProjectWrapperFactory {
+public class FreemarkerMetaPropertyObjectWrapper implements MetaPropertyWrapper<MetaPropertyObject> {
 
-    FreemarkerProjectWrapperFactory() {
+    FreemarkerMetaPropertyObjectWrapper() {
     }
 
     @Override
-    public ProjectWrapper getJProjectWrapper() {
-        return new FreemarkerJProjectWrapper();
-    }
-
-    @Override
-    public ProjectWrapper getJWebProjectWrapper() {
-        return new FreemarkerJWebProjectWrapper();
+    public Map wrap(MetaPropertyObject metaPropertyObject) {
+        Map root = new HashMap();
+        root.put(PROPERTY_KEY, metaPropertyObject.getProperty());
+        return root;
     }
 }

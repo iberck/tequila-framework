@@ -50,7 +50,7 @@ public class MetaClassTest extends TestCase {
         try {
             MyBean bean = new MyBean();
             bean.setNombre("iberck");
-            MetaClass metaClass = new MetaClass(bean);
+            MetaPojo metaClass = new MetaPojo(bean);
             assertEquals(metaClass.get("nombre"), "iberck");
             metaClass.injectProperty("edad", "3");
             Object injectedObject = metaClass.getInjectedObject();

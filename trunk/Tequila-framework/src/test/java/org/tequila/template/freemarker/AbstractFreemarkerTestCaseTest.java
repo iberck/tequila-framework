@@ -3,8 +3,8 @@ package org.tequila.template.freemarker;
 import java.io.File;
 import org.tequila.model.project.JProject;
 import org.tequila.model.project.NbJProject;
-import org.tequila.template.wrapper.freemarker.FreemarkerProjectWrapperFactory;
-import org.tequila.template.wrapper.ProjectWrapperFactory;
+import org.tequila.template.engine.FreemarkerEngine;
+import org.tequila.template.engine.TemplateEngine;
 
 /**
  *
@@ -32,10 +32,10 @@ public class AbstractFreemarkerTestCaseTest extends AbstractFreemarkerTestCase {
     public void testAbstractFreemarkerTestCase() throws Exception {
         // un proyecto cualquiera
         JProject nbProject = new NbJProject("./src/test/resources/NbApplication");
-        ProjectWrapperFactory prjWrapperFactory = new FreemarkerProjectWrapperFactory();
-        nbProject.setProjectWrapperFactory(prjWrapperFactory);
+        TemplateEngine engine = new FreemarkerEngine();
+        nbProject.setProjectWrapperFactory(engine.getEngineWrappersFactory().getProjectWrapperFactory());
         nbProject.setup();
-        
+
         Object projectWrap = nbProject.getProjectWrapper().wrap(nbProject);
 
         String templateDef = "${project.name}, ${project.path}, ${project.srcPath}," +

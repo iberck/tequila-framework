@@ -16,24 +16,23 @@
  */
 package org.tequila.template.wrapper.freemarker;
 
-import org.tequila.template.wrapper.*;
+import org.tequila.template.wrapper.EngineWrappersFactory;
+import org.tequila.template.wrapper.MetaPropertyWrapperFactory;
+import org.tequila.template.wrapper.ProjectWrapperFactory;
 
 /**
  *
  * @author iberck
  */
-public class FreemarkerProjectWrapperFactory implements ProjectWrapperFactory {
+public class FreemarkerWrappersFactory implements EngineWrappersFactory {
 
-    FreemarkerProjectWrapperFactory() {
+    @Override
+    public ProjectWrapperFactory getProjectWrapperFactory() {
+        return new FreemarkerProjectWrapperFactory();
     }
 
     @Override
-    public ProjectWrapper getJProjectWrapper() {
-        return new FreemarkerJProjectWrapper();
-    }
-
-    @Override
-    public ProjectWrapper getJWebProjectWrapper() {
-        return new FreemarkerJWebProjectWrapper();
+    public MetaPropertyWrapperFactory getMetaPropertyWrapperFactory() {
+        return new FreemarkerMetaPropertyWrapperFactory();
     }
 }

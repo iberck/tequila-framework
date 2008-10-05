@@ -31,26 +31,26 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author iberck
  */
-public class MetaClass extends LazyDynaBean {
+public class MetaPojo extends LazyDynaBean {
 
-    private static final Log log = LogFactory.getLog(MetaClass.class);
+    private static final Log log = LogFactory.getLog(MetaPojo.class);
     private Object originalObject;
 
     /**
-     * Crea una MetaClass en base a un objeto
+     * Crea una MetaPojo en base a un objeto
      * @param object
      */
-    public MetaClass(Object object) {
+    public MetaPojo(Object object) {
         this.originalObject = object;
 
         try {
             PropertyUtils.copyProperties(this, object);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(MetaClass.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvocationTargetException ex) {
-            Logger.getLogger(MetaClass.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchMethodException ex) {
-            Logger.getLogger(MetaClass.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -58,11 +58,11 @@ public class MetaClass extends LazyDynaBean {
         try {
             PropertyUtils.setNestedProperty(this, name, value);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(MetaClass.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvocationTargetException ex) {
-            Logger.getLogger(MetaClass.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchMethodException ex) {
-            Logger.getLogger(MetaClass.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -75,16 +75,16 @@ public class MetaClass extends LazyDynaBean {
             Field[] originalProps = originalObject.getClass().getDeclaredFields();
 
             // Crear nuevas propiedades
-            MetaClass[] newProps = new MetaClass[injectedProps.length + originalProps.length];
+            MetaPojo[] newProps = new MetaPojo[injectedProps.length + originalProps.length];
             int i = 0;
             for (Field originalProp : originalProps) {
-                newProps[i++] = new MetaClass(originalProp);
+                newProps[i++] = new MetaPojo(originalProp);
             }
             for (DynaProperty injectedProp : injectedProps) {
-                newProps[i++] = new MetaClass(injectedProp);
+                newProps[i++] = new MetaPojo(injectedProp);
             }
 
-            MetaClass clazz = new MetaClass(originalObject.getClass());
+            MetaPojo clazz = new MetaPojo(originalObject.getClass());
             clazz.removeProperty("declaredFields");
             PropertyUtils.setNestedProperty(clazz, "declaredFields", newProps);
 
@@ -92,11 +92,11 @@ public class MetaClass extends LazyDynaBean {
             PropertyUtils.setNestedProperty(this, "class", clazz);
 
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(MetaClass.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvocationTargetException ex) {
-            Logger.getLogger(MetaClass.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchMethodException ex) {
-            Logger.getLogger(MetaClass.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return this;

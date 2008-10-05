@@ -17,6 +17,7 @@
 package org.tequila.template.freemarker;
 
 import freemarker.core.Environment;
+import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;
 import java.io.File;
 import java.io.FileWriter;
@@ -44,6 +45,7 @@ public abstract class AbstractFreemarkerTestCase extends TestCase {
 
         cfg = new Configuration();
         cfg.setDirectoryForTemplateLoading(tmp);
+        cfg.setObjectWrapper(new BeansWrapper());
     }
 
     @Override

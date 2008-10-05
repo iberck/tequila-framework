@@ -16,24 +16,22 @@
  */
 package org.tequila.template.wrapper.freemarker;
 
-import org.tequila.template.wrapper.*;
-
 /**
  *
  * @author iberck
  */
-public class FreemarkerProjectWrapperFactory implements ProjectWrapperFactory {
+public class Cadena {
 
-    FreemarkerProjectWrapperFactory() {
+    public Cadena(String valor) {
+        this.valor = valor;
+    }
+    private String valor;
+
+    public String getValor() {
+        return valor;
     }
 
-    @Override
-    public ProjectWrapper getJProjectWrapper() {
-        return new FreemarkerJProjectWrapper();
-    }
-
-    @Override
-    public ProjectWrapper getJWebProjectWrapper() {
-        return new FreemarkerJWebProjectWrapper();
+    public void setValor(String valor) {
+        this.valor = valor;
     }
 }
