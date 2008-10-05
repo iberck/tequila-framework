@@ -16,12 +16,13 @@
  */
 package org.tequila.template.wrapper.freemarker;
 
-import org.tequila.template.wrapper.*;
 import java.io.File;
 import java.util.Map;
 import org.tequila.model.project.JProject;
 import org.tequila.model.project.NbJProject;
 import org.tequila.model.project.NbJWebProject;
+import org.tequila.template.engine.FreemarkerEngine;
+import org.tequila.template.engine.TemplateEngine;
 import org.tequila.template.freemarker.AbstractFreemarkerTestCase;
 
 /**
@@ -46,8 +47,8 @@ public class ProjectWrapTest extends AbstractFreemarkerTestCase {
 
     public void testFreemarkerNbJProjectWrapp() throws Exception {
         JProject nbProject = new NbJProject("./src/test/resources/NbApplication");
-        ProjectWrapperFactory prjWrapperFactory = new FreemarkerProjectWrapperFactory();
-        nbProject.setProjectWrapperFactory(prjWrapperFactory);
+        TemplateEngine engine = new FreemarkerEngine();
+        nbProject.setProjectWrapperFactory(engine.getEngineWrappersFactory().getProjectWrapperFactory());
         nbProject.setup();
 
         Map projectWrap = (Map) nbProject.getProjectWrapper().wrap(nbProject);
@@ -68,8 +69,8 @@ public class ProjectWrapTest extends AbstractFreemarkerTestCase {
 
     public void testFreemarkerNbJWebProjectWrapp() throws Exception {
         JProject nbProject = new NbJWebProject("./src/test/resources/NbWebApplicationTest");
-        ProjectWrapperFactory prjWrapperFactory = new FreemarkerProjectWrapperFactory();
-        nbProject.setProjectWrapperFactory(prjWrapperFactory);
+        TemplateEngine engine = new FreemarkerEngine();
+        nbProject.setProjectWrapperFactory(engine.getEngineWrappersFactory().getProjectWrapperFactory());
         nbProject.setup();
 
         Map projectWrap = (Map) nbProject.getProjectWrapper().wrap(nbProject);

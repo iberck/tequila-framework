@@ -14,26 +14,19 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.template.wrapper.freemarker;
+package org.tequila.template.engine;
 
-import org.tequila.template.wrapper.*;
+import org.tequila.template.wrapper.EngineWrappersFactory;
+import org.tequila.template.wrapper.freemarker.FreemarkerWrappersFactory;
 
 /**
  *
  * @author iberck
  */
-public class FreemarkerProjectWrapperFactory implements ProjectWrapperFactory {
-
-    FreemarkerProjectWrapperFactory() {
-    }
+public class FreemarkerEngine implements TemplateEngine {
 
     @Override
-    public ProjectWrapper getJProjectWrapper() {
-        return new FreemarkerJProjectWrapper();
-    }
-
-    @Override
-    public ProjectWrapper getJWebProjectWrapper() {
-        return new FreemarkerJWebProjectWrapper();
+    public EngineWrappersFactory getEngineWrappersFactory() {
+        return new FreemarkerWrappersFactory();
     }
 }

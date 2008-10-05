@@ -34,6 +34,9 @@ public class FreemarkerJProjectWrapper implements ProjectWrapper<JProject> {
     protected final static String PROJECT_CLASSES_PATH = "classesPath";
     protected final static String PROJECT_TEST_PATH = "testPath";
 
+    FreemarkerJProjectWrapper() {
+    }
+
     /**
      * Realiza el wrapper de un proyecto java básico, hasta el momento se cuenta con
      * las siguientes propiedades:

@@ -14,26 +14,18 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.template.wrapper.freemarker;
+package org.tequila.template.wrapper;
 
-import org.tequila.template.wrapper.*;
+import org.tequila.model.MetaProperty;
 
 /**
  *
  * @author iberck
  */
-public class FreemarkerProjectWrapperFactory implements ProjectWrapperFactory {
+public interface MetaPropertyWrapper<T extends MetaProperty> extends ObjectWrapper<T> {
 
-    FreemarkerProjectWrapperFactory() {
-    }
-
-    @Override
-    public ProjectWrapper getJProjectWrapper() {
-        return new FreemarkerJProjectWrapper();
-    }
+    public final static String PROPERTY_KEY = "metaProperty";
 
     @Override
-    public ProjectWrapper getJWebProjectWrapper() {
-        return new FreemarkerJWebProjectWrapper();
-    }
+    public Object wrap(T property);
 }

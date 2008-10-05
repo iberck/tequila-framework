@@ -28,6 +28,9 @@ public class FreemarkerJWebProjectWrapper extends FreemarkerJProjectWrapper {
 
     protected final static String PROJECT_WEB_INF_PATH = "webInfPath";
 
+    FreemarkerJWebProjectWrapper() {
+    }
+
     /**
      * Realiza el wrapper de un proyecto java básico, hasta el momento se cuenta con
      * las siguientes propiedades:
