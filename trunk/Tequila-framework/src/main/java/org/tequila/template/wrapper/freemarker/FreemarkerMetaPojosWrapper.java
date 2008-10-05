@@ -14,17 +14,32 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.template.wrapper;
+package org.tequila.template.wrapper.freemarker;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.tequila.model.MetaPojo;
+import org.tequila.template.wrapper.MetaPojosWrapper;
 
 /**
  *
  * @author iberck
  */
-public interface EngineWrappersFactory {
+public class FreemarkerMetaPojosWrapper implements MetaPojosWrapper {
 
-    public ProjectWrapperFactory getProjectWrapperFactory();
+    @Override
+    public Map wrap(List<MetaPojo> metaPojos) {
+        List metaPojosInjected = new ArrayList();
 
-    public MetaPropertyWrapperFactory getMetaPropertyWrapperFactory();
+        for (MetaPojo metaPojo : metaPojos) {
+            metaPojosInjected.add(metaPojo.createInjectedObject());
+        }
 
-    public MetaPojosWrapper getMetaPojosWrapper();
+        Map m = new HashMap();
+        m.put(MetaPojosWrapper.POJOS_KEY, metaPojosInjected);
+
+        return m;
+    }
 }

@@ -19,6 +19,7 @@ package org.tequila.template.freemarker;
 import freemarker.core.Environment;
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;
+import freemarker.template.SimpleObjectWrapper;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.StringWriter;
@@ -31,7 +32,14 @@ import org.apache.commons.io.FilenameUtils;
  */
 public abstract class AbstractFreemarkerTestCase extends TestCase {
 
-    Configuration cfg;
+    private static BeansWrapper bw_instance;
+    Configuration cfg;    
+
+    static {
+        bw_instance = SimpleObjectWrapper.getDefaultInstance();
+        bw_instance.setMethodsShadowItems(false);
+        bw_instance.setUseCache(true);
+    }
 
     public AbstractFreemarkerTestCase(String testName) {
         super(testName);
@@ -45,7 +53,7 @@ public abstract class AbstractFreemarkerTestCase extends TestCase {
 
         cfg = new Configuration();
         cfg.setDirectoryForTemplateLoading(tmp);
-        cfg.setObjectWrapper(new BeansWrapper());
+        cfg.setObjectWrapper(bw_instance);
     }
 
     @Override
@@ -60,7 +68,6 @@ public abstract class AbstractFreemarkerTestCase extends TestCase {
         fw.flush();
 
         String relativeTemplate = FilenameUtils.getName(fTemplate.getAbsolutePath());
-
         freemarker.template.Template freeMarkerTemplate = cfg.getTemplate(relativeTemplate);
 
         StringWriter sw = new StringWriter();

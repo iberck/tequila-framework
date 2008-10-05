@@ -28,9 +28,10 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author iberck
  */
-public class JMetaPojo extends LazyDynaBean {
+public class JMetaPojo extends LazyDynaBean implements MetaPojo {
 
     private static final Log log = LogFactory.getLog(JMetaPojo.class);
+    private Object sourceObject;
 
     /**
      * Crea una JMetaPojo a partir del nombre de una clase
@@ -47,6 +48,8 @@ public class JMetaPojo extends LazyDynaBean {
      * @throws MetaPojoException
      */
     public JMetaPojo(Object instance) throws MetaPojoException {
+        this.sourceObject = instance;
+
         try {
             PropertyUtils.copyProperties(this, instance);
         } catch (IllegalAccessException ex) {
@@ -56,6 +59,10 @@ public class JMetaPojo extends LazyDynaBean {
         } catch (NoSuchMethodException ex) {
             throw new MetaPojoException("NoSuchMethodException", ex);
         }
+    }
+
+    public Object getSourceObject() {
+        return sourceObject;
     }
 
     private static Object instantiateClass(String className) throws MetaPojoException {
@@ -70,6 +77,7 @@ public class JMetaPojo extends LazyDynaBean {
         }
     }
 
+    @Override
     public void injectProperty(String name, Object value) throws MetaPojoException {
         try {
             PropertyUtils.setNestedProperty(this, name, value);
@@ -82,16 +90,28 @@ public class JMetaPojo extends LazyDynaBean {
         }
     }
 
-    public Object getInjectedObject() throws MetaPojoException {
+    @Override
+    public Object createInjectedObject() throws MetaPojoException {
         try {
-            // propiedades injectadas
+            JMetaPojo clazz = new JMetaPojo(sourceObject.getClass());
+
+            // propiedades actuales (originales + injectadas)
             DynaProperty[] injectedProps = getDynaClass().getDynaProperties();
 
-            // Modificar los objetos class y declaredFields
-            JMetaPojo clazz = new JMetaPojo(this.getClass());
-            clazz.removeProperty("declaredFields");
-            PropertyUtils.setNestedProperty(clazz, "declaredFields", injectedProps);
+            // quitar objeto class de las propiedades
+            DynaProperty[] injectedWithoutClass = new DynaProperty[injectedProps.length - 1];
+            int i = 0;
+            for (DynaProperty dp : injectedProps) {
+                if (!dp.getName().equals("class")) {
+                    injectedWithoutClass[i++] = dp;
+                }
+            }
 
+            // Modificar los declaredFields del objeto original
+            clazz.removeProperty("declaredFields");
+            PropertyUtils.setNestedProperty(clazz, "declaredFields", injectedWithoutClass);
+
+            // reemplazar el objeto class del MetaPojo
             this.removeProperty("class");
             PropertyUtils.setNestedProperty(this, "class", clazz);
 

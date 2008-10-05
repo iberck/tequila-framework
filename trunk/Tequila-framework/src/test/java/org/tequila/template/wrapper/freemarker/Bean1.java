@@ -14,17 +14,30 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.template.wrapper;
+package org.tequila.template.wrapper.freemarker;
 
 /**
  *
  * @author iberck
  */
-public interface EngineWrappersFactory {
+public class Bean1 {
 
-    public ProjectWrapperFactory getProjectWrapperFactory();
+    private String prop1;
+    private String prop1_1;
 
-    public MetaPropertyWrapperFactory getMetaPropertyWrapperFactory();
+    public String getProp1() {
+        return prop1;
+    }
 
-    public MetaPojosWrapper getMetaPojosWrapper();
+    public void setProp1(String prop1) {
+        this.prop1 = prop1;
+    }
+
+    public String getProp1_1() {
+        return prop1_1;
+    }
+
+    public void setProp1_1(String prop1_1) {
+        this.prop1_1 = prop1_1;
+    }
 }

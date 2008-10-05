@@ -10,7 +10,7 @@ import org.tequila.template.engine.TemplateEngine;
  *
  * @author iberck
  */
-public class AbstractFreemarkerTestCaseTest extends AbstractFreemarkerTestCase {
+public final class AbstractFreemarkerTestCaseTest extends AbstractFreemarkerTestCase {
 
     public AbstractFreemarkerTestCaseTest(String testName) {
         super(testName);

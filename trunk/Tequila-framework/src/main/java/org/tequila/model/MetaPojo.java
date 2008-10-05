@@ -14,17 +14,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.template.wrapper;
+package org.tequila.model;
 
 /**
  *
  * @author iberck
  */
-public interface EngineWrappersFactory {
+public interface MetaPojo {
 
-    public ProjectWrapperFactory getProjectWrapperFactory();
+    public void injectProperty(String name, Object value);
 
-    public MetaPropertyWrapperFactory getMetaPropertyWrapperFactory();
-
-    public MetaPojosWrapper getMetaPojosWrapper();
+    public Object createInjectedObject();
 }

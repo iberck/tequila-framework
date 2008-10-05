@@ -16,15 +16,17 @@
  */
 package org.tequila.template.wrapper;
 
+import java.util.List;
+import org.tequila.model.MetaPojo;
+
 /**
  *
  * @author iberck
  */
-public interface EngineWrappersFactory {
+public interface MetaPojosWrapper extends ObjectWrapper<List<MetaPojo>> {
 
-    public ProjectWrapperFactory getProjectWrapperFactory();
+    public final static String POJOS_KEY = "metaPojos";
 
-    public MetaPropertyWrapperFactory getMetaPropertyWrapperFactory();
-
-    public MetaPojosWrapper getMetaPojosWrapper();
+    @Override
+    public Object wrap(List<MetaPojo> metaPojos);
 }
