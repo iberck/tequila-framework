@@ -18,8 +18,6 @@ package org.tequila.model;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.beanutils.DynaProperty;
 import org.apache.commons.beanutils.LazyDynaBean;
 import org.apache.commons.beanutils.LazyDynaClass;
@@ -39,34 +37,62 @@ public class MetaPojo extends LazyDynaBean {
     /**
      * Crea una MetaPojo en base a un objeto
      * @param object
+     * @throws MetaPojoException
      */
-    public MetaPojo(Object object) {
+    public MetaPojo(Object object) throws MetaPojoException {
         this.originalObject = object;
 
         try {
             PropertyUtils.copyProperties(this, object);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new MetaPojoException("IllegalAccessException", ex);
         } catch (InvocationTargetException ex) {
-            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new MetaPojoException("InvocationTargetException", ex);
         } catch (NoSuchMethodException ex) {
-            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new MetaPojoException("NoSuchMethodException", ex);
         }
     }
 
-    public void injectProperty(String name, Object value) {
+    /**
+     * Crea una MetaPojo a partir del nombre de una clase
+     * @param className Nombre de la clase
+     * @throws MetaPojoException
+     */
+    public MetaPojo(String className) throws MetaPojoException {
+        try {
+            Object instance = Class.forName(className).newInstance();
+            this.originalObject = instance;
+            PropertyUtils.copyProperties(this, instance);
+        } catch (ClassNotFoundException ex) {
+            throw new MetaPojoException("ClassNotFoundException", ex);
+        } catch (InstantiationException ex) {
+            throw new MetaPojoException("InstantiationException", ex);
+        } catch (IllegalAccessException ex) {
+            throw new MetaPojoException("IllegalAccessException", ex);
+        } catch (InvocationTargetException ex) {
+            throw new MetaPojoException("InvocationTargetException", ex);
+        } catch (NoSuchMethodException ex) {
+            throw new MetaPojoException("NoSuchMethodException", ex);
+        }
+    }
+
+    public Object getOriginalObject() {
+        return originalObject;
+    }
+
+    public void injectProperty(String name, Object value) throws MetaPojoException {
         try {
             PropertyUtils.setNestedProperty(this, name, value);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new MetaPojoException("IllegalAccessException", ex);
         } catch (InvocationTargetException ex) {
-            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new MetaPojoException("InvocationTargetException", ex);
         } catch (NoSuchMethodException ex) {
-            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new MetaPojoException("NoSuchMethodException", ex);
         }
     }
 
-    public Object getInjectedObject() {
+    public Object getInjectedObject() throws MetaPojoException {
         try {
             // propiedades injectadas
             DynaProperty[] injectedProps = getDynaClass().getDynaProperties();
@@ -77,13 +103,14 @@ public class MetaPojo extends LazyDynaBean {
             // Crear nuevas propiedades
             MetaPojo[] newProps = new MetaPojo[injectedProps.length + originalProps.length];
             int i = 0;
-            for (Field originalProp : originalProps) {
-                newProps[i++] = new MetaPojo(originalProp);
+            for (Field field : originalProps) {
+                newProps[i++] = new MetaPojo(field);
             }
             for (DynaProperty injectedProp : injectedProps) {
                 newProps[i++] = new MetaPojo(injectedProp);
             }
 
+            // Modificar los objetos class y declaredFields
             MetaPojo clazz = new MetaPojo(originalObject.getClass());
             clazz.removeProperty("declaredFields");
             PropertyUtils.setNestedProperty(clazz, "declaredFields", newProps);
@@ -92,11 +119,11 @@ public class MetaPojo extends LazyDynaBean {
             PropertyUtils.setNestedProperty(this, "class", clazz);
 
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new MetaPojoException("IllegalAccessException", ex);
         } catch (InvocationTargetException ex) {
-            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new MetaPojoException("InvocationTargetException", ex);
         } catch (NoSuchMethodException ex) {
-            Logger.getLogger(MetaPojo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new MetaPojoException("NoSuchMethodException", ex);
         }
 
         return this;
