@@ -68,5 +68,11 @@
             <version>1.7.0</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>groovy</groupId>
+            <artifactId>groovy-all-minimal</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

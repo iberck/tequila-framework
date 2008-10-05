@@ -84,10 +84,7 @@ public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
         t2.append("${field.name},");
         t2.append("</#list>");
         t2.append("</#list>");
-        assertEqualsFreemarkerTemplate(metaPojosWrapped, "injectedProperty1,prop1,prop1_1,prop2,prop3,", t2.toString());
-
-    // test de inyeccion de fields a las clases
-
+        assertEqualsFreemarkerTemplate(metaPojosWrapped, "injectedProperty1,prop1,prop1_1,prop2,propBean3,prop3,", t2.toString());
     }
 
     public void testMetaPojosInjectedFieldsFreemarker() throws Exception {
@@ -191,5 +188,75 @@ public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
         t4.append("</#list>");
         t4.append("</#list>");
         assertEqualsFreemarkerTemplate(metaPojosWrapped, "metafield inyectado nuevaPropiedad InView", t4.toString());
+    }
+
+    public void testInjectionTypes() throws Exception {
+        // crear lista de metapojos
+        List<MetaPojo> jMetaPojos = new ArrayList();
+        JMetaPojo bean1 = new JMetaPojo("org.tequila.template.wrapper.freemarker.Bean2");
+
+        Bean3 bean3 = new Bean3();
+        // injectar field
+        bean1.injectPojoProperty("nuevaPropiedad", new Integer(5));
+        bean1.injectPojoProperty("nuevaPropiedad2", "dos");
+        bean1.injectPojoProperty("propiedadObjeto", bean3);
+
+        jMetaPojos.add(bean1);
+
+        TemplateEngine engine = new FreemarkerEngine();
+        MetaPojosWrapperFactory factory = engine.getEngineWrappersFactory().getMetaPojosWrapperFactory();
+        bean1.setMetaPojosWrapperFactory(factory);
+        MetaPojosWrapper metaPojosWrapper = bean1.getMetaPojosWrapper();
+        Map metaPojosWrapped = (Map) metaPojosWrapper.wrap(jMetaPojos);
+
+        // pojo.class.simpleName, pojo.class.name, pojo.toString
+        // pojo.class.toString
+        StringBuilder t2 = new StringBuilder();
+        t2.append("<#list metaPojos as pojo>");
+        t2.append("1.[${pojo.class.simpleName}], [${pojo.class.name}]");
+        t2.append("<#if pojo?contains('JMetaPojo')>");
+        t2.append("2.[pojo es de tipo JMetaPojo]");
+        t2.append("</#if>");
+        t2.append("<#if pojo.class?contains('JMetaPojo')>");
+        t2.append("3.[pojo.class es de tipo JMetaPojo]");
+        t2.append("</#if>");
+        t2.append("4.[${pojo.nuevaPropiedad}]");
+        t2.append("5.[${pojo.nuevaPropiedad2}]");
+
+        t2.append("<#if pojo.propiedadObjeto?contains('Bean3')>");
+        t2.append("5.1[pojo.propiedadObjeto es de tipo Bean3]");
+        t2.append("</#if>");
+//
+        t2.append("6.[${pojo.nuevaPropiedad.class.name}]");
+        t2.append("7.[${pojo.nuevaPropiedad2.class.name}]");
+        t2.append("8.[${pojo.propiedadObjeto.class.name}]");
+
+//        t2.append("<#list pojo.propiedadObjeto.class.declaredFields as f>");
+//        t2.append("9.[${f.name}]");
+//        t2.append("</#list>");
+//
+//        t2.append("<#list pojo.prop2.class.declaredFields as f>");
+//        t2.append("10.[${f.name}]");
+//        t2.append("</#list>");
+//
+
+        t2.append("</#list>");
+
+        StringBuilder exp = new StringBuilder();
+        exp.append("1.[Bean2], [org.tequila.template.wrapper.freemarker.Bean2]");
+        exp.append("2.[pojo es de tipo JMetaPojo]");
+        exp.append("3.[pojo.class es de tipo JMetaPojo]");
+
+        exp.append("4.[5]");
+        exp.append("5.[dos]");
+        exp.append("5.1[pojo.propiedadObjeto es de tipo Bean3]");
+        exp.append("6.[java.lang.Integer]");
+        exp.append("7.[java.lang.String]");
+        exp.append("8.[org.tequila.template.wrapper.freemarker.Bean3]");
+
+//        exp.append("9.[prop3]");
+//        exp.append("10.[]");
+
+        assertEqualsFreemarkerTemplate(metaPojosWrapped, exp.toString(), t2.toString());
     }
 }
