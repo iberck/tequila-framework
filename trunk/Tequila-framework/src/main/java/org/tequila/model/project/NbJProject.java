@@ -14,18 +14,44 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.template.wrapper;
+package org.tequila.model.project;
 
-import org.tequila.model.project.ExternalProject;
+import java.io.File;
 
 /**
- * Interfaz que modela los wrappers de proyectos externos.
- * 
- * @see ObjectWrapper
+ * Esta clase modela un proyecto java básico en netbeans
  * @author iberck
  */
-public interface ProjectWrapper<T extends ExternalProject> extends ObjectWrapper<T> {
+public class NbJProject extends JProject {
 
+    public NbJProject(String path) {
+        super(path);
+    }
+
+    /**
+     * @see ExternalProject
+     * @return
+     */
     @Override
-    public Object wrap(T project);
+    public String getClassesPath() {
+        return "build" + File.separator + "classes";
+    }
+
+    /**
+     * @see ExternalProject
+     * @return
+     */
+    @Override
+    public String getSourcesPath() {
+        return "src";
+    }
+
+    /**
+     * @see ExternalProject
+     * @return
+     */
+    @Override
+    public String getTestPath() {
+        return "test";
+    }
 }

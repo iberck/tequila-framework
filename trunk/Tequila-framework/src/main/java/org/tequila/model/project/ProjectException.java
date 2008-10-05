@@ -14,18 +14,33 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.template.wrapper;
-
-import org.tequila.model.project.ExternalProject;
+package org.tequila.model.project;
 
 /**
- * Interfaz que modela los wrappers de proyectos externos.
- * 
- * @see ObjectWrapper
+ * Modela las excepciones en tiempo de ejecución de los proyectos
  * @author iberck
  */
-public interface ProjectWrapper<T extends ExternalProject> extends ObjectWrapper<T> {
+public class ProjectException extends RuntimeException {
 
-    @Override
-    public Object wrap(T project);
+    /**
+     * Crea una excepcion vacía
+     */
+    public ProjectException() {
+    }
+
+    /**
+     * Crea una excepción con un mensaje
+     * @param msg
+     */
+    public ProjectException(String msg) {
+        super(msg);
+    }
+
+    /**
+     * Crea una excepción con un mensaje y un objeto con la excepcion
+     * @param msg
+     */
+    public ProjectException(String msg, Throwable t) {
+        super(msg, t);
+    }
 }

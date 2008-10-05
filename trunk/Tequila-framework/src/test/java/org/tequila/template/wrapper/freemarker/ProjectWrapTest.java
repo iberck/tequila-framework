@@ -19,9 +19,9 @@ package org.tequila.template.wrapper.freemarker;
 import org.tequila.template.wrapper.*;
 import java.io.File;
 import java.util.Map;
-import org.tequila.project.JProject;
-import org.tequila.project.NbJProject;
-import org.tequila.project.NbJWebProject;
+import org.tequila.model.project.JProject;
+import org.tequila.model.project.NbJProject;
+import org.tequila.model.project.NbJWebProject;
 import org.tequila.template.freemarker.AbstractFreemarkerTestCase;
 
 /**

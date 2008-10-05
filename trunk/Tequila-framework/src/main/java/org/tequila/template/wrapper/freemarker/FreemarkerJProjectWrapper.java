@@ -19,7 +19,7 @@ package org.tequila.template.wrapper.freemarker;
 import org.tequila.template.wrapper.*;
 import java.util.HashMap;
 import java.util.Map;
-import org.tequila.project.JProject;
+import org.tequila.model.project.JProject;
 
 /**
  *

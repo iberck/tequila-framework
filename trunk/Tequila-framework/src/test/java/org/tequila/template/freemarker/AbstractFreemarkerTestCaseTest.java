@@ -1,8 +1,8 @@
 package org.tequila.template.freemarker;
 
 import java.io.File;
-import org.tequila.project.JProject;
-import org.tequila.project.NbJProject;
+import org.tequila.model.project.JProject;
+import org.tequila.model.project.NbJProject;
 import org.tequila.template.wrapper.freemarker.FreemarkerProjectWrapperFactory;
 import org.tequila.template.wrapper.ProjectWrapperFactory;
 

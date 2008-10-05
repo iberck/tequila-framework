@@ -23,7 +23,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.tequila.project.ProjectException;
+import org.tequila.model.project.ProjectException;
 
 /**
  * Esta clase modela el classpath interno del framework y sirve para introducir
