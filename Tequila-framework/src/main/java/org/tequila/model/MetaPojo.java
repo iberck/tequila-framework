@@ -22,7 +22,9 @@ package org.tequila.model;
  */
 public interface MetaPojo {
 
-    public void injectProperty(String name, Object value);
+    public void injectPojoProperty(String propertyName, Object propertyValue);
+
+    public void injectFieldProperty(String fieldName, String propertyName, Object propertyValue);
 
     public Object createInjectedObject();
 }

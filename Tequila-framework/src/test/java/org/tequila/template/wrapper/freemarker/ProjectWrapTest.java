@@ -60,11 +60,11 @@ public class ProjectWrapTest extends AbstractFreemarkerTestCase {
         assertEquals(projectProps.get(FreemarkerJProjectWrapper.PROJECT_TEST_PATH), "test");
 
         // freemarker test
-        assertEqualsFreemarkerTemplate(projectWrap, "${project.name}", "NbApplication");
-        assertEqualsFreemarkerTemplate(projectWrap, "${project.path}", "./src/test/resources/NbApplication");
-        assertEqualsFreemarkerTemplate(projectWrap, "${project.srcPath}", "src");
-        assertEqualsFreemarkerTemplate(projectWrap, "${project.classesPath}", "build" + File.separator + "classes");
-        assertEqualsFreemarkerTemplate(projectWrap, "${project.testPath}", "test");
+        assertEqualsFreemarkerTemplate(projectWrap, "NbApplication", "${project.name}");
+        assertEqualsFreemarkerTemplate(projectWrap, "./src/test/resources/NbApplication", "${project.path}");
+        assertEqualsFreemarkerTemplate(projectWrap, "src", "${project.srcPath}");
+        assertEqualsFreemarkerTemplate(projectWrap, "build" + File.separator + "classes", "${project.classesPath}");
+        assertEqualsFreemarkerTemplate(projectWrap, "test", "${project.testPath}");
     }
 
     public void testFreemarkerNbJWebProjectWrapp() throws Exception {
@@ -84,12 +84,13 @@ public class ProjectWrapTest extends AbstractFreemarkerTestCase {
         assertEquals(projectProps.get(FreemarkerJWebProjectWrapper.PROJECT_WEB_INF_PATH), "web" + File.separator + "WEB-INF");
 
         // freemarker test
-        assertEqualsFreemarkerTemplate(projectWrap, "${project.name}", "NbWebApplicationTest");
-        assertEqualsFreemarkerTemplate(projectWrap, "${project.path}", "./src/test/resources/NbWebApplicationTest");
-        assertEqualsFreemarkerTemplate(projectWrap, "${project.srcPath}", "src");
-        assertEqualsFreemarkerTemplate(projectWrap, "${project.classesPath}", "build" + File.separator + "web" +
-                File.separator + "WEB-INF" + File.separator + "classes");
-        assertEqualsFreemarkerTemplate(projectWrap, "${project.testPath}", "test");
-        assertEqualsFreemarkerTemplate(projectWrap, "${project.webInfPath}", "web" + File.separator + "WEB-INF");
+        assertEqualsFreemarkerTemplate(projectWrap, "NbWebApplicationTest", "${project.name}");
+        assertEqualsFreemarkerTemplate(projectWrap, "./src/test/resources/NbWebApplicationTest", "${project.path}");
+        assertEqualsFreemarkerTemplate(projectWrap, "src", "${project.srcPath}");
+        assertEqualsFreemarkerTemplate(projectWrap, "build" + File.separator + "web" +
+                File.separator + "WEB-INF" + File.separator + "classes",
+                "${project.classesPath}");
+        assertEqualsFreemarkerTemplate(projectWrap, "test", "${project.testPath}");
+        assertEqualsFreemarkerTemplate(projectWrap, "web" + File.separator + "WEB-INF", "${project.webInfPath}");
     }
 }
