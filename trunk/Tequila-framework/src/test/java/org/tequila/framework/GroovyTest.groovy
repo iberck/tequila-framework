@@ -14,30 +14,38 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.template.wrapper.freemarker;
+
+package org.tequila.framework;
+
+import junit.framework.TestCase;
+import org.apache.commons.logging.Log
 
 /**
  *
  * @author iberck
  */
-public class Bean3 {
+class GroovyTest extends TestCase {
 
-    private String prop3;
-    private Bean3 propBean3;
+    
 
-    public String getProp3() {
-        return prop3;
+    public GroovyTest(String testName) {
+        super(testName);
     }
 
-    public void setProp3(String prop3) {
-        this.prop3 = prop3;
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
     }
 
-    public Bean3 getPropBean3() {
-        return propBean3;
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
     }
 
-    public void setPropBean3(Bean3 propBean3) {
-        this.propBean3 = propBean3;
+
+    public void testGroovy() {
+        def groovyTest = new NewGroovyClass();
+        
     }
+
 }

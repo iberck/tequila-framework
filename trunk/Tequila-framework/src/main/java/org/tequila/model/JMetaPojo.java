@@ -64,9 +64,6 @@ public class JMetaPojo extends LazyDynaBean implements MetaPojo {
         }
     }
 
-    private JMetaPojo() {
-    }
-
     @Override
     public MetaPojosWrapperFactory getMetaPojosWrapperFactory() {
         return factory;
@@ -97,6 +94,7 @@ public class JMetaPojo extends LazyDynaBean implements MetaPojo {
     @Override
     public void injectPojoProperty(String propName, Object propValue) throws MetaPojoException {
         try {
+
             // Pone la propiedad al servicio con get('propName')
             PropertyUtils.setNestedProperty(this, propName, propValue);
             PropertyUtils.setNestedProperty(this, "name", propName);

@@ -16,9 +16,7 @@
  */
 package org.tequila.model;
 
-import java.util.Collection;
 import junit.framework.TestCase;
-import org.apache.commons.beanutils.DynaProperty;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -69,7 +67,7 @@ public class JMetaPojoTest extends TestCase {
         // test de las propiedades originales del objeto
         assertEquals("iberck", PropertyUtils.getNestedProperty(injectedObject, "nombre"));
         assertEquals("default_value", PropertyUtils.getNestedProperty(injectedObject, "cadenaConValor"));
-        assertEquals(5, PropertyUtils.getNestedProperty(injectedObject, "edad"));
+        assertEquals("5", PropertyUtils.getNestedProperty(injectedObject, "edad").toString());
 
         // test con el nombre de la clase
         JMetaPojo metaClassName = new JMetaPojo("org.tequila.model.MyBean");
@@ -102,7 +100,6 @@ public class JMetaPojoTest extends TestCase {
         // nuevo valor inyectado
         assertEquals("java.lang.String", PropertyUtils.getNestedProperty(injObj, "otraPropiedad").getClass().getName());
         assertEquals("val", PropertyUtils.getNestedProperty(injObj, "otraPropiedad"));
-
     }
 
     public void testJMetaPojoInjectedField() throws Exception {
