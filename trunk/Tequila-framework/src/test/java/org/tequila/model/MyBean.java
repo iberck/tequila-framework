@@ -23,6 +23,7 @@ package org.tequila.model;
 public class MyBean {
 
     private String nombre;
+    private String cadenaConValor = "default_value";
 
     public String getNombre() {
         return nombre;
@@ -30,5 +31,13 @@ public class MyBean {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getCadenaConValor() {
+        return cadenaConValor;
+    }
+
+    public void setCadenaConValor(String cadenaConValor) {
+        this.cadenaConValor = cadenaConValor;
     }
 }

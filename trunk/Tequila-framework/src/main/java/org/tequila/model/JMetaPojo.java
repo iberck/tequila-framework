@@ -16,7 +16,6 @@
  */
 package org.tequila.model;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.beanutils.DynaProperty;
 import org.apache.commons.beanutils.LazyDynaBean;
@@ -29,21 +28,27 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author iberck
  */
-public class MetaPojo extends LazyDynaBean {
+public class JMetaPojo extends LazyDynaBean {
 
-    private static final Log log = LogFactory.getLog(MetaPojo.class);
-    private Object originalObject;
+    private static final Log log = LogFactory.getLog(JMetaPojo.class);
 
     /**
-     * Crea una MetaPojo en base a un objeto
+     * Crea una JMetaPojo a partir del nombre de una clase
+     * @param className Nombre de la clase
+     * @throws MetaPojoException
+     */
+    public JMetaPojo(String className) throws MetaPojoException {
+        this(instantiateClass(className));
+    }
+
+    /**
+     * Crea una JMetaPojo en base a un objeto
      * @param object
      * @throws MetaPojoException
      */
-    public MetaPojo(Object object) throws MetaPojoException {
-        this.originalObject = object;
-
+    public JMetaPojo(Object instance) throws MetaPojoException {
         try {
-            PropertyUtils.copyProperties(this, object);
+            PropertyUtils.copyProperties(this, instance);
         } catch (IllegalAccessException ex) {
             throw new MetaPojoException("IllegalAccessException", ex);
         } catch (InvocationTargetException ex) {
@@ -53,31 +58,16 @@ public class MetaPojo extends LazyDynaBean {
         }
     }
 
-    /**
-     * Crea una MetaPojo a partir del nombre de una clase
-     * @param className Nombre de la clase
-     * @throws MetaPojoException
-     */
-    public MetaPojo(String className) throws MetaPojoException {
+    private static Object instantiateClass(String className) throws MetaPojoException {
         try {
-            Object instance = Class.forName(className).newInstance();
-            this.originalObject = instance;
-            PropertyUtils.copyProperties(this, instance);
-        } catch (ClassNotFoundException ex) {
-            throw new MetaPojoException("ClassNotFoundException", ex);
+            return Class.forName(className).newInstance();
         } catch (InstantiationException ex) {
             throw new MetaPojoException("InstantiationException", ex);
         } catch (IllegalAccessException ex) {
             throw new MetaPojoException("IllegalAccessException", ex);
-        } catch (InvocationTargetException ex) {
-            throw new MetaPojoException("InvocationTargetException", ex);
-        } catch (NoSuchMethodException ex) {
-            throw new MetaPojoException("NoSuchMethodException", ex);
+        } catch (ClassNotFoundException ex) {
+            throw new MetaPojoException("ClassNotFoundException", ex);
         }
-    }
-
-    public Object getOriginalObject() {
-        return originalObject;
     }
 
     public void injectProperty(String name, Object value) throws MetaPojoException {
@@ -97,23 +87,10 @@ public class MetaPojo extends LazyDynaBean {
             // propiedades injectadas
             DynaProperty[] injectedProps = getDynaClass().getDynaProperties();
 
-            // propiedades originales
-            Field[] originalProps = originalObject.getClass().getDeclaredFields();
-
-            // Crear nuevas propiedades
-            MetaPojo[] newProps = new MetaPojo[injectedProps.length + originalProps.length];
-            int i = 0;
-            for (Field field : originalProps) {
-                newProps[i++] = new MetaPojo(field);
-            }
-            for (DynaProperty injectedProp : injectedProps) {
-                newProps[i++] = new MetaPojo(injectedProp);
-            }
-
             // Modificar los objetos class y declaredFields
-            MetaPojo clazz = new MetaPojo(originalObject.getClass());
+            JMetaPojo clazz = new JMetaPojo(this.getClass());
             clazz.removeProperty("declaredFields");
-            PropertyUtils.setNestedProperty(clazz, "declaredFields", newProps);
+            PropertyUtils.setNestedProperty(clazz, "declaredFields", injectedProps);
 
             this.removeProperty("class");
             PropertyUtils.setNestedProperty(this, "class", clazz);
