@@ -16,6 +16,9 @@
  */
 package org.tequila.model;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  *
  * @author iberck
@@ -34,6 +37,16 @@ public class GMetaPojo implements MetaPojo {
 
     @Override
     public Object createInjectedObject() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setInjectedPropertiesMap(Map<String, Object> m) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setInjectedFields(List<InjectedField> injectedFields) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

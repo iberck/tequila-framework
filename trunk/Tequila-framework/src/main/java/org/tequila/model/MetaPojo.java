@@ -16,6 +16,9 @@
  */
 package org.tequila.model;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  *
  * @author iberck
@@ -27,4 +30,8 @@ public interface MetaPojo {
     public void injectFieldProperty(String fieldName, String propertyName, Object propertyValue);
 
     public Object createInjectedObject();
+
+    public void setInjectedPropertiesMap(Map<String, Object> m);
+
+    public void setInjectedFields(List<InjectedField> injectedFields);
 }

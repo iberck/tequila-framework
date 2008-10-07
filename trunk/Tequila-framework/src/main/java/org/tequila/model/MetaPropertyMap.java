@@ -27,12 +27,12 @@ public class MetaPropertyMap implements MetaProperty<Map> {
     private Map property;
 
     @Override
-    public void setProperty(Map property) {
+    public void setValue(Map property) {
         this.property = property;
     }
 
     @Override
-    public Map getProperty() {
+    public Map getValue() {
         return property;
     }
 }

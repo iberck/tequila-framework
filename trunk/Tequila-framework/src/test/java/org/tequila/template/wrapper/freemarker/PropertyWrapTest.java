@@ -54,7 +54,7 @@ public class PropertyWrapTest extends AbstractFreemarkerTestCase {
 
         Map m = new HashMap();
         m.put("llave", "_valor_");
-        metaPropertyMap.setProperty(m);
+        metaPropertyMap.setValue(m);
 
         Map rootMap = (Map) wrappersFactory.getMetaPropertyWrapper().wrap(metaPropertyMap);
         assertEqualsFreemarkerTemplate(rootMap, "_valor_", "${metaProperty.llave}");
@@ -67,7 +67,7 @@ public class PropertyWrapTest extends AbstractFreemarkerTestCase {
         MetaProperty metaPropertyObject = new MetaPropertyObject();
 
         Cadena cad = new Cadena("hola mundo");
-        metaPropertyObject.setProperty(cad);
+        metaPropertyObject.setValue(cad);
 
         Map rootMap = (Map) wrappersFactory.getMetaPropertyWrapper().wrap(metaPropertyObject);
 
