@@ -33,7 +33,7 @@ public class FreemarkerMetaPropertyWrapper implements MetaPropertyWrapper {
     @Override
     public Object wrap(MetaProperty metaProperty) {
         Map root = new HashMap();
-        root.put(PROPERTY_KEY, metaProperty.getProperty());
+        root.put(PROPERTY_KEY, metaProperty.getValue());
         return root;
     }
 }

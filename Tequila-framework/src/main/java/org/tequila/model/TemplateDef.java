@@ -16,21 +16,40 @@
  */
 package org.tequila.model;
 
+import org.springframework.beans.factory.annotation.Required;
+
 /**
  *
  * @author iberck
  */
-public class MetaPropertyObject implements MetaProperty<Object> {
+public class TemplateDef {
 
-    private Object property;
+    private String path;
+    private String name;
+    private String description;
 
-    @Override
-    public void setValue(Object property) {
-        this.property = property;
+    public String getDescription() {
+        return description;
     }
 
-    @Override
-    public Object getValue() {
-        return property;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    @Required
+    public void setPath(String path) {
+        this.path = path;
     }
 }

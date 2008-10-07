@@ -16,21 +16,32 @@
  */
 package org.tequila.model;
 
+import java.util.List;
+import org.springframework.beans.factory.annotation.Required;
+
 /**
  *
  * @author iberck
  */
-public class MetaPropertyObject implements MetaProperty<Object> {
+public class GroupTemplates {
 
-    private Object property;
+    private List<TemplateDef> templates;
+    private String name;
 
-    @Override
-    public void setValue(Object property) {
-        this.property = property;
+    public List<TemplateDef> getTemplates() {
+        return templates;
     }
 
-    @Override
-    public Object getValue() {
-        return property;
+    @Required
+    public void setTemplates(List<TemplateDef> templates) {
+        this.templates = templates;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

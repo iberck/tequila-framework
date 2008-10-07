@@ -14,23 +14,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.model;
+package org.tequila.template.engine;
 
 /**
  *
  * @author iberck
  */
-public class MetaPropertyObject implements MetaProperty<Object> {
+public interface TemplateDirective {
 
-    private Object property;
-
-    @Override
-    public void setValue(Object property) {
-        this.property = property;
-    }
-
-    @Override
-    public Object getValue() {
-        return property;
-    }
+    public String getName();
 }

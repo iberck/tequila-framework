@@ -18,7 +18,10 @@ package org.tequila.model;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import org.apache.commons.beanutils.DynaProperty;
 import org.apache.commons.beanutils.LazyDynaBean;
 import org.apache.commons.beanutils.LazyDynaClass;
@@ -115,7 +118,8 @@ public class JMetaPojo extends LazyDynaBean implements MetaPojo {
             declaredFields.put(fieldName, metaField);
 
         } catch (Exception ex) {
-            throw new MetaPojoException("No existe la propiedad '" + fieldName + "'", ex);
+            throw new MetaPojoException("No existe el field '" + fieldName + "' " +
+                    "dentro de la clase '" + sourceObject + "'", ex);
         }
     }
 
@@ -175,5 +179,22 @@ public class JMetaPojo extends LazyDynaBean implements MetaPojo {
         }
 
         return dynaPropsWithoutClass;
+    }
+
+    @Override
+    public void setInjectedPropertiesMap(Map<String, Object> m) {
+        Set<Entry<String, Object>> entrySet = m.entrySet();
+        for (Entry<String, Object> entry : entrySet) {
+            injectPojoProperty(entry.getKey(), entry.getValue());
+        }
+    }
+
+    @Override
+    public void setInjectedFields(List<InjectedField> injectedFields) {
+        for (InjectedField injectedField : injectedFields) {
+            injectFieldProperty(injectedField.getFieldName(),
+                    injectedField.getInjectedPropertyName(),
+                    injectedField.getInjectedPropertyValue());
+        }
     }
 }

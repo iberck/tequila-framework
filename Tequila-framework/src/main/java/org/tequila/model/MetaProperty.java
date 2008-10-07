@@ -22,7 +22,7 @@ package org.tequila.model;
  */
 public interface MetaProperty<T> {
 
-    public void setProperty(T property);
+    public void setValue(T property);
 
-    public T getProperty();
+    public T getValue();
 }
