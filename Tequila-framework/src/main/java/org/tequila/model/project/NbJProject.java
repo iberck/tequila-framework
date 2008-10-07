@@ -27,8 +27,8 @@ public class NbJProject extends JProject {
     public NbJProject() {
     }
 
-    public NbJProject(String projectFolder) {
-        setProjectFolder(projectFolder);
+    public NbJProject(String path) {
+        setPath(path);
     }
 
     /**

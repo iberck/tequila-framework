@@ -100,7 +100,7 @@ public class InternalClassPath {
     }
 
     protected static void addJProject(JProject project) {
-        log.debug("Introduciendo el proyecto '" + project.getProjectFolder() + "' al classpath interno");
-        InternalClassPath.addResource(project.getProjectFolder() + File.separator + project.getClassesPath());
+        log.debug("Introduciendo el proyecto '" + project.getPath() + "' al classpath interno");
+        InternalClassPath.addResource(project.getPath() + File.separator + project.getClassesPath());
     }
 }

@@ -28,13 +28,13 @@ import org.tequila.template.wrapper.ProjectWrapperFactory;
 public interface ExternalProject {
 
     @Required
-    public void setProjectFolder(String path);
+    public void setPath(String path);
 
     /**
      * Obtiene el path del proyecto
      * @return
      */
-    public String getProjectFolder();
+    public String getPath();
 
     /**
      * Obtiene el nombre del proyecto
