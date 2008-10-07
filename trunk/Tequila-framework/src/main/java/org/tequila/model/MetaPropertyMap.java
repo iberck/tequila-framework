@@ -17,8 +17,6 @@
 package org.tequila.model;
 
 import java.util.Map;
-import org.tequila.template.wrapper.MetaPropertyWrapper;
-import org.tequila.template.wrapper.MetaPropertyWrapperFactory;
 
 /**
  *
@@ -27,7 +25,6 @@ import org.tequila.template.wrapper.MetaPropertyWrapperFactory;
 public class MetaPropertyMap implements MetaProperty<Map> {
 
     private Map property;
-    private MetaPropertyWrapperFactory factory;
 
     @Override
     public void setProperty(Map property) {
@@ -37,20 +34,5 @@ public class MetaPropertyMap implements MetaProperty<Map> {
     @Override
     public Map getProperty() {
         return property;
-    }
-
-    @Override
-    public void setMetaPropertyWrapperFactory(MetaPropertyWrapperFactory factory) {
-        this.factory = factory;
-    }
-
-    @Override
-    public MetaPropertyWrapperFactory getMetaPropertyWrapperFactory() {
-        return factory;
-    }
-
-    @Override
-    public MetaPropertyWrapper getMetaPropertyWrapper() {
-        return factory.getMetaPropertyMapWrapper();
     }
 }

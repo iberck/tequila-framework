@@ -16,26 +16,11 @@
  */
 package org.tequila.model;
 
-import org.tequila.template.wrapper.MetaPojosWrapper;
-import org.tequila.template.wrapper.MetaPojosWrapperFactory;
-
 /**
  *
  * @author iberck
  */
 public class GMetaPojo implements MetaPojo {
-
-    private MetaPojosWrapperFactory factory;
-
-    @Override
-    public MetaPojosWrapperFactory getMetaPojosWrapperFactory() {
-        return factory;
-    }
-
-    @Override
-    public void setMetaPojosWrapperFactory(MetaPojosWrapperFactory factory) {
-        this.factory = factory;
-    }
 
     @Override
     public void injectPojoProperty(String propertyName, Object propertyValue) {
@@ -50,10 +35,5 @@ public class GMetaPojo implements MetaPojo {
     @Override
     public Object createInjectedObject() {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public MetaPojosWrapper getMetaPojosWrapper() {
-        return factory.getMetaGPojosWrapper();
     }
 }
