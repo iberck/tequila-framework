@@ -28,8 +28,8 @@ public abstract class JWebProject extends JProject {
     protected JWebProject() {
     }
 
-    protected JWebProject(String projectFolder) {
-        setProjectFolder(projectFolder);
+    protected JWebProject(String path) {
+        setPath(path);
     }
 
     /**

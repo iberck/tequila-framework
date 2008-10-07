@@ -94,8 +94,8 @@ public class FreemarkerEngine implements TemplateEngine {
             
             Environment env = freeMarkerTemplate.createProcessingEnvironment(root, sw);
             env.process(); // process the template
-            log.debug("Resultado del matcheo:" + sw.toString());
             sw.close();
+            log.debug("->Resultado del matcheo:" + sw.toString());
         } catch (TemplateException ex) {
             String templateName = templateModel.getTemplateDef().getName();
             throw new MatchException("No se pudo hacer match del template '" +

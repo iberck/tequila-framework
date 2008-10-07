@@ -31,11 +31,11 @@ public abstract class JProject implements ExternalProject {
 
     protected static final Log log = LogFactory.getLog(JProject.class);
     protected ProjectWrapperFactory projectWrapperFactory;
-    private String projectFolder;
+    private String path;
 
     @Override
-    public void setProjectFolder(String projectFolder) {
-        this.projectFolder = projectFolder;
+    public void setPath(String path) {
+        this.path = path;
 
         validateProject();
 
@@ -46,8 +46,8 @@ public abstract class JProject implements ExternalProject {
      * @see ExternalProject
      */
     @Override
-    public String getProjectFolder() {
-        return projectFolder;
+    public String getPath() {
+        return path;
     }
 
     /**
@@ -58,7 +58,7 @@ public abstract class JProject implements ExternalProject {
      */
     @Override
     public String getProjectName() {
-        String projectName = FilenameUtils.getName(projectFolder);
+        String projectName = FilenameUtils.getName(path);
         if (projectName == null || projectName.equals("")) {
             throw new ProjectException("El nombre del proyecto no es válido");
         }
@@ -120,16 +120,16 @@ public abstract class JProject implements ExternalProject {
      */
     @Override
     public void validateProject() throws ProjectException {
-        log.debug("Validando el proyecto '" + getProjectFolder() + "'");
+        log.debug("Validando el proyecto '" + getPath() + "'");
 
         // validar que exista la ruta del proyecto
-        File fprj = new File(getProjectFolder());
+        File fprj = new File(getPath());
         if (!fprj.exists()) {
-            throw new ProjectException("No existe el proyecto '" + getProjectFolder() + "'");
+            throw new ProjectException("No existe el proyecto '" + getPath() + "'");
         }
 
         if (!fprj.canWrite()) {
-            throw new ProjectException("El proyecto '" + getProjectFolder() + "' es de solo lectura");
+            throw new ProjectException("El proyecto '" + getPath() + "' es de solo lectura");
         }
 
         // valida que se encuentre la carpeta sources
@@ -162,7 +162,7 @@ public abstract class JProject implements ExternalProject {
      * @return true si existe, false si no existe
      */
     public boolean existsInProject(String directory) {
-        File f = new File(getProjectFolder() + File.separator + directory);
+        File f = new File(getPath() + File.separator + directory);
         return f.exists() && f.isDirectory();
     }
 
