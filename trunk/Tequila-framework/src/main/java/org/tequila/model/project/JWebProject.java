@@ -25,8 +25,11 @@ import org.tequila.template.wrapper.ProjectWrapper;
  */
 public abstract class JWebProject extends JProject {
 
-    protected JWebProject(String path) {
-        super(path);
+    protected JWebProject() {
+    }
+
+    protected JWebProject(String projectFolder) {
+        super(projectFolder);
     }
 
     /**

@@ -24,8 +24,11 @@ import java.io.File;
  */
 public class NbJWebProject extends JWebProject {
 
-    public NbJWebProject(String path) {
-        super(path);
+    public NbJWebProject() {
+    }
+
+    public NbJWebProject(String projectFolder) {
+        super(projectFolder);
     }
 
     @Override
@@ -39,7 +42,7 @@ public class NbJWebProject extends JWebProject {
     }
 
     @Override
-    public String getSourcesPath() {
+    public String getSrcPath() {
         return "src";
     }
 

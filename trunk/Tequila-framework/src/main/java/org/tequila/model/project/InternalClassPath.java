@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.framework;
+package org.tequila.model.project;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -23,7 +23,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.tequila.model.project.ProjectException;
 
 /**
  * Esta clase modela el classpath interno del framework y sirve para introducir
@@ -32,9 +31,9 @@ import org.tequila.model.project.ProjectException;
  *
  * @author iberck
  */
-public class FrameworkClassPath {
+public class InternalClassPath {
 
-    private static final Log log = LogFactory.getLog(FrameworkClassPath.class);
+    private static final Log log = LogFactory.getLog(InternalClassPath.class);
     private static final Class<?>[] parameters = new Class[]{URL.class};
 
     /**
@@ -43,7 +42,7 @@ public class FrameworkClassPath {
      * @param url
      * @throws ProjectException No se puede agregar el recurso al classpath interno
      */
-    private static void addURL(URL url) throws ProjectException {
+    protected static void addURL(URL url) throws ProjectException {
         log.debug("Agregando el recurso '" + url + "' al classpath interno");
 
         try {
@@ -78,7 +77,7 @@ public class FrameworkClassPath {
      * @throws ProjectException: En caso que no exista el recurso o
      * no se puede agregar al classpath interno.
      */
-    public static void addResource(File resource) throws ProjectException {
+    protected static void addResource(File resource) throws ProjectException {
         if (!resource.exists()) {
             throw new ProjectException("No se pudo agregar el recurso " + "al " +
                     "classpath interno ya que no existe");
@@ -96,7 +95,11 @@ public class FrameworkClassPath {
      * @param resource
      * @throws ProjectException
      */
-    public static void addResource(String resource) throws ProjectException {
+    protected static void addResource(String resource) throws ProjectException {
         addResource(new File(resource));
+    }
+
+    protected static void addJProject(JProject project) {
+        InternalClassPath.addResource(project.getProjectFolder() + File.separator + project.getClassesPath());
     }
 }

@@ -14,8 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.framework;
+package org.tequila.model.project;
 
+import org.tequila.model.project.InternalClassPath;
 import java.io.File;
 import java.lang.reflect.Field;
 import junit.framework.TestCase;
@@ -29,11 +30,11 @@ import org.springframework.core.io.ClassPathResource;
  *
  * @author iberck
  */
-public class FrameworkClassPathTest extends TestCase {
+public class InternalClassPathTest extends TestCase {
 
     private static final Log log = LogFactory.getLog(TestCase.class);
 
-    public FrameworkClassPathTest(String testName) {
+    public InternalClassPathTest(String testName) {
         super(testName);
     }
 
@@ -63,7 +64,7 @@ public class FrameworkClassPathTest extends TestCase {
 
         // verificar que SI se puede crear un objeto de la clase
         File classes = new File("./src/test/resources/classes/");
-        FrameworkClassPath.addResource(classes);
+        InternalClassPath.addResource(classes);
 
         Class<?> classForName = null;
         try {
@@ -94,7 +95,7 @@ public class FrameworkClassPathTest extends TestCase {
         }
 
         File resources = new File("./src/test/resources/up-to-classpath.xml");
-        FrameworkClassPath.addResource(resources);
+        InternalClassPath.addResource(resources);
 
         BeanFactory factory = new XmlBeanFactory(
                 new ClassPathResource("up-to-classpath.xml"));
