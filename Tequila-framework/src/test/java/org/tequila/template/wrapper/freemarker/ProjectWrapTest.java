@@ -49,7 +49,7 @@ public class ProjectWrapTest extends AbstractFreemarkerTestCase {
         JProject nbProject = new NbJProject("./src/test/resources/NbApplication");
         TemplateEngine engine = new FreemarkerEngine();
         nbProject.setProjectWrapperFactory(engine.getEngineWrappersFactory().getProjectWrapperFactory());
-        nbProject.setUp();
+
 
         Map projectWrap = (Map) nbProject.getProjectWrapper().wrap(nbProject);
         Map projectProps = (Map) projectWrap.get(FreemarkerJProjectWrapper.PROJECT_PROPERTIES);
@@ -71,7 +71,6 @@ public class ProjectWrapTest extends AbstractFreemarkerTestCase {
         JProject nbProject = new NbJWebProject("./src/test/resources/NbWebApplicationTest");
         TemplateEngine engine = new FreemarkerEngine();
         nbProject.setProjectWrapperFactory(engine.getEngineWrappersFactory().getProjectWrapperFactory());
-        nbProject.setUp();
 
         Map projectWrap = (Map) nbProject.getProjectWrapper().wrap(nbProject);
         Map projectProps = (Map) projectWrap.get(FreemarkerJWebProjectWrapper.PROJECT_PROPERTIES);

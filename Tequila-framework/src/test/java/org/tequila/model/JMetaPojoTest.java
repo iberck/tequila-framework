@@ -71,6 +71,7 @@ public class JMetaPojoTest extends TestCase {
 
         // test con el nombre de la clase
         JMetaPojo metaClassName = new JMetaPojo("org.tequila.model.MyBean");
+
         metaClassName.injectPojoProperty("estatura", 23.4f);
 
         Object injObj = metaClassName.createInjectedObject();
@@ -103,10 +104,8 @@ public class JMetaPojoTest extends TestCase {
     }
 
     public void testJMetaPojoInjectedField() throws Exception {
-        MyBean b = new MyBean();
-        b.setNombre("iberck");
+        JMetaPojo metaClass = new JMetaPojo("org.tequila.model.MyBean");
 
-        JMetaPojo metaClass = new JMetaPojo(b);
         metaClass.injectFieldProperty("nombre", "pref", "nom");
         Object injObj = metaClass.createInjectedObject();
 

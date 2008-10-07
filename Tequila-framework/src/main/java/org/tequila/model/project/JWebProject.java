@@ -29,7 +29,7 @@ public abstract class JWebProject extends JProject {
     }
 
     protected JWebProject(String projectFolder) {
-        super(projectFolder);
+        setProjectFolder(projectFolder);
     }
 
     /**

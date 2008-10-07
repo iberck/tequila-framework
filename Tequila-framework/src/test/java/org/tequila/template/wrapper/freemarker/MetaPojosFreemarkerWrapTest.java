@@ -16,11 +16,10 @@
  */
 package org.tequila.template.wrapper.freemarker;
 
+import org.tequila.model.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.tequila.model.JMetaPojo;
-import org.tequila.model.MetaPojo;
 import org.tequila.template.engine.FreemarkerEngine;
 import org.tequila.template.engine.TemplateEngine;
 import org.tequila.template.freemarker.AbstractFreemarkerTestCase;
@@ -30,9 +29,9 @@ import org.tequila.template.wrapper.MetaPojosWrapper;
  *
  * @author iberck
  */
-public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
+public class MetaPojosFreemarkerWrapTest extends AbstractFreemarkerTestCase {
 
-    public MetaPojosWrapTest(String testName) {
+    public MetaPojosFreemarkerWrapTest(String testName) {
         super(testName);
     }
 
@@ -185,15 +184,15 @@ public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
     public void testInjectionTypes() throws Exception {
         // crear lista de metapojos
         List<MetaPojo> jMetaPojos = new ArrayList();
-        JMetaPojo bean1 = new JMetaPojo("org.tequila.template.wrapper.freemarker.Bean2");
+        JMetaPojo bean2 = new JMetaPojo("org.tequila.template.wrapper.freemarker.Bean2");
 
         Bean3 bean3 = new Bean3();
         // injectar field
-        bean1.injectPojoProperty("nuevaPropiedad", new Integer(5));
-        bean1.injectPojoProperty("nuevaPropiedad2", "dos");
-        bean1.injectPojoProperty("propiedadObjeto", bean3);
+        bean2.injectPojoProperty("nuevaPropiedad", new Integer(5));
+        bean2.injectPojoProperty("nuevaPropiedad2", "dos");
+        bean2.injectPojoProperty("propiedadObjeto", bean3);
 
-        jMetaPojos.add(bean1);
+        jMetaPojos.add(bean2);
 
         TemplateEngine engine = new FreemarkerEngine();
         MetaPojosWrapper metaPojosWrapper = engine.getEngineWrappersFactory().getMetaPojosWrapper();
