@@ -39,12 +39,7 @@ public class JMetaPojo extends LazyDynaBean implements MetaPojo {
     private Object sourceObject;
     private Map<String, JMetaPojo> declaredFields = new HashMap<String, JMetaPojo>();
 
-    /**
-     * Crea una JMetaPojo a partir del nombre de una clase
-     * @param className Nombre de la clase
-     * @throws MetaPojoException
-     */
-    public JMetaPojo(String className) throws MetaPojoException {
+    public JMetaPojo(String className) {
         this(instantiateClass(className));
     }
 
@@ -53,7 +48,7 @@ public class JMetaPojo extends LazyDynaBean implements MetaPojo {
      * @param object
      * @throws MetaPojoException
      */
-    public JMetaPojo(Object instance) throws MetaPojoException {
+    protected JMetaPojo(Object instance) throws MetaPojoException {
         this.sourceObject = instance;
 
         try {
@@ -68,12 +63,39 @@ public class JMetaPojo extends LazyDynaBean implements MetaPojo {
         return sourceObject;
     }
 
-    private static Object instantiateClass(String className) throws MetaPojoException {
+    protected static Object instantiateClass(String className) throws MetaPojoException {
         try {
             return Class.forName(className).newInstance();
         } catch (Exception ex) {
             throw new MetaPojoException("Error al instanciar la clase '" + className + "'", ex);
         }
+    }
+
+    /**
+     * Borra dinamicamente la propiedad
+     * @param name Property name
+     */
+    protected void removeProperty(String propertyName) {
+        ((LazyDynaClass) getDynaClass()).remove(propertyName);
+    }
+
+    /**
+     * Obtiene todas las propiedades menos la propiedad class
+     * @return
+     */
+    protected Object[] getDynaProperties() {
+        // quitar objeto class de las propiedades
+        DynaProperty[] dynaProps = getDynaClass().getDynaProperties();
+        Object[] dynaPropsWithoutClass = new Object[dynaProps.length - 1];
+
+        int i = 0;
+        for (DynaProperty dp : dynaProps) {
+            if (!dp.getName().equals("class")) {
+                dynaPropsWithoutClass[i++] = dp;
+            }
+        }
+
+        return dynaPropsWithoutClass;
     }
 
     @Override
@@ -152,33 +174,6 @@ public class JMetaPojo extends LazyDynaBean implements MetaPojo {
         }
 
         return this;
-    }
-
-    /**
-     * Borra dinamicamente la propiedad
-     * @param name Property name
-     */
-    protected void removeProperty(String propertyName) {
-        ((LazyDynaClass) getDynaClass()).remove(propertyName);
-    }
-
-    /**
-     * Obtiene todas las propiedades menos la propiedad class
-     * @return
-     */
-    protected Object[] getDynaProperties() {
-        // quitar objeto class de las propiedades
-        DynaProperty[] dynaProps = getDynaClass().getDynaProperties();
-        Object[] dynaPropsWithoutClass = new Object[dynaProps.length - 1];
-
-        int i = 0;
-        for (DynaProperty dp : dynaProps) {
-            if (!dp.getName().equals("class")) {
-                dynaPropsWithoutClass[i++] = dp;
-            }
-        }
-
-        return dynaPropsWithoutClass;
     }
 
     @Override

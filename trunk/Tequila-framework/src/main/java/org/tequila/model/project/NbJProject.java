@@ -28,7 +28,7 @@ public class NbJProject extends JProject {
     }
 
     public NbJProject(String projectFolder) {
-        super(projectFolder);
+        setProjectFolder(projectFolder);
     }
 
     /**

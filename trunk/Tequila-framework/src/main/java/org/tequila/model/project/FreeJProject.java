@@ -44,11 +44,11 @@ public class FreeJProject extends JProject {
      * @param testPath Carpeta relativa al proyecto donde se encuentran los test
      */
     public FreeJProject(String projectFolder, String sourcesPath, String classesPath, String testPath) {
-        super(projectFolder);
-
         this.srcPath = sourcesPath;
         this.classesPath = classesPath;
         this.testPath = testPath;
+        
+        setProjectFolder(projectFolder);
     }
 
     @Override

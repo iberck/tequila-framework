@@ -20,7 +20,6 @@ import java.io.File;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.tequila.model.project.InternalClassPath;
 import org.tequila.template.wrapper.ProjectWrapper;
 import org.tequila.template.wrapper.ProjectWrapperFactory;
 
@@ -34,16 +33,13 @@ public abstract class JProject implements ExternalProject {
     protected ProjectWrapperFactory projectWrapperFactory;
     private String projectFolder;
 
-    protected JProject() {
-    }
-
-    protected JProject(String projectFolder) {
-        this.projectFolder = projectFolder;
-    }
-
     @Override
-    public void setProjectFolder(String path) {
-        this.projectFolder = path;
+    public void setProjectFolder(String projectFolder) {
+        this.projectFolder = projectFolder;
+
+        validateProject();
+
+        InternalClassPath.addJProject(this);
     }
 
     /**
@@ -177,11 +173,5 @@ public abstract class JProject implements ExternalProject {
     @Override
     public ProjectWrapper getProjectWrapper() {
         return projectWrapperFactory.getJProjectWrapper();
-    }
-
-    @Override
-    public void setUp() {
-        validateProject();
-        InternalClassPath.addJProject(this);
     }
 }

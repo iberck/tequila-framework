@@ -28,12 +28,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.FilenameUtils;
-import org.tequila.model.project.InternalClassPath;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.tequila.model.MetaPojo;
 import org.tequila.model.MetaProperty;
 import org.tequila.model.TemplateModel;
 import org.tequila.model.project.ExternalProject;
-import org.tequila.model.project.JProject;
 import org.tequila.template.wrapper.EngineWrappersFactory;
 import org.tequila.template.wrapper.MetaPropertyWrapper;
 import org.tequila.template.wrapper.freemarker.FreemarkerWrappersFactory;
@@ -44,6 +44,7 @@ import org.tequila.template.wrapper.freemarker.FreemarkerWrappersFactory;
  */
 public class FreemarkerEngine implements TemplateEngine {
 
+    private static final Log log = LogFactory.getLog(FreemarkerEngine.class);
     private BeansWrapper bw_instance;
     private Map projectWrapped;
     Configuration cfg;
@@ -78,17 +79,22 @@ public class FreemarkerEngine implements TemplateEngine {
             root.putAll(projectWrapped);
             // ${metapojos}
             List<MetaPojo> metaPojos = templateModel.getMetaPojos();
-            Object metaPojosWrapped = getEngineWrappersFactory().getMetaPojosWrapper().wrap(metaPojos);
-            root.putAll((Map) metaPojosWrapped);
+            if (metaPojos != null) {
+                Object metaPojosWrapped = getEngineWrappersFactory().getMetaPojosWrapper().wrap(metaPojos);
+                root.putAll((Map) metaPojosWrapped);
+            }
+
             // ${metaproperty}
             MetaProperty metaProperty = templateModel.getMetaProperty();
-            MetaPropertyWrapper metaPropertyWrapper = getEngineWrappersFactory().getMetaPropertyWrapper();
-            Object metaPropertyWrapped = metaPropertyWrapper.wrap(metaProperty);
-
-            root.putAll((Map) metaPropertyWrapped);
-
+            if (metaProperty != null) {
+                MetaPropertyWrapper metaPropertyWrapper = getEngineWrappersFactory().getMetaPropertyWrapper();
+                Object metaPropertyWrapped = metaPropertyWrapper.wrap(metaProperty);
+                root.putAll((Map) metaPropertyWrapped);
+            }
+            
             Environment env = freeMarkerTemplate.createProcessingEnvironment(root, sw);
             env.process(); // process the template
+            log.debug("Resultado del matcheo:" + sw.toString());
             sw.close();
         } catch (TemplateException ex) {
             String templateName = templateModel.getTemplateDef().getName();
@@ -103,8 +109,6 @@ public class FreemarkerEngine implements TemplateEngine {
 
     @Override
     public void setUpEnvironment(ExternalProject project) {
-        project.setUp();
-
         project.setProjectWrapperFactory(
                 getEngineWrappersFactory().getProjectWrapperFactory());
         projectWrapped = (Map) project.getProjectWrapper().wrap(project);

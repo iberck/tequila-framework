@@ -72,5 +72,4 @@ public interface ExternalProject {
      */
     public ProjectWrapperFactory getProjectWrapperFactory();
 
-    public void setUp();
 }

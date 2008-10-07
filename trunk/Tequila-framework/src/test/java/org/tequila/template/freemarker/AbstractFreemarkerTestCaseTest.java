@@ -35,7 +35,6 @@ public final class AbstractFreemarkerTestCaseTest extends AbstractFreemarkerTest
         nbProject.setProjectFolder("./src/test/resources/NbApplication");
         TemplateEngine engine = new FreemarkerEngine();
         nbProject.setProjectWrapperFactory(engine.getEngineWrappersFactory().getProjectWrapperFactory());
-        nbProject.setUp();
 
         Object projectWrap = nbProject.getProjectWrapper().wrap(nbProject);
 

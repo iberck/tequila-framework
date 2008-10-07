@@ -38,7 +38,8 @@ public class FreemarkerMetaPojosWrapper implements MetaPojosWrapper<JMetaPojo> {
         List metaPojosInjected = new ArrayList();
 
         for (MetaPojo metaPojo : metaPojos) {
-            metaPojosInjected.add(metaPojo.createInjectedObject());
+            Object injectedObject = metaPojo.createInjectedObject();
+            metaPojosInjected.add(injectedObject);
         }
 
         Map m = new HashMap();
