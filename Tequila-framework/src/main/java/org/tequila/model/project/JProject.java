@@ -20,7 +20,7 @@ import java.io.File;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.tequila.framework.FrameworkClassPath;
+import org.tequila.model.project.InternalClassPath;
 import org.tequila.template.wrapper.ProjectWrapper;
 import org.tequila.template.wrapper.ProjectWrapperFactory;
 
@@ -32,22 +32,26 @@ public abstract class JProject implements ExternalProject {
 
     protected static final Log log = LogFactory.getLog(JProject.class);
     protected ProjectWrapperFactory projectWrapperFactory;
-    private final String path;
+    private String projectFolder;
 
-    /**
-     * Crea un nuevo JProject a partir de una ruta
-     * @param path Ruta del proyecto
-     */
-    protected JProject(String path) throws ProjectException {
-        this.path = path;
+    protected JProject() {
+    }
+
+    protected JProject(String projectFolder) {
+        this.projectFolder = projectFolder;
+    }
+
+    @Override
+    public void setProjectFolder(String path) {
+        this.projectFolder = path;
     }
 
     /**
      * @see ExternalProject
      */
     @Override
-    public String getPath() {
-        return path;
+    public String getProjectFolder() {
+        return projectFolder;
     }
 
     /**
@@ -58,21 +62,12 @@ public abstract class JProject implements ExternalProject {
      */
     @Override
     public String getProjectName() {
-        String projectName = FilenameUtils.getName(path);
+        String projectName = FilenameUtils.getName(projectFolder);
         if (projectName == null || projectName.equals("")) {
             throw new ProjectException("El nombre del proyecto no es válido");
         }
 
         return projectName;
-    }
-
-    /**
-     * Método para introducir el proyecto externo al classpath del framework
-     * con el objetivo poder ocupar los recursos externos en tiempo de ejecución.
-     * @see RuntimeClassPath
-     */
-    protected void addToInternalClassPath() {
-        FrameworkClassPath.addResource(getPath() + File.separator + getClassesPath());
     }
 
     @Override
@@ -97,7 +92,7 @@ public abstract class JProject implements ExternalProject {
      * dentro del proyecto, esta ruta debe ser relativa al proyecto.
      * @return
      */
-    public abstract String getSourcesPath();
+    public abstract String getSrcPath();
 
     /**
      * Path donde se encuentra la carpeta test
@@ -129,21 +124,20 @@ public abstract class JProject implements ExternalProject {
      */
     @Override
     public void validateProject() throws ProjectException {
-        log.debug("Validando el proyecto '" + getPath() + "'");
+        log.debug("Validando el proyecto '" + getProjectFolder() + "'");
 
         // validar que exista la ruta del proyecto
-        File fprj = new File(getPath());
+        File fprj = new File(getProjectFolder());
         if (!fprj.exists()) {
-            throw new ProjectException("No existe el proyecto '" + getPath() + "'");
+            throw new ProjectException("No existe el proyecto '" + getProjectFolder() + "'");
         }
 
-        File f = new File(getPath());
-        if (!f.canWrite()) {
-            throw new ProjectException("El proyecto '" + getPath() + "' es de solo lectura");
+        if (!fprj.canWrite()) {
+            throw new ProjectException("El proyecto '" + getProjectFolder() + "' es de solo lectura");
         }
 
         // valida que se encuentre la carpeta sources
-        String src = getSourcesPath();
+        String src = getSrcPath();
         if (!existsInProject(src)) {
             throw new ProjectException("No existe la carpeta sources '" + src + "' dentro del " +
                     "proyecto");
@@ -172,23 +166,8 @@ public abstract class JProject implements ExternalProject {
      * @return true si existe, false si no existe
      */
     public boolean existsInProject(String directory) {
-        File f = new File(getPath() + File.separator + directory);
+        File f = new File(getProjectFolder() + File.separator + directory);
         return f.exists() && f.isDirectory();
-    }
-
-    /*
-     * Inicializa el proyecto
-     * @throws org.tequila.project.ProjectException Se puede lanzar bajo las 
-     * siguientes circunstancias: 
-     *  1. El proyecto no es valido
-     *  2. El proyecto no se puede meter al RuntimeClasspath del framework.
-     */
-    public void setup() throws ProjectException {
-        // validar el proyecto
-        validateProject();
-
-        // introducir el proyecto al classpath
-        addToInternalClassPath();
     }
 
     /**
@@ -198,5 +177,11 @@ public abstract class JProject implements ExternalProject {
     @Override
     public ProjectWrapper getProjectWrapper() {
         return projectWrapperFactory.getJProjectWrapper();
+    }
+
+    @Override
+    public void setUp() {
+        validateProject();
+        InternalClassPath.addJProject(this);
     }
 }

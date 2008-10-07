@@ -31,10 +31,11 @@ public final class AbstractFreemarkerTestCaseTest extends AbstractFreemarkerTest
      */
     public void testAbstractFreemarkerTestCase() throws Exception {
         // un proyecto cualquiera
-        JProject nbProject = new NbJProject("./src/test/resources/NbApplication");
+        JProject nbProject = new NbJProject();
+        nbProject.setProjectFolder("./src/test/resources/NbApplication");
         TemplateEngine engine = new FreemarkerEngine();
         nbProject.setProjectWrapperFactory(engine.getEngineWrappersFactory().getProjectWrapperFactory());
-        nbProject.setup();
+        nbProject.setUp();
 
         Object projectWrap = nbProject.getProjectWrapper().wrap(nbProject);
 

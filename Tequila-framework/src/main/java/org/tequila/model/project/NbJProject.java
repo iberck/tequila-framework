@@ -24,8 +24,11 @@ import java.io.File;
  */
 public class NbJProject extends JProject {
 
-    public NbJProject(String path) {
-        super(path);
+    public NbJProject() {
+    }
+
+    public NbJProject(String projectFolder) {
+        super(projectFolder);
     }
 
     /**
@@ -42,7 +45,7 @@ public class NbJProject extends JProject {
      * @return
      */
     @Override
-    public String getSourcesPath() {
+    public String getSrcPath() {
         return "src";
     }
 

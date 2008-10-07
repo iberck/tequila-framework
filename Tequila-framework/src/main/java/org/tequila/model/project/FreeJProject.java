@@ -28,8 +28,8 @@ package org.tequila.model.project;
  */
 public class FreeJProject extends JProject {
 
+    private final String srcPath;
     private final String classesPath;
-    private final String sourcesPath;
     private final String testPath;
 
     /**
@@ -43,22 +43,22 @@ public class FreeJProject extends JProject {
      * @param classesPath Carpeta relativa a donde se encuentran los archivos .class
      * @param testPath Carpeta relativa al proyecto donde se encuentran los test
      */
-    public FreeJProject(String path, String sourcesPath, String classesPath, String testPath) {
-        super(path);
+    public FreeJProject(String projectFolder, String sourcesPath, String classesPath, String testPath) {
+        super(projectFolder);
 
-        this.sourcesPath = sourcesPath;
+        this.srcPath = sourcesPath;
         this.classesPath = classesPath;
         this.testPath = testPath;
     }
 
     @Override
-    public String getClassesPath() {
-        return classesPath;
+    public String getSrcPath() {
+        return srcPath;
     }
 
     @Override
-    public String getSourcesPath() {
-        return sourcesPath;
+    public String getClassesPath() {
+        return classesPath;
     }
 
     @Override

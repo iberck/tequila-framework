@@ -56,9 +56,9 @@ public class FreemarkerJProjectWrapper implements ProjectWrapper<JProject> {
         Map properties = new HashMap();
 
         root.put(PROJECT_PROPERTIES, properties);
-        properties.put(PROJECT_PATH, project.getPath());
+        properties.put(PROJECT_PATH, project.getProjectFolder());
         properties.put(PROJECT_NAME, project.getProjectName());
-        properties.put(PROJECT_SRC_PATH, project.getSourcesPath());
+        properties.put(PROJECT_SRC_PATH, project.getSrcPath());
         properties.put(PROJECT_CLASSES_PATH, project.getClassesPath());
         properties.put(PROJECT_TEST_PATH, project.getTestPath());
 

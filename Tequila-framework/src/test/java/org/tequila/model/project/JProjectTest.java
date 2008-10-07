@@ -16,11 +16,8 @@
  */
 package org.tequila.model.project;
 
-import org.tequila.model.project.JProject;
-import org.tequila.model.project.NbJProject;
-import org.tequila.model.project.FreeJProject;
-import org.tequila.model.project.NbJWebProject;
 import junit.framework.TestCase;
+import org.tequila.model.project.InternalClassPath;
 
 /**
  *
@@ -61,7 +58,7 @@ public class JProjectTest extends TestCase {
 
         // validar que agregue el proyecto al classpath
         try {
-            nbProject.addToInternalClassPath();
+            InternalClassPath.addJProject(nbProject);
         } catch (Exception ex) {
             throw new AssertionError(ex.getCause());
         }
@@ -73,7 +70,6 @@ public class JProjectTest extends TestCase {
         } catch (Exception ex) {
             throw new AssertionError(ex.getCause());
         }
-
     }
 
     /**
@@ -95,7 +91,7 @@ public class JProjectTest extends TestCase {
 
         // validar que agregue el proyecto al classpath
         try {
-            nbProject.addToInternalClassPath();
+            InternalClassPath.addJProject(nbProject);
         } catch (Exception ex) {
             throw new AssertionError(ex.getCause());
         }
@@ -130,7 +126,7 @@ public class JProjectTest extends TestCase {
 
         // validar que agregue el proyecto al classpath
         try {
-            nbProject.addToInternalClassPath();
+            InternalClassPath.addJProject(nbProject);
         } catch (Exception ex) {
             throw new AssertionError(ex.getCause());
         }

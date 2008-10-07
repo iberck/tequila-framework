@@ -28,10 +28,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.FilenameUtils;
+import org.tequila.model.project.InternalClassPath;
 import org.tequila.model.MetaPojo;
 import org.tequila.model.MetaProperty;
 import org.tequila.model.TemplateModel;
 import org.tequila.model.project.ExternalProject;
+import org.tequila.model.project.JProject;
 import org.tequila.template.wrapper.EngineWrappersFactory;
 import org.tequila.template.wrapper.MetaPropertyWrapper;
 import org.tequila.template.wrapper.freemarker.FreemarkerWrappersFactory;
@@ -42,20 +44,21 @@ import org.tequila.template.wrapper.freemarker.FreemarkerWrappersFactory;
  */
 public class FreemarkerEngine implements TemplateEngine {
 
-    private static BeansWrapper bw_instance;
+    private BeansWrapper bw_instance;
     private Map projectWrapped;
     Configuration cfg;
+    private EngineWrappersFactory engineWrappersFactory;
 
-
-    static {
+    public FreemarkerEngine() {
         bw_instance = SimpleObjectWrapper.getDefaultInstance();
         bw_instance.setMethodsShadowItems(false);
         bw_instance.setUseCache(true);
+        engineWrappersFactory = new FreemarkerWrappersFactory();
     }
 
     @Override
     public EngineWrappersFactory getEngineWrappersFactory() {
-        return new FreemarkerWrappersFactory();
+        return engineWrappersFactory;
     }
 
     @Override
@@ -100,8 +103,8 @@ public class FreemarkerEngine implements TemplateEngine {
 
     @Override
     public void setUpEnvironment(ExternalProject project) {
-        // setup project
-        project.validateProject();
+        project.setUp();
+
         project.setProjectWrapperFactory(
                 getEngineWrappersFactory().getProjectWrapperFactory());
         projectWrapped = (Map) project.getProjectWrapper().wrap(project);

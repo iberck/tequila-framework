@@ -16,6 +16,7 @@
  */
 package org.tequila.model.project;
 
+import org.springframework.beans.factory.annotation.Required;
 import org.tequila.template.wrapper.ProjectWrapper;
 import org.tequila.template.wrapper.ProjectWrapperFactory;
 
@@ -26,11 +27,14 @@ import org.tequila.template.wrapper.ProjectWrapperFactory;
  */
 public interface ExternalProject {
 
+    @Required
+    public void setProjectFolder(String path);
+
     /**
      * Obtiene el path del proyecto
      * @return
      */
-    public String getPath();
+    public String getProjectFolder();
 
     /**
      * Obtiene el nombre del proyecto
@@ -67,4 +71,6 @@ public interface ExternalProject {
      * @return
      */
     public ProjectWrapperFactory getProjectWrapperFactory();
+
+    public void setUp();
 }
