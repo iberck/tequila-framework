@@ -16,19 +16,31 @@
  */
 package org.tequila.template.engine;
 
-import org.tequila.model.TemplateModel;
-import org.tequila.model.project.ExternalProject;
-import org.tequila.template.wrapper.EngineWrappersFactory;
-
 /**
- *
+ * Modela las excepciones en tiempo de ejecución de los match de templates
  * @author iberck
  */
-public interface TemplateEngine {
+public class MatchException extends RuntimeException {
 
-    public void setUpEnvironment(ExternalProject project);
+    /**
+     * Crea una excepcion vacía
+     */
+    public MatchException() {
+    }
 
-    public EngineWrappersFactory getEngineWrappersFactory();
+    /**
+     * Crea una excepción con un mensaje
+     * @param msg
+     */
+    public MatchException(String msg) {
+        super(msg);
+    }
 
-    public void match(TemplateModel templateModel);
+    /**
+     * Crea una excepción con un mensaje y un objeto con la excepcion
+     * @param msg
+     */
+    public MatchException(String msg, Throwable t) {
+        super(msg, t);
+    }
 }
