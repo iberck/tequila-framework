@@ -25,8 +25,6 @@ import org.apache.commons.beanutils.LazyDynaClass;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.tequila.template.wrapper.MetaPojosWrapper;
-import org.tequila.template.wrapper.MetaPojosWrapperFactory;
 
 /**
  *
@@ -37,7 +35,6 @@ public class JMetaPojo extends LazyDynaBean implements MetaPojo {
     private static final Log log = LogFactory.getLog(JMetaPojo.class);
     private Object sourceObject;
     private Map<String, JMetaPojo> declaredFields = new HashMap<String, JMetaPojo>();
-    private MetaPojosWrapperFactory factory;
 
     /**
      * Crea una JMetaPojo a partir del nombre de una clase
@@ -62,21 +59,6 @@ public class JMetaPojo extends LazyDynaBean implements MetaPojo {
         } catch (Exception ex) {
             throw new MetaPojoException("Error al crear el metapojo", ex);
         }
-    }
-
-    @Override
-    public MetaPojosWrapperFactory getMetaPojosWrapperFactory() {
-        return factory;
-    }
-
-    @Override
-    public void setMetaPojosWrapperFactory(MetaPojosWrapperFactory factory) {
-        this.factory = factory;
-    }
-
-    @Override
-    public MetaPojosWrapper getMetaPojosWrapper() {
-        return factory.getMetaJPojosWrapper();
     }
 
     public Object getSourceObject() {

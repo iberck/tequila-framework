@@ -16,9 +16,6 @@
  */
 package org.tequila.model;
 
-import org.tequila.template.wrapper.MetaPropertyWrapper;
-import org.tequila.template.wrapper.MetaPropertyWrapperFactory;
-
 /**
  *
  * @author iberck
@@ -28,10 +25,4 @@ public interface MetaProperty<T> {
     public void setProperty(T property);
 
     public T getProperty();
-
-    public void setMetaPropertyWrapperFactory(MetaPropertyWrapperFactory factory);
-
-    public MetaPropertyWrapperFactory getMetaPropertyWrapperFactory();
-
-    public MetaPropertyWrapper getMetaPropertyWrapper();
 }

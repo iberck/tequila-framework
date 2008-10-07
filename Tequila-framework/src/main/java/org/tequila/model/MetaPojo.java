@@ -16,9 +16,6 @@
  */
 package org.tequila.model;
 
-import org.tequila.template.wrapper.MetaPojosWrapper;
-import org.tequila.template.wrapper.MetaPojosWrapperFactory;
-
 /**
  *
  * @author iberck
@@ -30,10 +27,4 @@ public interface MetaPojo {
     public void injectFieldProperty(String fieldName, String propertyName, Object propertyValue);
 
     public Object createInjectedObject();
-
-    public void setMetaPojosWrapperFactory(MetaPojosWrapperFactory factory);
-
-    public MetaPojosWrapperFactory getMetaPojosWrapperFactory();
-
-    public MetaPojosWrapper getMetaPojosWrapper();
 }

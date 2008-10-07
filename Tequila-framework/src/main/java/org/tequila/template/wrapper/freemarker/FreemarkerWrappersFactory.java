@@ -17,8 +17,8 @@
 package org.tequila.template.wrapper.freemarker;
 
 import org.tequila.template.wrapper.EngineWrappersFactory;
-import org.tequila.template.wrapper.MetaPojosWrapperFactory;
-import org.tequila.template.wrapper.MetaPropertyWrapperFactory;
+import org.tequila.template.wrapper.MetaPojosWrapper;
+import org.tequila.template.wrapper.MetaPropertyWrapper;
 import org.tequila.template.wrapper.ProjectWrapperFactory;
 
 /**
@@ -33,12 +33,12 @@ public class FreemarkerWrappersFactory implements EngineWrappersFactory {
     }
 
     @Override
-    public MetaPropertyWrapperFactory getMetaPropertyWrapperFactory() {
-        return new FreemarkerMetaPropertyWrapperFactory();
+    public MetaPropertyWrapper getMetaPropertyWrapper() {
+        return new FreemarkerMetaPropertyWrapper();
     }
 
     @Override
-    public MetaPojosWrapperFactory getMetaPojosWrapperFactory() {
-        return new FreemarkerMetaPojosWrapperFactory();
+    public MetaPojosWrapper getMetaPojosWrapper() {
+        return new FreemarkerMetaPojosWrapper();
     }
 }

@@ -51,14 +51,12 @@ public class PropertyWrapTest extends AbstractFreemarkerTestCase {
         EngineWrappersFactory wrappersFactory = engine.getEngineWrappersFactory();
 
         MetaProperty metaPropertyMap = new MetaPropertyMap();
-        metaPropertyMap.setMetaPropertyWrapperFactory(wrappersFactory.getMetaPropertyWrapperFactory());
 
         Map m = new HashMap();
         m.put("llave", "_valor_");
         metaPropertyMap.setProperty(m);
 
-        Map rootMap = (Map) metaPropertyMap.getMetaPropertyWrapper().wrap(metaPropertyMap);
-
+        Map rootMap = (Map) wrappersFactory.getMetaPropertyWrapper().wrap(metaPropertyMap);
         assertEqualsFreemarkerTemplate(rootMap, "_valor_", "${metaProperty.llave}");
     }
 
@@ -67,12 +65,11 @@ public class PropertyWrapTest extends AbstractFreemarkerTestCase {
         EngineWrappersFactory wrappersFactory = engine.getEngineWrappersFactory();
 
         MetaProperty metaPropertyObject = new MetaPropertyObject();
-        metaPropertyObject.setMetaPropertyWrapperFactory(wrappersFactory.getMetaPropertyWrapperFactory());
 
         Cadena cad = new Cadena("hola mundo");
         metaPropertyObject.setProperty(cad);
 
-        Map rootMap = (Map) metaPropertyObject.getMetaPropertyWrapper().wrap(metaPropertyObject);
+        Map rootMap = (Map) wrappersFactory.getMetaPropertyWrapper().wrap(metaPropertyObject);
 
         assertEqualsFreemarkerTemplate(rootMap, "hola mundo", "${metaProperty.valor}");
         assertEqualsFreemarkerTemplate(rootMap, "Cadena", "${metaProperty.class.simpleName}");

@@ -16,9 +16,6 @@
  */
 package org.tequila.model;
 
-import org.tequila.template.wrapper.MetaPropertyWrapper;
-import org.tequila.template.wrapper.MetaPropertyWrapperFactory;
-
 /**
  *
  * @author iberck
@@ -26,7 +23,6 @@ import org.tequila.template.wrapper.MetaPropertyWrapperFactory;
 public class MetaPropertyObject implements MetaProperty<Object> {
 
     private Object property;
-    private MetaPropertyWrapperFactory factory;
 
     @Override
     public void setProperty(Object property) {
@@ -36,20 +32,5 @@ public class MetaPropertyObject implements MetaProperty<Object> {
     @Override
     public Object getProperty() {
         return property;
-    }
-
-    @Override
-    public void setMetaPropertyWrapperFactory(MetaPropertyWrapperFactory factory) {
-        this.factory = factory;
-    }
-
-    @Override
-    public MetaPropertyWrapperFactory getMetaPropertyWrapperFactory() {
-        return factory;
-    }
-
-    @Override
-    public MetaPropertyWrapper getMetaPropertyWrapper() {
-        return factory.getMetaPropertyObjectWrapper();
     }
 }

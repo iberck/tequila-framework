@@ -22,10 +22,10 @@ import org.tequila.model.MetaProperty;
  *
  * @author iberck
  */
-public interface MetaPropertyWrapper<T extends MetaProperty> extends ObjectWrapper<T> {
+public interface MetaPropertyWrapper extends ObjectWrapper<MetaProperty> {
 
     public final static String PROPERTY_KEY = "metaProperty";
 
     @Override
-    public Object wrap(T property);
+    public Object wrap(MetaProperty property);
 }

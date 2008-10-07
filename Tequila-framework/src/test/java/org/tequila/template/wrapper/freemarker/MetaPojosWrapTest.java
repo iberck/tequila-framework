@@ -25,7 +25,6 @@ import org.tequila.template.engine.FreemarkerEngine;
 import org.tequila.template.engine.TemplateEngine;
 import org.tequila.template.freemarker.AbstractFreemarkerTestCase;
 import org.tequila.template.wrapper.MetaPojosWrapper;
-import org.tequila.template.wrapper.MetaPojosWrapperFactory;
 
 /**
  *
@@ -55,10 +54,7 @@ public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
         MetaPojo bean3 = new JMetaPojo("org.tequila.template.wrapper.freemarker.Bean3");
 
         TemplateEngine engine = new FreemarkerEngine();
-        MetaPojosWrapperFactory factory = engine.getEngineWrappersFactory().getMetaPojosWrapperFactory();
-        bean1.setMetaPojosWrapperFactory(factory);
-        // se toma de cualquiera
-        MetaPojosWrapper metaPojosWrapper = bean1.getMetaPojosWrapper();
+        MetaPojosWrapper metaPojosWrapper = engine.getEngineWrappersFactory().getMetaPojosWrapper();
 
         // injectar propiedad
         bean1.injectPojoProperty("injectedProperty1", "value");
@@ -98,9 +94,7 @@ public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
         jMetaPojos.add(bean1);
 
         TemplateEngine engine = new FreemarkerEngine();
-        MetaPojosWrapperFactory factory = engine.getEngineWrappersFactory().getMetaPojosWrapperFactory();
-        bean1.setMetaPojosWrapperFactory(factory);
-        MetaPojosWrapper metaPojosWrapper = bean1.getMetaPojosWrapper();
+        MetaPojosWrapper metaPojosWrapper = engine.getEngineWrappersFactory().getMetaPojosWrapper();
 
         Map metaPojosWrapped = (Map) metaPojosWrapper.wrap(jMetaPojos);
 
@@ -153,9 +147,7 @@ public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
         jMetaPojos.add(bean1);
 
         TemplateEngine engine = new FreemarkerEngine();
-        MetaPojosWrapperFactory factory = engine.getEngineWrappersFactory().getMetaPojosWrapperFactory();
-        bean1.setMetaPojosWrapperFactory(factory);
-        MetaPojosWrapper metaPojosWrapper = bean1.getMetaPojosWrapper();
+        MetaPojosWrapper metaPojosWrapper = engine.getEngineWrappersFactory().getMetaPojosWrapper();
         Map metaPojosWrapped = (Map) metaPojosWrapper.wrap(jMetaPojos);
 
         // propiedades
@@ -204,9 +196,7 @@ public class MetaPojosWrapTest extends AbstractFreemarkerTestCase {
         jMetaPojos.add(bean1);
 
         TemplateEngine engine = new FreemarkerEngine();
-        MetaPojosWrapperFactory factory = engine.getEngineWrappersFactory().getMetaPojosWrapperFactory();
-        bean1.setMetaPojosWrapperFactory(factory);
-        MetaPojosWrapper metaPojosWrapper = bean1.getMetaPojosWrapper();
+        MetaPojosWrapper metaPojosWrapper = engine.getEngineWrappersFactory().getMetaPojosWrapper();
         Map metaPojosWrapped = (Map) metaPojosWrapper.wrap(jMetaPojos);
 
         // pojo.class.simpleName, pojo.class.name, pojo.toString
