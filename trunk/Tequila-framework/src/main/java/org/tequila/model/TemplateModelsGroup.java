@@ -14,21 +14,34 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.template.engine;
+package org.tequila.model;
 
-import org.tequila.model.TemplateModel;
-import org.tequila.model.project.ExternalProject;
-import org.tequila.template.wrapper.EngineWrappersFactory;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Required;
 
 /**
  *
  * @author iberck
  */
-public interface TemplateEngine {
+public class TemplateModelsGroup {
 
-    public void setUpEnvironment(ExternalProject project);
+    private String name;
+    private List<TemplateModel> templateModels;
 
-    public EngineWrappersFactory getEngineWrappersFactory();
+    public String getName() {
+        return name;
+    }
 
-    public void match(TemplateModel templateModel);
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<TemplateModel> getTemplateModels() {
+        return templateModels;
+    }
+
+    @Required
+    public void setTemplateModels(List<TemplateModel> templateModels) {
+        this.templateModels = templateModels;
+    }
 }

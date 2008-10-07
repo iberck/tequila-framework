@@ -23,25 +23,34 @@ import org.springframework.beans.factory.annotation.Required;
  *
  * @author iberck
  */
-public class GroupTemplates {
+public class TemplateModel {
 
-    private List<TemplateDef> templates;
-    private String name;
-
-    public List<TemplateDef> getTemplates() {
-        return templates;
-    }
+    private TemplateDef templateDef;
+    private List<MetaPojo> metaPojos;
+    private MetaProperty metaProperty;
 
     @Required
-    public void setTemplates(List<TemplateDef> templates) {
-        this.templates = templates;
+    public void setTemplateDef(TemplateDef templateDef) {
+        this.templateDef = templateDef;
     }
 
-    public String getName() {
-        return name;
+    public TemplateDef getTemplateDef() {
+        return templateDef;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public List<MetaPojo> getMetaPojos() {
+        return metaPojos;
+    }
+
+    public void setMetaPojos(List<MetaPojo> metaPojos) {
+        this.metaPojos = metaPojos;
+    }
+
+    public MetaProperty getMetaProperty() {
+        return metaProperty;
+    }
+
+    public void setMetaProperty(MetaProperty metaProperty) {
+        this.metaProperty = metaProperty;
     }
 }

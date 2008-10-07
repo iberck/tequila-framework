@@ -18,8 +18,9 @@ package org.tequila.template.engine;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Required;
-import org.tequila.model.GroupTemplates;
-import org.tequila.model.TemplateDef;
+import org.tequila.model.TemplateModelsGroup;
+import org.tequila.model.TemplateModel;
+import org.tequila.model.project.ExternalProject;
 
 /**
  *
@@ -27,9 +28,10 @@ import org.tequila.model.TemplateDef;
  */
 public class AtomicMatcher {
 
-    private List<GroupTemplates> groups;
-    private List<TemplateDef> templates;
     private TemplateEngine engine;
+    private List<TemplateModelsGroup> groupsMatch;
+    private List<TemplateModel> templatesMatch;
+    private ExternalProject project;
 
     public TemplateEngine getEngine() {
         return engine;
@@ -40,19 +42,52 @@ public class AtomicMatcher {
         this.engine = engine;
     }
 
-    public List<GroupTemplates> getGroups() {
-        return groups;
+    public List<TemplateModelsGroup> getGroupsMatch() {
+        return groupsMatch;
     }
 
-    public void setGroups(List<GroupTemplates> groups) {
-        this.groups = groups;
+    public void setGroupsMatch(List<TemplateModelsGroup> groupsMatch) {
+        this.groupsMatch = groupsMatch;
     }
 
-    public List<TemplateDef> getTemplates() {
-        return templates;
+    public List<TemplateModel> getTemplatesMatch() {
+        return templatesMatch;
     }
 
-    public void setTemplates(List<TemplateDef> templates) {
-        this.templates = templates;
+    public void setTemplatesMatch(List<TemplateModel> templatesMatch) {
+        this.templatesMatch = templatesMatch;
+    }
+
+    public ExternalProject getProject() {
+        return project;
+    }
+
+    @Required
+    public void setProject(ExternalProject project) {
+        this.project = project;
+    }
+
+    public void match() {
+        // inicializar el engine
+        engine.setUpEnvironment(project);
+
+        if (templatesMatch == null && groupsMatch == null) {
+            throw new IllegalArgumentException("No se definido ningún templatesMatch ni groupsMatch");
+        }
+
+        if (templatesMatch != null) {
+            for (TemplateModel tModel : templatesMatch) {
+                engine.match(tModel);
+            }
+        }
+
+        if (groupsMatch != null) {
+            for (TemplateModelsGroup tModelGroup : groupsMatch) {
+                List<TemplateModel> templateModels = tModelGroup.getTemplateModels();
+                for (TemplateModel tModel : templateModels) {
+                    engine.match(tModel);
+                }
+            }
+        }
     }
 }
