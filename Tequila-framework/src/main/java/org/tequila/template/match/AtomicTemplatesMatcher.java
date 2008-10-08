@@ -24,18 +24,24 @@ import org.springframework.beans.factory.annotation.Required;
 import org.tequila.model.TemplateModelsGroup;
 import org.tequila.model.TemplateModel;
 import org.tequila.model.project.ExternalProject;
+import org.tequila.conf.SpringUtils;
 
 /**
  * 
  * @author iberck
  */
-public class AtomicMatcher {
+public class AtomicTemplatesMatcher {
 
-    private static final Log log = LogFactory.getLog(AtomicMatcher.class);
+    private static final Log log = LogFactory.getLog(AtomicTemplatesMatcher.class);
     private TemplateEngine engine;
     private List<TemplateModelsGroup> groupsMatch;
     private List<TemplateModel> templatesMatch;
     private ExternalProject project;
+    private TemplatesWriterPool templatesWriterPool;
+
+    public AtomicTemplatesMatcher() {
+        templatesWriterPool = (TemplatesWriterPool) SpringUtils.getBean("templatesWriterPool");
+    }
 
     public TemplateEngine getEngine() {
         return engine;
@@ -71,10 +77,7 @@ public class AtomicMatcher {
         this.project = project;
     }
 
-    public void match() {
-        // inicializar el engine
-        engine.setUpEnvironment(project);
-
+    private void match() {
         if (templatesMatch == null && groupsMatch == null) {
             throw new IllegalArgumentException("No se definido ningún templatesMatch ni groupsMatch");
         }
@@ -93,5 +96,25 @@ public class AtomicMatcher {
                 }
             }
         }
+    }
+
+    private void writeAtomically() {
+        try {
+            templatesWriterPool.writeTemplates(project);
+        } catch (Exception ex) {
+            log.error("Error al escribir los archivos generados", ex);
+            templatesWriterPool.rollbackTemplates(project);
+        }
+    }
+
+    public void matchAndWrite() {
+        // inicializar el engine
+        engine.setUpEnvironment(project);
+
+        // hacer el match de los templates y crear templates procesados
+        match();
+
+        // escribir los templates procesados de forma atómica
+        writeAtomically();
     }
 }
