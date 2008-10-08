@@ -14,13 +14,33 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.template.engine;
+package org.tequila.template.match;
 
 /**
- *
+ * Modela las excepciones en tiempo de ejecución de los match de templates
  * @author iberck
  */
-public interface TemplateDirective {
+public class MatchException extends RuntimeException {
 
-    public String getName();
+    /**
+     * Crea una excepcion vacía
+     */
+    public MatchException() {
+    }
+
+    /**
+     * Crea una excepción con un mensaje
+     * @param msg
+     */
+    public MatchException(String msg) {
+        super(msg);
+    }
+
+    /**
+     * Crea una excepción con un mensaje y un objeto con la excepcion
+     * @param msg
+     */
+    public MatchException(String msg, Throwable t) {
+        super(msg, t);
+    }
 }

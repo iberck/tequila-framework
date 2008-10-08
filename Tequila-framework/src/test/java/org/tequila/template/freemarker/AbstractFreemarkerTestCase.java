@@ -33,7 +33,8 @@ import org.apache.commons.io.FilenameUtils;
 public abstract class AbstractFreemarkerTestCase extends TestCase {
 
     private static BeansWrapper bw_instance;
-    Configuration cfg;    
+    Configuration cfg;
+
 
     static {
         bw_instance = SimpleObjectWrapper.getDefaultInstance();
@@ -77,7 +78,7 @@ public abstract class AbstractFreemarkerTestCase extends TestCase {
         assertEquals(expectedResult, sw.toString());
         sw.close();
         fw.close();
-        fTemplate.deleteOnExit();
+        fTemplate.delete();
     }
 
     protected void assertEqualsFreemarkerTemplate(Object rootMap, String expectedResult, File template) throws Exception {

@@ -3,7 +3,12 @@
    "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-    <bean id="hello" class="org.tequilaframework.SayHello">
-        <property name="name" value="iberck" />
-    </bean>
+    <bean id="templateWriter" class="org.tequila.template.match.TemplateFileWriter"/>
+
+    <bean id="fileSectionFreemarker"
+          class="org.tequila.template.directive.freemarker.FileSection"/>
+    
+    <bean id="jFileSectionFreemarker"
+          class="org.tequila.template.directive.freemarker.JFileSection"/>
+
 </beans>

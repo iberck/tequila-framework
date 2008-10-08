@@ -14,23 +14,33 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.template.engine;
-
-import org.tequila.model.TemplateModel;
-import org.tequila.model.project.ExternalProject;
-import org.tequila.template.wrapper.EngineWrappersFactory;
+package org.tequila.template.directive;
 
 /**
- *
+ * Modela las excepciones en tiempo de ejecución de las directivas
  * @author iberck
  */
-public interface TemplateEngine {
+public class DirectiveException extends RuntimeException {
 
-    public void setUpEnvironment(ExternalProject project);
+    /**
+     * Crea una excepcion vacía
+     */
+    public DirectiveException() {
+    }
 
-    public void setUpDirectives();
+    /**
+     * Crea una excepción con un mensaje
+     * @param msg
+     */
+    public DirectiveException(String msg) {
+        super(msg);
+    }
 
-    public EngineWrappersFactory getEngineWrappersFactory();
-
-    public void match(TemplateModel templateModel);
+    /**
+     * Crea una excepción con un mensaje y un objeto con la excepcion
+     * @param msg
+     */
+    public DirectiveException(String msg, Throwable t) {
+        super(msg, t);
+    }
 }

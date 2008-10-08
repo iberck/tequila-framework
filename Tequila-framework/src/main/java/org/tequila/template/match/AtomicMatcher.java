@@ -14,20 +14,24 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.template.engine;
+package org.tequila.template.match;
 
+import org.tequila.template.engine.*;
 import java.util.List;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.tequila.model.TemplateModelsGroup;
 import org.tequila.model.TemplateModel;
 import org.tequila.model.project.ExternalProject;
 
 /**
- *
+ * 
  * @author iberck
  */
 public class AtomicMatcher {
 
+    private static final Log log = LogFactory.getLog(AtomicMatcher.class);
     private TemplateEngine engine;
     private List<TemplateModelsGroup> groupsMatch;
     private List<TemplateModel> templatesMatch;
