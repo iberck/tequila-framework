@@ -14,23 +14,18 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.template.engine;
+package org.tequila.template.match;
 
-import org.tequila.model.TemplateModel;
+import java.util.Observer;
 import org.tequila.model.project.ExternalProject;
-import org.tequila.template.wrapper.EngineWrappersFactory;
 
 /**
  *
  * @author iberck
  */
-public interface TemplateEngine {
+public interface TemplateWriter extends Observer {
 
-    public void setUpEnvironment(ExternalProject project);
+    public void setProject(ExternalProject project);
 
-    public void setUpDirectives();
-
-    public EngineWrappersFactory getEngineWrappersFactory();
-
-    public void match(TemplateModel templateModel);
+    public ExternalProject getProject();
 }

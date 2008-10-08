@@ -16,6 +16,8 @@
  */
 package org.tequila.template.engine;
 
+import org.tequila.template.match.MatchException;
+import org.tequila.template.match.TemplateWriter;
 import freemarker.core.Environment;
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;
@@ -34,9 +36,11 @@ import org.tequila.model.MetaPojo;
 import org.tequila.model.MetaProperty;
 import org.tequila.model.TemplateModel;
 import org.tequila.model.project.ExternalProject;
+import org.tequila.template.directive.TemplateDirective;
 import org.tequila.template.wrapper.EngineWrappersFactory;
 import org.tequila.template.wrapper.MetaPropertyWrapper;
 import org.tequila.template.wrapper.freemarker.FreemarkerWrappersFactory;
+import org.tequila.util.SpringUtils;
 
 /**
  *
@@ -47,6 +51,7 @@ public class FreemarkerEngine implements TemplateEngine {
     private static final Log log = LogFactory.getLog(FreemarkerEngine.class);
     private BeansWrapper bw_instance;
     private Map projectWrapped;
+    private Map directivesWrapped;
     Configuration cfg;
     private EngineWrappersFactory engineWrappersFactory;
 
@@ -73,8 +78,12 @@ public class FreemarkerEngine implements TemplateEngine {
             freemarker.template.Template freeMarkerTemplate = cfg.getTemplate(relativeTemplate);
             StringWriter sw = new StringWriter();
 
-            // create model
+            // create model root
             Map root = new HashMap();
+            
+            // put directives
+            root.putAll(directivesWrapped);
+
             // ${project}
             root.putAll(projectWrapped);
             // ${metapojos}
@@ -91,7 +100,7 @@ public class FreemarkerEngine implements TemplateEngine {
                 Object metaPropertyWrapped = metaPropertyWrapper.wrap(metaProperty);
                 root.putAll((Map) metaPropertyWrapped);
             }
-            
+
             Environment env = freeMarkerTemplate.createProcessingEnvironment(root, sw);
             env.process(); // process the template
             sw.close();
@@ -113,9 +122,25 @@ public class FreemarkerEngine implements TemplateEngine {
                 getEngineWrappersFactory().getProjectWrapperFactory());
         projectWrapped = (Map) project.getProjectWrapper().wrap(project);
 
+        // Los templates se escribiran en un archivo local por el momento.
+        TemplateWriter templateWriter = (TemplateWriter) SpringUtils.getBean("templateWriter");
+        templateWriter.setProject(project);
+
         // setup engine
         cfg = new Configuration();
         //cfg.setDirectoryForTemplateLoading(tmp);
         cfg.setObjectWrapper(bw_instance);
+
+        setUpDirectives();
+    }
+
+    @Override
+    public void setUpDirectives() {
+        directivesWrapped = new HashMap();
+
+        TemplateDirective[] fmDirectives = SpringUtils.getFreemarkerDirectives();
+        for (TemplateDirective directive : fmDirectives) {
+            directivesWrapped.put(directive.getDirectiveName(), directive);
+        }
     }
 }
