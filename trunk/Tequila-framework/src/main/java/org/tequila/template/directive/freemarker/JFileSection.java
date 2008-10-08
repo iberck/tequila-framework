@@ -30,15 +30,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tequila.model.project.JProject;
 import org.tequila.template.directive.DirectiveException;
 import org.tequila.template.directive.TemplateDirective;
 import org.tequila.template.match.TemplateProcessed;
-import org.tequila.template.match.TemplateWriter;
-import org.tequila.util.JTextFileUtils;
-import org.tequila.util.SpringUtils;
+import org.tequila.template.match.TemplatesWriterPool;
+import org.tequila.conf.SpringUtils;
+import org.tequila.conf.ProjectHolder;
 
 /**
  *
@@ -47,10 +49,16 @@ import org.tequila.util.SpringUtils;
 public class JFileSection extends Observable implements TemplateDirectiveModel, TemplateDirective {
 
     private static final Log log = LogFactory.getLog(JFileSection.class);
+    private TemplatesWriterPool pool;
+    private ProjectHolder projectHolder;
 
     public JFileSection() {
-        TemplateWriter templateWriter = (TemplateWriter) SpringUtils.getBean("templateWriter");
-        addObserver(templateWriter);
+        // TODO: Desacoplar esto, no deberia tomar el proyecto del observador
+        // mas bien de un proyect holder
+        pool = (TemplatesWriterPool) SpringUtils.getBean("templatesWriterPool");
+        addObserver(pool);
+
+        projectHolder = (ProjectHolder) SpringUtils.getBean("projectHolder");
     }
 
     @Override
@@ -88,16 +96,14 @@ public class JFileSection extends Observable implements TemplateDirectiveModel, 
                 bw.close();
                 sw.close();
 
-                TemplateWriter templateWriter = (TemplateWriter) SpringUtils.getBean("templateWriter");
-                JProject project = (JProject) templateWriter.getProject();
-
+                JProject project = (JProject) projectHolder.getProject();
                 String srcPath = project.getSrcPath();
                 if ("true".equalsIgnoreCase(test)) {
                     srcPath = project.getTestPath();
                 }
 
-                String jFileName = JTextFileUtils.getJFileName(sw.toString());
-                String jPackagePath = JTextFileUtils.getPackagePath(sw.toString());
+                String jFileName = JFileSection.getJFileName(sw.toString());
+                String jPackagePath = JFileSection.getPackagePath(sw.toString());
 
                 TemplateProcessed tp = new TemplateProcessed();
                 tp.setOutputFolder(File.separator + srcPath + File.separator + jPackagePath);
@@ -120,5 +126,47 @@ public class JFileSection extends Observable implements TemplateDirectiveModel, 
     @Override
     public String getDirectiveName() {
         return "JFileSection";
+    }
+
+    public static String getJFileName(String source) {
+        String fileName = null;
+
+        final String FILENAME_REGEX = "public\\s+(\\w+\\s+)*(class|interface|enum)\\s+(\\w+)\\s+";
+        Pattern pattern = Pattern.compile(FILENAME_REGEX);
+        Matcher matcher = pattern.matcher(source);
+        boolean found = false;
+
+        while (matcher.find()) {
+            found = true;
+            fileName = matcher.group(matcher.groupCount());
+        }
+
+        if (!found) {
+            throw new IllegalArgumentException(
+                    "The source is not a valid java file");
+        }
+
+        return fileName + ".java";
+    }
+
+    public static String getPackagePath(String source) {
+        String path = null;
+
+        final String PATH_REGEX = "package\\s+(.+)\\s*;";
+        Pattern pattern = Pattern.compile(PATH_REGEX);
+        Matcher matcher = pattern.matcher(source);
+        boolean found = false;
+
+        while (matcher.find()) {
+            found = true;
+            path = matcher.group(1).trim();
+        }
+
+        // the file does not contain package
+        if (!found) {
+            return "";
+        }
+
+        return path.replace(".", File.separator);
     }
 }

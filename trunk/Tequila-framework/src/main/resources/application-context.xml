@@ -3,8 +3,10 @@
    "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-    <bean id="templateWriter" class="org.tequila.template.match.TemplateFileWriter"/>
+    <bean id="templatesWriterPool" class="org.tequila.template.match.TemplatesWriterPool"/>
+    <bean id="projectHolder" class="org.tequila.conf.ProjectHolder"/>
 
+    <!-- freemarker directives -->
     <bean id="fileSectionFreemarker"
           class="org.tequila.template.directive.freemarker.FileSection"/>
     

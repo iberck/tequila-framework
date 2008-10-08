@@ -23,7 +23,6 @@ import freemarker.template.TemplateDirectiveModel;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
@@ -36,7 +35,8 @@ import org.tequila.template.directive.DirectiveException;
 import org.tequila.template.directive.TemplateDirective;
 import org.tequila.template.match.TemplateProcessed;
 import org.tequila.template.match.TemplateWriter;
-import org.tequila.util.SpringUtils;
+import org.tequila.template.match.TemplatesWriterPool;
+import org.tequila.conf.SpringUtils;
 
 /**
  *
@@ -51,8 +51,8 @@ public class FileSection extends Observable
     private static final String APPEND_BEFORE_LAST = "appendBeforeLast";
 
     public FileSection() {
-        TemplateWriter templateWriter = (TemplateWriter) SpringUtils.getBean("templateWriter");
-        addObserver(templateWriter);
+        TemplatesWriterPool pool = (TemplatesWriterPool) SpringUtils.getBean("templatesWriterPool");
+        addObserver(pool);
     }
 
     @Override

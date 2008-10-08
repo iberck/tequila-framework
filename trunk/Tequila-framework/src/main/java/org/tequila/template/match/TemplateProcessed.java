@@ -16,13 +16,20 @@
  */
 package org.tequila.template.match;
 
+import java.io.File;
+import java.io.IOException;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.tequila.model.project.ExternalProject;
+
 /**
- *
+ * Receiver
  * @author iberck
  */
 public class TemplateProcessed {
 
-    private boolean writed;
+    private static final Log log = LogFactory.getLog(TemplateProcessed.class);
     private String outputFolder;
     private String outputFileName;
     private String templateResult;
@@ -51,11 +58,29 @@ public class TemplateProcessed {
         this.templateResult = templateResult;
     }
 
-    public boolean isWrited() {
-        return writed;
+    public void write(ExternalProject project) {
+        File sourceFile = null;
+
+        try {
+            // crear el directorio si no existiera
+            File sourceDir = new File(project.getPath() + getOutputFolder());
+            if (!sourceDir.exists()) {
+                log.warn("El directorio '" + sourceDir + "' no existe");
+                log.info("Creando el directorio '" + sourceDir + "'");
+                sourceDir.mkdirs();
+            }
+
+            // crear el archivo
+            sourceFile = new File(sourceDir, getOutputFileName());
+            FileUtils.writeStringToFile(sourceFile, getTemplateResult());
+        } catch (IOException ex) {
+            throw new MatchException("Error al escribir el archivo '" + sourceFile + "'", ex);
+        }
     }
 
-    public void setWrited(boolean writed) {
-        this.writed = writed;
+    public void rollback(ExternalProject project) {
+        // destruir el archivo generado
+        File f = new File(project.getPath() + getOutputFolder() + File.separator + getOutputFileName());
+        f.delete();
     }
 }

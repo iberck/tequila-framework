@@ -17,7 +17,6 @@
 package org.tequila.template.engine;
 
 import org.tequila.template.match.MatchException;
-import org.tequila.template.match.TemplateWriter;
 import freemarker.core.Environment;
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;
@@ -40,7 +39,8 @@ import org.tequila.template.directive.TemplateDirective;
 import org.tequila.template.wrapper.EngineWrappersFactory;
 import org.tequila.template.wrapper.MetaPropertyWrapper;
 import org.tequila.template.wrapper.freemarker.FreemarkerWrappersFactory;
-import org.tequila.util.SpringUtils;
+import org.tequila.conf.SpringUtils;
+import org.tequila.conf.ProjectHolder;
 
 /**
  *
@@ -80,7 +80,7 @@ public class FreemarkerEngine implements TemplateEngine {
 
             // create model root
             Map root = new HashMap();
-            
+
             // put directives
             root.putAll(directivesWrapped);
 
@@ -122,9 +122,8 @@ public class FreemarkerEngine implements TemplateEngine {
                 getEngineWrappersFactory().getProjectWrapperFactory());
         projectWrapped = (Map) project.getProjectWrapper().wrap(project);
 
-        // Los templates se escribiran en un archivo local por el momento.
-        TemplateWriter templateWriter = (TemplateWriter) SpringUtils.getBean("templateWriter");
-        templateWriter.setProject(project);
+        ProjectHolder projectHolder = (ProjectHolder) SpringUtils.getBean("projectHolder");
+        projectHolder.setProject(project);
 
         // setup engine
         cfg = new Configuration();

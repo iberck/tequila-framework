@@ -14,19 +14,23 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tequila.template.match;
+package org.tequila.conf;
 
-import org.tequila.model.project.ExternalProject;
+import org.tequila.model.project.*;
 
 /**
- * Command
+ *
  * @author iberck
  */
-public interface TemplateWriter {
+public class ProjectHolder {
 
-    public void write(ExternalProject project);
+    private ExternalProject project;
 
-    public void rollback(ExternalProject project);
+    public ExternalProject getProject() {
+        return project;
+    }
 
-    public boolean wasWrited();
+    public void setProject(ExternalProject project) {
+        this.project = project;
+    }
 }
