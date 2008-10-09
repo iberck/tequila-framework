@@ -34,7 +34,6 @@ import org.apache.commons.logging.LogFactory;
 import org.tequila.template.directive.DirectiveException;
 import org.tequila.template.directive.TemplateDirective;
 import org.tequila.template.match.TemplateProcessed;
-import org.tequila.template.match.TemplateWriter;
 import org.tequila.template.match.TemplatesWriterPool;
 import org.tequila.conf.SpringUtils;
 

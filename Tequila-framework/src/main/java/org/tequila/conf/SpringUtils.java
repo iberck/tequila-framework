@@ -42,6 +42,11 @@ public class SpringUtils {
         return factory.getBean(name);
     }
 
+    public static Map getBeans(Class clazz) {
+        return BeanFactoryUtils.beansOfTypeIncludingAncestors(
+                (ListableBeanFactory) factory, clazz);
+    }
+
     public static TemplateDirective[] getFreemarkerDirectives() {
         Map beans = getBeans(TemplateDirectiveModel.class);
         Collection values = beans.values();
@@ -53,10 +58,5 @@ public class SpringUtils {
         }
 
         return fmDirectives;
-    }
-
-    public static Map getBeans(Class clazz) {
-        return BeanFactoryUtils.beansOfTypeIncludingAncestors(
-                (ListableBeanFactory) factory, clazz);
     }
 }
