@@ -1,9 +1,10 @@
 <@JFileSection>
-package org.metamorfosis.test;
+package org.metamorfosis.internal.test;
 
-public class Clase1 {
+public class ClaseFromInternalTemplate {
     internal template!!!!
     ${project.srcPath}
+    ${project.name}
 }
 
 </@JFileSection>

@@ -17,6 +17,7 @@
 package org.tequila.model;
 
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.core.io.Resource;
 
 /**
  *
@@ -24,7 +25,7 @@ import org.springframework.beans.factory.annotation.Required;
  */
 public class TemplateDef {
 
-    private String path;
+    private Resource location;
     private String name;
     private String description;
 
@@ -44,12 +45,12 @@ public class TemplateDef {
         this.name = name;
     }
 
-    public String getPath() {
-        return path;
+    public Resource getLocation() {
+        return location;
     }
 
     @Required
-    public void setPath(String path) {
-        this.path = path;
+    public void setLocation(Resource location) {
+        this.location = location;
     }
 }

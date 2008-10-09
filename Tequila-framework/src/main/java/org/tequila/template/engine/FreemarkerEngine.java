@@ -16,19 +16,21 @@
  */
 package org.tequila.template.engine;
 
+import org.tequila.model.TemplateDef;
 import org.tequila.template.match.MatchException;
 import freemarker.core.Environment;
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;
 import freemarker.template.SimpleObjectWrapper;
+import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tequila.model.MetaPojo;
@@ -71,11 +73,11 @@ public class FreemarkerEngine implements TemplateEngine {
     public void match(TemplateModel templateModel) {
 
         try {
-            File template = new File(templateModel.getTemplateDef().getPath());
-            String fullPath = FilenameUtils.getFullPath(template.getAbsolutePath());
-            cfg.setDirectoryForTemplateLoading(new File(fullPath));
-            String relativeTemplate = FilenameUtils.getName(template.getAbsolutePath());
-            freemarker.template.Template freeMarkerTemplate = cfg.getTemplate(relativeTemplate);
+            TemplateDef templateDef = templateModel.getTemplateDef();
+            InputStream is = templateDef.getLocation().getInputStream();
+            InputStreamReader reader = new InputStreamReader(is);
+            Template template = new Template(templateDef.getName(), reader, cfg);
+
             StringWriter sw = new StringWriter();
 
             // create model root
@@ -101,7 +103,7 @@ public class FreemarkerEngine implements TemplateEngine {
                 root.putAll((Map) metaPropertyWrapped);
             }
 
-            Environment env = freeMarkerTemplate.createProcessingEnvironment(root, sw);
+            Environment env = template.createProcessingEnvironment(root, sw);
             env.process(); // process the template
             sw.close();
             log.debug("->Resultado del matcheo:" + sw.toString());

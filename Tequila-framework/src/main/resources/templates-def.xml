@@ -4,8 +4,6 @@
 <beans>   
     <!-- aqui podria definir los templates del framework -->
     <bean id="internalTemplate" class="org.tequila.model.TemplateDef">
-        <property name="path">
-            <value>classpath:templates/internalTemplate.ftl</value>
-        </property>
+        <property name="location" value="classpath:templates/internalTemplate.ftl"/>
     </bean>
 </beans>
