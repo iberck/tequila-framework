@@ -52,7 +52,7 @@ public class FreemarkerEngine implements TemplateEngine {
     private BeansWrapper bw_instance;
     private Map projectWrapped;
     private Map directivesWrapped;
-    Configuration cfg;
+    private Configuration cfg;
     private EngineWrappersFactory engineWrappersFactory;
 
     public FreemarkerEngine() {
